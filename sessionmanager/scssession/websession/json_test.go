@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ambientkit/ambient/lib/aesdata"
+	"github.com/ambientkit/plugin/pkg/aesdata"
 	"github.com/ambientkit/plugin/sessionmanager/scssession/websession"
 	"github.com/ambientkit/plugin/storage/localstorage/store"
 	"github.com/stretchr/testify/assert"
