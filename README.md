@@ -659,4 +659,4 @@ If you feel like you have so many plugins that it's hard to find what you're loo
 
 **Does the app run slower with more plugins?**
 
-It will require a big more startup time with many plugins, but it should be neligible unless you have hundreds of plugins.
+It will require a bit more startup time as you add plugins, but it shouldn't be noticeable.
