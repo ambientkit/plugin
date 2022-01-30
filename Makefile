@@ -3,7 +3,7 @@
 # * make
 
 # Load the environment variables.
-include .env
+-include .env
 
 .PHONY: default
 default: amb
