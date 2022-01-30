@@ -9,17 +9,17 @@ This guide will walk you through creating a plugin.
 - [Minimum Viable Plugin (MVP)](#minimum-viable-plugin-mvp)
 - [Plugin Boot Process](#plugin-boot-process)
 - [Plugin Functions](#plugin-functions)
-  - [Logger](#logger)
-  - [Storage System](#storage-system)
-  - [Session Manager](#session-manager)
-  - [Template Engine](#template-engine)
-  - [Router](#router)
-  - [Middleware](#middleware)
-  - [Routes](#routes)
-  - [Grant Requests](#grant-requests)
-  - [Settings](#settings)
-  - [Assets](#assets)
-  - [Funcmaps](#funcmaps)
+	- [Logger](#logger)
+	- [Storage System](#storage-system)
+	- [Session Manager](#session-manager)
+	- [Template Engine](#template-engine)
+	- [Router](#router)
+	- [Middleware](#middleware)
+	- [Routes](#routes)
+	- [Grant Requests](#grant-requests)
+	- [Settings](#settings)
+	- [Assets](#assets)
+	- [Funcmaps](#funcmaps)
 - [Good Plugin Practices](#good-plugin-practices)
 - [FAQs](#faqs)
 
@@ -653,7 +653,7 @@ You could group by type as well. You may want to keep most of your middleware or
 
 Regardless if you're using Ambient or not, Go packages should be designed so they can be reused by other people and projects without tightly coupling dependencies. If you are creating a new plugin, build the package so it follows [Go best practices](https://talks.golang.org/2013/bestpractices.slide) and then import it to the plugin package. That way you can use it with other apps as well.
 
-**Should I be worred about creating too many plugins?**
+**Should I be worried about creating too many plugins?**
 
 If you feel like you have so many plugins that it's hard to find what you're looking for, it's probably too many plugins.
 
