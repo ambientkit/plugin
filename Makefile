@@ -34,5 +34,5 @@ update-ambient:
 # Update dependencies of other repos using this repo.
 .PHONY: update-children
 update-children:
-	cd ../ambient-template && go get -u github.com/ambientkit/plugin@$(shell git rev-parse HEAD) && go mod tidy
-	cd ../amb && go get -u github.com/ambientkit/plugin@$(shell git rev-parse HEAD) && go mod tidy
+	cd ../ambient-template && go get github.com/ambientkit/plugin@$(shell git rev-parse HEAD) && go mod tidy -compat=1.17
+	cd ../amb && go get github.com/ambientkit/plugin@$(shell git rev-parse HEAD) && go mod tidy -compat=1.17
