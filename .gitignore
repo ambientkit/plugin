@@ -1,0 +1,27 @@
+# OS cache files.
+.DS_Store
+thumbs.db
+
+# Binaries for programs and plugins.
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`.
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE.
+*.out
+
+# Development files.
+/tmp
+/bin
+/.env*
+/.azure/
+/.bash_history
+/node_modules
+/package-lock.json
+/deploy/azure/ambient
+/deploy/azure/ambient/tmp
