@@ -13,6 +13,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.9.1
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.24.1
 	github.com/dgryski/dgoogauth v0.0.0-20190221195224-5a805980a5f3
+	github.com/julienschmidt/httprouter v1.3.0
 	github.com/mattn/go-colorable v0.1.12
 	github.com/microcosm-cc/bluemonday v1.0.17
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c
@@ -51,7 +52,6 @@ require (
 	github.com/googleapis/gax-go/v2 v2.1.1 // indirect
 	github.com/gorilla/css v1.0.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
-	github.com/julienschmidt/httprouter v1.3.0 // indirect
 	github.com/mattn/go-ieproxy v0.0.1 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mattn/go-runewidth v0.0.13 // indirect
