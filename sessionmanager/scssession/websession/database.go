@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/ambientkit/ambient/lib/envdetect"
+	"github.com/ambientkit/ambient/pkg/envdetect"
 )
 
 // SessionDatabase -

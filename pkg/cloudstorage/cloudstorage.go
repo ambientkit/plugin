@@ -4,7 +4,7 @@ package cloudstorage
 
 import (
 	"github.com/ambientkit/ambient"
-	"github.com/ambientkit/ambient/lib/envdetect"
+	"github.com/ambientkit/ambient/pkg/envdetect"
 	"github.com/ambientkit/plugin/storage/awsbucketstorage"
 	"github.com/ambientkit/plugin/storage/azureblobstorage"
 	"github.com/ambientkit/plugin/storage/gcpbucketstorage"
