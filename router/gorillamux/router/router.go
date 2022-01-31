@@ -4,24 +4,25 @@ package router
 import (
 	"net/http"
 
-	"github.com/ambientkit/plugin/pkg/paramconvert"
-	"github.com/julienschmidt/httprouter"
+	"github.com/gorilla/mux"
 )
 
 // Mux contains the router.
 type Mux struct {
-	router *httprouter.Router
+	router *mux.Router
 
 	// customServeHTTP is the serve function.
 	customServeHTTP func(w http.ResponseWriter, r *http.Request, status int, err error)
+	notFound        http.Handler
 }
 
 // New returns an instance of the router.
 func New() *Mux {
-	r := httprouter.New()
+	r := mux.NewRouter()
 
 	return &Mux{
-		router: r,
+		router:   r,
+		notFound: r.MethodNotAllowedHandler,
 	}
 }
 
@@ -32,13 +33,14 @@ func (m *Mux) SetServeHTTP(csh func(w http.ResponseWriter, r *http.Request, stat
 
 // SetNotFound sets the NotFound function.
 func (m *Mux) SetNotFound(notFound http.Handler) {
-	m.router.NotFound = notFound
+	m.notFound = notFound
+	m.router.NotFoundHandler = notFound
 }
 
 // Clear will remove a method and path from the router.
 func (m *Mux) Clear(method string, path string) {
 	// Overwrite instead of delete.
-	m.router.Handler(method, paramconvert.BraceToColon(path), m.router.NotFound)
+	m.router.Handle(path, m.notFound).Methods(method)
 }
 
 // ServeHTTP routes the incoming http.Request based on method and path
@@ -54,8 +56,12 @@ func (m *Mux) Error(status int, w http.ResponseWriter, r *http.Request) {
 
 // Param returns a URL parameter.
 func (m *Mux) Param(r *http.Request, param string) string {
-	params := httprouter.ParamsFromContext(r.Context())
-	return params.ByName(param)
+	vars := mux.Vars(r)
+	if v, ok := vars[param]; ok {
+		return v
+	}
+
+	return ""
 }
 
 // Wrap a standard http handler so it can be used easily.

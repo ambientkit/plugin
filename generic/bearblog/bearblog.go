@@ -145,10 +145,10 @@ func (p *Plugin) Settings() []ambient.Setting {
 // Routes gets routes for the plugin.
 func (p *Plugin) Routes() {
 	p.Mux.Get("/blog", p.postIndex)
-	p.Mux.Get("/:slug", p.postShow)
+	p.Mux.Get("/{slug}", p.postShow)
 
-	p.Mux.Get("/login/:slug", p.login)
-	p.Mux.Post("/login/:slug", p.loginPost)
+	p.Mux.Get("/login/{slug}", p.login)
+	p.Mux.Post("/login/{slug}", p.loginPost)
 	p.Mux.Get("/dashboard/logout", p.logout)
 
 	p.Mux.Get("/", p.index)
@@ -162,9 +162,9 @@ func (p *Plugin) Routes() {
 	p.Mux.Get("/dashboard/posts", p.postAdminIndex)
 	p.Mux.Get("/dashboard/posts/new", p.postAdminCreate)
 	p.Mux.Post("/dashboard/posts/new", p.postAdminStore)
-	p.Mux.Get("/dashboard/posts/:id", p.postAdminEdit)
-	p.Mux.Post("/dashboard/posts/:id", p.postAdminUpdate)
-	p.Mux.Get("/dashboard/posts/:id/delete", p.postAdminDestroy)
+	p.Mux.Get("/dashboard/posts/{id}", p.postAdminEdit)
+	p.Mux.Post("/dashboard/posts/{id}", p.postAdminUpdate)
+	p.Mux.Get("/dashboard/posts/{id}/delete", p.postAdminDestroy)
 }
 
 // Assets returns a list of assets and an embedded filesystem.

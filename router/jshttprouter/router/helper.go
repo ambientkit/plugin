@@ -2,11 +2,13 @@ package router
 
 import (
 	"net/http"
+
+	"github.com/ambientkit/plugin/pkg/paramconvert"
 )
 
 // Delete is a shortcut for router.Handle("DELETE", path, handle)
 func (m *Mux) Delete(path string, fn func(http.ResponseWriter, *http.Request) (int, error)) {
-	m.router.HandlerFunc("DELETE", path, func(w http.ResponseWriter, req *http.Request) {
+	m.router.HandlerFunc("DELETE", paramconvert.BraceToColon(path), func(w http.ResponseWriter, req *http.Request) {
 		handler{
 			handlerFunc:     fn,
 			customServeHTTP: m.customServeHTTP,
@@ -16,7 +18,7 @@ func (m *Mux) Delete(path string, fn func(http.ResponseWriter, *http.Request) (i
 
 // Get is a shortcut for router.Handle("GET", path, handle)
 func (m *Mux) Get(path string, fn func(http.ResponseWriter, *http.Request) (int, error)) {
-	m.router.HandlerFunc("GET", path, func(w http.ResponseWriter, req *http.Request) {
+	m.router.HandlerFunc("GET", paramconvert.BraceToColon(path), func(w http.ResponseWriter, req *http.Request) {
 		handler{
 			handlerFunc:     fn,
 			customServeHTTP: m.customServeHTTP,
@@ -26,7 +28,7 @@ func (m *Mux) Get(path string, fn func(http.ResponseWriter, *http.Request) (int,
 
 // Head is a shortcut for router.Handle("HEAD", path, handle)
 func (m *Mux) Head(path string, fn func(http.ResponseWriter, *http.Request) (int, error)) {
-	m.router.HandlerFunc("HEAD", path, func(w http.ResponseWriter, req *http.Request) {
+	m.router.HandlerFunc("HEAD", paramconvert.BraceToColon(path), func(w http.ResponseWriter, req *http.Request) {
 		handler{
 			handlerFunc:     fn,
 			customServeHTTP: m.customServeHTTP,
@@ -36,7 +38,7 @@ func (m *Mux) Head(path string, fn func(http.ResponseWriter, *http.Request) (int
 
 // Options is a shortcut for router.Handle("OPTIONS", path, handle)
 func (m *Mux) Options(path string, fn func(http.ResponseWriter, *http.Request) (int, error)) {
-	m.router.HandlerFunc("OPTIONS", path, func(w http.ResponseWriter, req *http.Request) {
+	m.router.HandlerFunc("OPTIONS", paramconvert.BraceToColon(path), func(w http.ResponseWriter, req *http.Request) {
 		handler{
 			handlerFunc:     fn,
 			customServeHTTP: m.customServeHTTP,
@@ -46,7 +48,7 @@ func (m *Mux) Options(path string, fn func(http.ResponseWriter, *http.Request) (
 
 // Patch is a shortcut for router.Handle("PATCH", path, handle)
 func (m *Mux) Patch(path string, fn func(http.ResponseWriter, *http.Request) (int, error)) {
-	m.router.HandlerFunc("PATCH", path, func(w http.ResponseWriter, req *http.Request) {
+	m.router.HandlerFunc("PATCH", paramconvert.BraceToColon(path), func(w http.ResponseWriter, req *http.Request) {
 		handler{
 			handlerFunc:     fn,
 			customServeHTTP: m.customServeHTTP,
@@ -56,7 +58,7 @@ func (m *Mux) Patch(path string, fn func(http.ResponseWriter, *http.Request) (in
 
 // Post is a shortcut for router.Handle("POST", path, handle)
 func (m *Mux) Post(path string, fn func(http.ResponseWriter, *http.Request) (int, error)) {
-	m.router.HandlerFunc("POST", path, func(w http.ResponseWriter, req *http.Request) {
+	m.router.HandlerFunc("POST", paramconvert.BraceToColon(path), func(w http.ResponseWriter, req *http.Request) {
 		handler{
 			handlerFunc:     fn,
 			customServeHTTP: m.customServeHTTP,
@@ -66,7 +68,7 @@ func (m *Mux) Post(path string, fn func(http.ResponseWriter, *http.Request) (int
 
 // Put is a shortcut for router.Handle("PUT", path, handle)
 func (m *Mux) Put(path string, fn func(http.ResponseWriter, *http.Request) (int, error)) {
-	m.router.HandlerFunc("PUT", path, func(w http.ResponseWriter, req *http.Request) {
+	m.router.HandlerFunc("PUT", paramconvert.BraceToColon(path), func(w http.ResponseWriter, req *http.Request) {
 		handler{
 			handlerFunc:     fn,
 			customServeHTTP: m.customServeHTTP,

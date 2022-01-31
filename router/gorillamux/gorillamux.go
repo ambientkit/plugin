@@ -1,12 +1,12 @@
-// Package jshttprouter is an Ambient plugin for a router using julienschmidt/httprouter.
-package jshttprouter
+// Package gorillamux is an Ambient plugin for a router using gorilla/mux.
+package gorillamux
 
 import (
 	"fmt"
 	"net/http"
 
 	"github.com/ambientkit/ambient"
-	"github.com/ambientkit/plugin/router/jshttprouter/router"
+	"github.com/ambientkit/plugin/router/gorillamux/router"
 )
 
 // Plugin represents an Ambient plugin.
@@ -24,7 +24,7 @@ func New(serveHTTP CustomServeHTTP) *Plugin {
 
 // PluginName returns the plugin name.
 func (p *Plugin) PluginName() string {
-	return "jshttprouter"
+	return "gorillamux"
 }
 
 // PluginVersion returns the plugin version.
@@ -66,18 +66,18 @@ func (p *Plugin) setupRouter(logger ambient.Logger, mux ambient.AppRouter, te am
 			case 400:
 				errText = "Darn, something went wrong."
 				if err != nil {
-					logger.Info("jshttprouter: error (%v): %v", status, err.Error())
+					logger.Info("gorillamux: error (%v): %v", status, err.Error())
 				}
 			default:
 				if err != nil {
-					logger.Info("jshttprouter: error (%v): %v", status, err.Error())
+					logger.Info("gorillamux: error (%v): %v", status, err.Error())
 				}
 			}
 
 			status, err = te.Error(w, r, fmt.Sprintf("<h1>%v</h1>%v", status, errText), status, nil, nil)
 			if err != nil {
 				if err != nil {
-					logger.Info("jshttprouter: error in rendering error template (%v): %v", status, err.Error())
+					logger.Info("gorillamux: error in rendering error template (%v): %v", status, err.Error())
 				}
 				http.Error(w, "500 internal server error", http.StatusInternalServerError)
 				return

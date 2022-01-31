@@ -60,9 +60,9 @@ func (p *Plugin) GrantRequests() []ambient.GrantRequest {
 func (p *Plugin) Routes() {
 	p.Mux.Get("/dashboard/plugins", p.edit)
 	p.Mux.Post("/dashboard/plugins", p.update)
-	p.Mux.Get("/dashboard/plugins/:id/delete", p.destroy)
-	p.Mux.Get("/dashboard/plugins/:id/settings", p.settingsEdit)
-	p.Mux.Post("/dashboard/plugins/:id/settings", p.settingsUpdate)
-	p.Mux.Get("/dashboard/plugins/:id/grants", p.grantsEdit)
-	p.Mux.Post("/dashboard/plugins/:id/grants", p.grantsUpdate)
+	p.Mux.Get("/dashboard/plugins/{id}/delete", p.destroy)
+	p.Mux.Get("/dashboard/plugins/{id}/settings", p.settingsEdit)
+	p.Mux.Post("/dashboard/plugins/{id}/settings", p.settingsUpdate)
+	p.Mux.Get("/dashboard/plugins/{id}/grants", p.grantsEdit)
+	p.Mux.Post("/dashboard/plugins/{id}/grants", p.grantsUpdate)
 }
