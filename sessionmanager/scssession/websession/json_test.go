@@ -27,9 +27,9 @@ func TestNewJSONSession(t *testing.T) {
 
 	token := "abc"
 	data := "hello"
-	now := time.Now()
 
-	err = store.Commit(token, []byte(data), now)
+	// Set date in the future.
+	err = store.Commit(token, []byte(data), time.Now().AddDate(0, 0, 1))
 	assert.NoError(t, err)
 
 	b, exists, err := store.Find(token)
@@ -43,6 +43,14 @@ func TestNewJSONSession(t *testing.T) {
 	_, exists, err = store.Find(token)
 	assert.NoError(t, err)
 	assert.False(t, exists)
+
+	// Set date in the past.
+	err = store.Commit(token, []byte(data), time.Now().AddDate(0, 0, -1))
+	assert.NoError(t, err)
+	b, exists, err = store.Find(token)
+	assert.Nil(t, b)
+	assert.False(t, exists)
+	assert.NoError(t, err)
 
 	os.Remove(f)
 }

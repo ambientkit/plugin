@@ -7,19 +7,19 @@ import (
 	"github.com/ambientkit/ambient/pkg/envdetect"
 )
 
-// SessionDatabase -
+// SessionDatabase contains all the session records.
 type SessionDatabase struct {
 	Records map[string]SessionData `json:"db"`
 }
 
-// SessionData -
+// SessionData is a session record.
 type SessionData struct {
 	ID     string    `json:"id"`
 	Data   []byte    `json:"data"`
 	Expire time.Time `json:"expire"`
 }
 
-// Load -
+// Load all sessions.
 func (sd *SessionDatabase) Load(ss Sessionstorer, en Encrypter) error {
 	b, err := ss.Load()
 	if err != nil {
@@ -43,7 +43,7 @@ func (sd *SessionDatabase) Load(ss Sessionstorer, en Encrypter) error {
 	return nil
 }
 
-// Save -
+// Save all sessions.
 func (sd *SessionDatabase) Save(ss Sessionstorer, en Encrypter) error {
 	var b []byte
 	var err error

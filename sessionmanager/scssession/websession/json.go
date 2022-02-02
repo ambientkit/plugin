@@ -4,19 +4,19 @@ import (
 	"time"
 )
 
-// Encrypter -
+// Encrypter represents a data encrypter.
 type Encrypter interface {
 	Encrypt(data []byte) (encrypted []byte, err error)
 	Decrypt(data []byte) (decrypted []byte, err error)
 }
 
-// JSONSession -
+// JSONSession contains session and encryption objects.
 type JSONSession struct {
 	sessionstorer Sessionstorer
 	encrypter     Encrypter
 }
 
-// NewJSONSession -
+// NewJSONSession returns a new JSONSession.
 func NewJSONSession(sd Sessionstorer, encrypter Encrypter) (*JSONSession, error) {
 	s := &JSONSession{
 		sessionstorer: sd,
@@ -38,6 +38,15 @@ func (s *JSONSession) Find(token string) (b []byte, exists bool, err error) {
 
 	record, found := sd.Records[token]
 	if !found {
+		return nil, false, nil
+	}
+
+	// Determine if record is expired.
+	if time.Now().After(record.Expire) {
+		err = s.Delete(token)
+		if err != nil {
+			return nil, false, err
+		}
 		return nil, false, nil
 	}
 

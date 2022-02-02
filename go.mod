@@ -8,14 +8,14 @@ require (
 	github.com/alexedwards/scs/v2 v2.5.0
 	github.com/ambientkit/ambient v0.0.0-20220131003015-220f042a5256
 	github.com/ambientkit/away v0.0.0-20220131003110-eb5e8142938a
+	github.com/ambientkit/httprouter v1.3.1-0.20220202000709-b54b023f0606
+	github.com/ambientkit/mux v1.8.1-0.20220202013649-f01d64bb1111
 	github.com/aws/aws-sdk-go-v2 v1.13.0
 	github.com/aws/aws-sdk-go-v2/config v1.13.1
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.9.1
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.24.1
 	github.com/dgryski/dgoogauth v0.0.0-20190221195224-5a805980a5f3
 	github.com/go-chi/chi v1.5.4
-	github.com/gorilla/mux v1.8.0
-	github.com/julienschmidt/httprouter v1.3.0
 	github.com/mattn/go-colorable v0.1.12
 	github.com/microcosm-cc/bluemonday v1.0.17
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c
@@ -26,11 +26,6 @@ require (
 	go.uber.org/zap v1.20.0
 	golang.org/x/crypto v0.0.0-20220128200615-198e4374d7ed
 	jaytaylor.com/html2text v0.0.0-20211105163654-bc68cce691ba
-)
-
-require (
-	github.com/ambientkit/httprouter v1.3.1-0.20220202000709-b54b023f0606 // indirect
-	github.com/ambientkit/mux v1.8.1-0.20220202013649-f01d64bb1111 // indirect
 )
 
 require (

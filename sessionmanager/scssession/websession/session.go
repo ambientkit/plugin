@@ -29,12 +29,12 @@ func New(name string, manager *scs.SessionManager) *Session {
 	}
 }
 
-// Persist -
+// Persist sets session to persist after browser is closed.
 func (s *Session) Persist(r *http.Request, persist bool) {
 	s.manager.Cookie.Persist = persist
 }
 
-// Logout -
+// Logout and destroy session.
 func (s *Session) Logout(r *http.Request) {
 	s.manager.Destroy(r.Context())
 }
@@ -50,22 +50,23 @@ func (s *Session) AuthenticatedUser(r *http.Request) (string, error) {
 	return u, nil
 }
 
-// Login -
+// Login user by storing user ID in request context.
 func (s *Session) Login(r *http.Request, value string) {
 	s.manager.Put(r.Context(), "user", value)
 }
 
-// String -
+// String returns a value stored in user session.
 func (s *Session) String(r *http.Request, name string) string {
 	return s.manager.GetString(r.Context(), name)
 }
 
-// SetString -
+// SetString sets a value in the user session.
 func (s *Session) SetString(r *http.Request, name string, value string) {
 	s.manager.Put(r.Context(), name, value)
 }
 
-// SetCSRF -
+// SetCSRF sets a cross site request forgery token for the current request to
+// allow for validation during form submission.
 func (s *Session) SetCSRF(r *http.Request) string {
 	token := generate(32)
 	path := "csrf_" + r.URL.Path
@@ -73,7 +74,8 @@ func (s *Session) SetCSRF(r *http.Request) string {
 	return token
 }
 
-// CSRF -
+// CSRF return true if the cross site request forgery token matches what was
+// stored before form submission.
 func (s *Session) CSRF(r *http.Request, token string) bool {
 	path := "csrf_" + r.URL.Path
 	v := s.String(r, path)
