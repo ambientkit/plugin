@@ -4,7 +4,7 @@ package router
 import (
 	"net/http"
 
-	"github.com/bmizerany/pat"
+	"github.com/ambientkit/pat"
 )
 
 // Mux contains the router.
@@ -37,7 +37,7 @@ func (m *Mux) SetNotFound(notFound http.Handler) {
 // Clear will remove a method and path from the router.
 func (m *Mux) Clear(method string, path string) {
 	// Overwrite instead of delete.
-	m.router.Add(method, path, m.router.NotFound)
+	m.router.Clear(method, path, m.router.NotFound)
 }
 
 // ServeHTTP routes the incoming http.Request based on method and path

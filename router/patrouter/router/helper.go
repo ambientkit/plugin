@@ -3,7 +3,7 @@ package router
 import (
 	"net/http"
 
-	"github.com/ambientkit/away/paramconvert"
+	"github.com/ambientkit/plugin/pkg/paramconvert"
 )
 
 // Delete is a shortcut for router.Handle("DELETE", path, handle)

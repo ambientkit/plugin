@@ -12,7 +12,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.13.1
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.9.1
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.24.1
-	github.com/bmizerany/pat v0.0.0-20210406213842-e4b6760bdd6f
 	github.com/dgryski/dgoogauth v0.0.0-20190221195224-5a805980a5f3
 	github.com/go-chi/chi v1.5.4
 	github.com/gorilla/mux v1.8.0
@@ -30,10 +29,16 @@ require (
 )
 
 require (
+	github.com/ambientkit/httprouter v1.3.1-0.20220202000709-b54b023f0606 // indirect
+	github.com/ambientkit/mux v1.8.1-0.20220202013649-f01d64bb1111 // indirect
+)
+
+require (
 	cloud.google.com/go v0.100.2 // indirect
 	cloud.google.com/go/compute v1.1.0 // indirect
 	cloud.google.com/go/iam v0.1.1 // indirect
 	github.com/Azure/azure-pipeline-go v0.2.3 // indirect
+	github.com/ambientkit/pat v0.0.0-20220201235809-856b4ac36048
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.2.0 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.8.0 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.10.0 // indirect
