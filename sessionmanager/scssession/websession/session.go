@@ -2,9 +2,12 @@
 package websession
 
 import (
+	"context"
 	"crypto/rand"
 	"errors"
+	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/alexedwards/scs/v2"
 )
@@ -31,7 +34,7 @@ func New(name string, manager *scs.SessionManager) *Session {
 
 // Persist sets session to persist after browser is closed.
 func (s *Session) Persist(r *http.Request, persist bool) {
-	s.manager.Cookie.Persist = persist
+	s.manager.RememberMe(r.Context(), persist)
 }
 
 // Logout and destroy session.
@@ -39,30 +42,55 @@ func (s *Session) Logout(r *http.Request) {
 	s.manager.Destroy(r.Context())
 }
 
+// LogoutAll destroys all sessions.
+func (s *Session) LogoutAll(r *http.Request) error {
+	return s.manager.Iterate(r.Context(), func(ctx context.Context) error {
+		userID := s.manager.GetString(ctx, "userID")
+
+		// Only destroy authenticated sessions.
+		if len(userID) > 0 {
+			return s.manager.Destroy(ctx)
+		}
+
+		return nil
+	})
+}
+
 // AuthenticatedUser returns the user ID if authenticated or an error.
 func (s *Session) AuthenticatedUser(r *http.Request) (string, error) {
-	u := s.manager.GetString(r.Context(), "user")
+	userID := s.manager.GetString(r.Context(), "userID")
 
-	if len(u) == 0 {
+	if len(userID) == 0 {
 		return "", errors.New("user not found")
 	}
 
-	return u, nil
+	return userID, nil
 }
 
 // Login user by storing user ID in request context.
 func (s *Session) Login(r *http.Request, value string) {
-	s.manager.Put(r.Context(), "user", value)
+	s.manager.Put(r.Context(), "userID", value)
 }
 
-// String returns a value stored in user session.
-func (s *Session) String(r *http.Request, name string) string {
+// SessionValue returns a value stored in the user session.
+func (s *Session) SessionValue(r *http.Request, name string) string {
 	return s.manager.GetString(r.Context(), name)
 }
 
-// SetString sets a value in the user session.
-func (s *Session) SetString(r *http.Request, name string, value string) {
+// SetSessionValue sets a value in the user session or returns an error.
+func (s *Session) SetSessionValue(r *http.Request, name string, value string) error {
+	if strings.EqualFold("userID", name) {
+		return fmt.Errorf("cannot set reserved 'userID' value using SetSessionValue")
+	}
+
 	s.manager.Put(r.Context(), name, value)
+
+	return nil
+}
+
+// DeleteSessionValue deletes a value in the user session.
+func (s *Session) DeleteSessionValue(r *http.Request, name string) {
+	s.manager.Remove(r.Context(), name)
 }
 
 // SetCSRF sets a cross site request forgery token for the current request to
@@ -70,7 +98,7 @@ func (s *Session) SetString(r *http.Request, name string, value string) {
 func (s *Session) SetCSRF(r *http.Request) string {
 	token := generate(32)
 	path := "csrf_" + r.URL.Path
-	s.SetString(r, path, token)
+	s.SetSessionValue(r, path, token)
 	return token
 }
 
@@ -78,7 +106,7 @@ func (s *Session) SetCSRF(r *http.Request) string {
 // stored before form submission.
 func (s *Session) CSRF(r *http.Request, token string) bool {
 	path := "csrf_" + r.URL.Path
-	v := s.String(r, path)
+	v := s.SessionValue(r, path)
 
 	if len(v) > 0 {
 		s.manager.Remove(r.Context(), path)

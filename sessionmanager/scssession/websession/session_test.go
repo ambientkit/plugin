@@ -10,18 +10,20 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
+	"github.com/ambientkit/ambient"
 	"github.com/ambientkit/plugin/pkg/aesdata"
 	"github.com/ambientkit/plugin/sessionmanager/scssession/websession"
 	"github.com/ambientkit/plugin/storage/localstorage/store"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewSession(t *testing.T) {
+var storageFile = "data.bin"
+
+func setup(t *testing.T) (ambient.AppSession, func(next http.Handler) http.Handler) {
 	// Set up the session storage provider.
-	f := "data.bin"
-	err := ioutil.WriteFile(f, []byte(""), 0644)
+	err := ioutil.WriteFile(storageFile, []byte(""), 0644)
 	assert.NoError(t, err)
-	ss := store.NewLocalStorage(f)
+	ss := store.NewLocalStorage(storageFile)
 	secretkey := "82a18fbbfed2694bb15d512a70c53b1a088e669966918d3d474564b2ac44349b"
 	en := aesdata.NewEncryptedStorage(secretkey)
 	store, err := websession.NewJSONSession(ss, en)
@@ -33,6 +35,18 @@ func TestNewSession(t *testing.T) {
 	sessionManager.Cookie.Persist = false
 	sessionManager.Store = store
 	sess := websession.New("session", sessionManager)
+
+	return sess, sessionManager.LoadAndSave
+}
+
+func teardown() {
+	// Clean up.
+	os.Remove(storageFile)
+}
+
+func TestNewSession(t *testing.T) {
+	sess, sessHandler := setup(t)
+	defer teardown()
 
 	r := httptest.NewRequest("GET", "/", nil)
 	w := httptest.NewRecorder()
@@ -50,11 +64,6 @@ func TestNewSession(t *testing.T) {
 		_, err = sess.AuthenticatedUser(r)
 		assert.False(t, err == nil)
 
-		// Test persistence
-		assert.Equal(t, sessionManager.Cookie.Persist, false)
-		sess.Persist(r, true)
-		assert.Equal(t, sessionManager.Cookie.Persist, true)
-
 		// Test CSRF
 		assert.False(t, sess.CSRF(r, r.FormValue("token")))
 		token := sess.SetCSRF(r)
@@ -63,8 +72,26 @@ func TestNewSession(t *testing.T) {
 		assert.True(t, sess.CSRF(r, r.FormValue("token")))
 	})
 
-	mw := sessionManager.LoadAndSave(mux)
+	mw := sessHandler(mux)
 	mw.ServeHTTP(w, r)
 
-	os.Remove(f)
+	// Ensure the expiration is set properly.
+	assert.True(t, w.Result().Cookies()[0].Expires.IsZero())
+
+	// Test session persistence.
+	r = httptest.NewRequest("GET", "/", nil)
+	w = httptest.NewRecorder()
+	mux = http.NewServeMux()
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		// Test user
+		u := "foo"
+		sess.Login(r, u)
+
+		// Ensure the expiration is set properly.
+		sess.Persist(r, true)
+	})
+
+	mw = sessHandler(mux)
+	mw.ServeHTTP(w, r)
+	assert.False(t, w.Result().Cookies()[0].Expires.IsZero())
 }

@@ -84,6 +84,7 @@ func (p *Plugin) SessionManager(logger ambient.Logger, ss ambient.SessionStorer)
 
 	p.sessionManager = scs.New()
 	p.sessionManager.Lifetime = 24 * time.Hour
+	// This must be false for RememberMe() to work.
 	p.sessionManager.Cookie.Persist = false
 	p.sessionManager.Store = store
 	p.sess = websession.New(sessionName, p.sessionManager)

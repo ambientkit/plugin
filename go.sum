@@ -74,11 +74,11 @@ github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/alexedwards/scs/v2 v2.5.0 h1:zgxOfNFmiJyXG7UPIuw1g2b9LWBeRLh3PjfB9BDmfL4=
 github.com/alexedwards/scs/v2 v2.5.0/go.mod h1:ToaROZxyKukJKT/xLcVQAChi5k6+Pn1Gvmdl7h3RRj8=
-github.com/ambientkit/ambient v0.0.0-20220131003015-220f042a5256 h1:A9O83yujBh77VYCOdyy+QJaCxbynYr4rzfgV8dp9NQs=
-github.com/ambientkit/ambient v0.0.0-20220131003015-220f042a5256/go.mod h1:iamUriotuBEeHo4yWCk9CQsR2sX2VmnFRSF620RD5gU=
+github.com/ambientkit/ambient v0.0.0-20220204024638-65689c15ea8f h1:CEj7whrhCU3CixkHtMY1AeZ6boKc7MRcEv1OK1VX9Lc=
+github.com/ambientkit/ambient v0.0.0-20220204024638-65689c15ea8f/go.mod h1:iamUriotuBEeHo4yWCk9CQsR2sX2VmnFRSF620RD5gU=
 github.com/ambientkit/away v0.0.0-20220130143742-11941db4e189/go.mod h1:LhGMsnt/Ea/PVq58wNzRo8c44jsGQljCxv9MtIidETk=
-github.com/ambientkit/away v0.0.0-20220131003110-eb5e8142938a h1:S8pdw+IYgv/wMD8h+LCA9gdgCkZi3z7zFDgGx8yGBAA=
-github.com/ambientkit/away v0.0.0-20220131003110-eb5e8142938a/go.mod h1:LhGMsnt/Ea/PVq58wNzRo8c44jsGQljCxv9MtIidETk=
+github.com/ambientkit/away v0.0.0-20220202000003-bb3ddc99eafb h1:Q2I7zKb8Fal1ysDxDqf2gnG1nQXm22c+53c1yU2E8GQ=
+github.com/ambientkit/away v0.0.0-20220202000003-bb3ddc99eafb/go.mod h1:LhGMsnt/Ea/PVq58wNzRo8c44jsGQljCxv9MtIidETk=
 github.com/ambientkit/httprouter v1.3.1-0.20220202000709-b54b023f0606 h1:XnGiU8vjgfYCFQZeIPPPynGPgYNzJMhF3CXj9rPVgho=
 github.com/ambientkit/httprouter v1.3.1-0.20220202000709-b54b023f0606/go.mod h1:Jx8Q/4LchB2t8+Nw25E7Om1yEzsZEX1ZC7g5irutl5M=
 github.com/ambientkit/mux v1.8.1-0.20220202013649-f01d64bb1111 h1:j2ij6ObWOil4RQWmiYgQPa3L4QvuqNXthFQtgh4QZ1Q=
