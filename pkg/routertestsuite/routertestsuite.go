@@ -15,33 +15,33 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// RouterTest performance standard router tests.
-type RouterTest struct{}
+// TestSuite performs standard tests.
+type TestSuite struct{}
 
 // New returns a router test suite.
-func New() *RouterTest {
-	return new(RouterTest)
+func New() *TestSuite {
+	return new(TestSuite)
 }
 
 // Run all the tests.
-func (rt *RouterTest) Run(t *testing.T, mux func() ambient.AppRouter) {
-	rt.TestParams(t, mux())
-	rt.TestInstance(t, mux())
-	rt.TestPostForm(t, mux())
-	rt.TestPostJSON(t, mux())
-	rt.TestGet(t, mux())
-	rt.TestDelete(t, mux())
-	rt.TestHead(t, mux())
-	rt.TestOptions(t, mux())
-	rt.TestPatch(t, mux())
-	rt.TestPut(t, mux())
-	rt.Test404(t, mux())
-	rt.Test500NoError(t, mux())
-	rt.Test500WithError(t, mux())
-	rt.Test400(t, mux())
-	rt.TestNotFound(t, mux())
-	rt.TestBadRequest(t, mux())
-	rt.TestClear(t, mux())
+func (ts *TestSuite) Run(t *testing.T, mux func() ambient.AppRouter) {
+	ts.TestParams(t, mux())
+	ts.TestInstance(t, mux())
+	ts.TestPostForm(t, mux())
+	ts.TestPostJSON(t, mux())
+	ts.TestGet(t, mux())
+	ts.TestDelete(t, mux())
+	ts.TestHead(t, mux())
+	ts.TestOptions(t, mux())
+	ts.TestPatch(t, mux())
+	ts.TestPut(t, mux())
+	ts.Test404(t, mux())
+	ts.Test500NoError(t, mux())
+	ts.Test500WithError(t, mux())
+	ts.Test400(t, mux())
+	ts.TestNotFound(t, mux())
+	ts.TestBadRequest(t, mux())
+	ts.TestClear(t, mux())
 }
 
 // defaultServeHTTP is the default ServeHTTP function that receives the status and error from
@@ -58,7 +58,7 @@ var defaultServeHTTP = func(w http.ResponseWriter, r *http.Request, status int,
 }
 
 // TestParams .
-func (rt *RouterTest) TestParams(t *testing.T, mux ambient.AppRouter) {
+func (ts *TestSuite) TestParams(t *testing.T, mux ambient.AppRouter) {
 	mux.SetServeHTTP(defaultServeHTTP)
 
 	outParam := ""
@@ -77,7 +77,7 @@ func (rt *RouterTest) TestParams(t *testing.T, mux ambient.AppRouter) {
 }
 
 // TestInstance .
-func (rt *RouterTest) TestInstance(t *testing.T, mux ambient.AppRouter) {
+func (ts *TestSuite) TestInstance(t *testing.T, mux ambient.AppRouter) {
 	mux.SetServeHTTP(defaultServeHTTP)
 
 	outParam := ""
@@ -96,7 +96,7 @@ func (rt *RouterTest) TestInstance(t *testing.T, mux ambient.AppRouter) {
 }
 
 // TestPostForm .
-func (rt *RouterTest) TestPostForm(t *testing.T, mux ambient.AppRouter) {
+func (ts *TestSuite) TestPostForm(t *testing.T, mux ambient.AppRouter) {
 	mux.SetServeHTTP(defaultServeHTTP)
 
 	form := url.Values{}
@@ -120,7 +120,7 @@ func (rt *RouterTest) TestPostForm(t *testing.T, mux ambient.AppRouter) {
 }
 
 // TestPostJSON .
-func (rt *RouterTest) TestPostJSON(t *testing.T, mux ambient.AppRouter) {
+func (ts *TestSuite) TestPostJSON(t *testing.T, mux ambient.AppRouter) {
 	mux.SetServeHTTP(defaultServeHTTP)
 
 	j, err := json.Marshal(map[string]interface{}{
@@ -149,7 +149,7 @@ func (rt *RouterTest) TestPostJSON(t *testing.T, mux ambient.AppRouter) {
 }
 
 // TestGet .
-func (rt *RouterTest) TestGet(t *testing.T, mux ambient.AppRouter) {
+func (ts *TestSuite) TestGet(t *testing.T, mux ambient.AppRouter) {
 	mux.SetServeHTTP(defaultServeHTTP)
 
 	called := false
@@ -167,7 +167,7 @@ func (rt *RouterTest) TestGet(t *testing.T, mux ambient.AppRouter) {
 }
 
 // TestDelete .
-func (rt *RouterTest) TestDelete(t *testing.T, mux ambient.AppRouter) {
+func (ts *TestSuite) TestDelete(t *testing.T, mux ambient.AppRouter) {
 	mux.SetServeHTTP(defaultServeHTTP)
 
 	called := false
@@ -185,7 +185,7 @@ func (rt *RouterTest) TestDelete(t *testing.T, mux ambient.AppRouter) {
 }
 
 // TestHead .
-func (rt *RouterTest) TestHead(t *testing.T, mux ambient.AppRouter) {
+func (ts *TestSuite) TestHead(t *testing.T, mux ambient.AppRouter) {
 	mux.SetServeHTTP(defaultServeHTTP)
 
 	called := false
@@ -203,7 +203,7 @@ func (rt *RouterTest) TestHead(t *testing.T, mux ambient.AppRouter) {
 }
 
 // TestOptions .
-func (rt *RouterTest) TestOptions(t *testing.T, mux ambient.AppRouter) {
+func (ts *TestSuite) TestOptions(t *testing.T, mux ambient.AppRouter) {
 	mux.SetServeHTTP(defaultServeHTTP)
 
 	called := false
@@ -221,7 +221,7 @@ func (rt *RouterTest) TestOptions(t *testing.T, mux ambient.AppRouter) {
 }
 
 // TestPatch .
-func (rt *RouterTest) TestPatch(t *testing.T, mux ambient.AppRouter) {
+func (ts *TestSuite) TestPatch(t *testing.T, mux ambient.AppRouter) {
 	mux.SetServeHTTP(defaultServeHTTP)
 
 	called := false
@@ -239,7 +239,7 @@ func (rt *RouterTest) TestPatch(t *testing.T, mux ambient.AppRouter) {
 }
 
 // TestPut .
-func (rt *RouterTest) TestPut(t *testing.T, mux ambient.AppRouter) {
+func (ts *TestSuite) TestPut(t *testing.T, mux ambient.AppRouter) {
 	mux.SetServeHTTP(defaultServeHTTP)
 
 	called := false
@@ -257,7 +257,7 @@ func (rt *RouterTest) TestPut(t *testing.T, mux ambient.AppRouter) {
 }
 
 // Test404 .
-func (rt *RouterTest) Test404(t *testing.T, mux ambient.AppRouter) {
+func (ts *TestSuite) Test404(t *testing.T, mux ambient.AppRouter) {
 	mux.SetServeHTTP(defaultServeHTTP)
 
 	called := false
@@ -276,7 +276,7 @@ func (rt *RouterTest) Test404(t *testing.T, mux ambient.AppRouter) {
 }
 
 // Test500NoError .
-func (rt *RouterTest) Test500NoError(t *testing.T, mux ambient.AppRouter) {
+func (ts *TestSuite) Test500NoError(t *testing.T, mux ambient.AppRouter) {
 	mux.SetServeHTTP(defaultServeHTTP)
 
 	called := true
@@ -295,7 +295,7 @@ func (rt *RouterTest) Test500NoError(t *testing.T, mux ambient.AppRouter) {
 }
 
 // Test500WithError .
-func (rt *RouterTest) Test500WithError(t *testing.T, mux ambient.AppRouter) {
+func (ts *TestSuite) Test500WithError(t *testing.T, mux ambient.AppRouter) {
 	mux.SetServeHTTP(defaultServeHTTP)
 
 	called := true
@@ -316,7 +316,7 @@ func (rt *RouterTest) Test500WithError(t *testing.T, mux ambient.AppRouter) {
 }
 
 // Test400 .
-func (rt *RouterTest) Test400(t *testing.T, mux ambient.AppRouter) {
+func (ts *TestSuite) Test400(t *testing.T, mux ambient.AppRouter) {
 	notFound := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 	},
@@ -333,7 +333,7 @@ func (rt *RouterTest) Test400(t *testing.T, mux ambient.AppRouter) {
 }
 
 // TestNotFound .
-func (rt *RouterTest) TestNotFound(t *testing.T, mux ambient.AppRouter) {
+func (ts *TestSuite) TestNotFound(t *testing.T, mux ambient.AppRouter) {
 	mux.SetServeHTTP(defaultServeHTTP)
 
 	r := httptest.NewRequest("GET", "/unknown", nil)
@@ -344,7 +344,7 @@ func (rt *RouterTest) TestNotFound(t *testing.T, mux ambient.AppRouter) {
 }
 
 // TestBadRequest .
-func (rt *RouterTest) TestBadRequest(t *testing.T, mux ambient.AppRouter) {
+func (ts *TestSuite) TestBadRequest(t *testing.T, mux ambient.AppRouter) {
 	mux.SetServeHTTP(defaultServeHTTP)
 
 	r := httptest.NewRequest("GET", "/unknown", nil)
@@ -355,7 +355,7 @@ func (rt *RouterTest) TestBadRequest(t *testing.T, mux ambient.AppRouter) {
 }
 
 // TestClear .
-func (rt *RouterTest) TestClear(t *testing.T, mux ambient.AppRouter) {
+func (ts *TestSuite) TestClear(t *testing.T, mux ambient.AppRouter) {
 	mux.SetServeHTTP(defaultServeHTTP)
 
 	called := false
