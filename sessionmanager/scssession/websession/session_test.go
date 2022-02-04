@@ -12,8 +12,9 @@ import (
 	"github.com/alexedwards/scs/v2"
 	"github.com/ambientkit/ambient"
 	"github.com/ambientkit/plugin/pkg/aesdata"
+	"github.com/ambientkit/plugin/pkg/filestore"
+	"github.com/ambientkit/plugin/pkg/jsonstore"
 	"github.com/ambientkit/plugin/sessionmanager/scssession/websession"
-	"github.com/ambientkit/plugin/storage/localstorage/store"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -23,10 +24,10 @@ func setup(t *testing.T) (ambient.AppSession, func(next http.Handler) http.Handl
 	// Set up the session storage provider.
 	err := ioutil.WriteFile(storageFile, []byte(""), 0644)
 	assert.NoError(t, err)
-	ss := store.NewLocalStorage(storageFile)
+	ss := filestore.New(storageFile)
 	secretkey := "82a18fbbfed2694bb15d512a70c53b1a088e669966918d3d474564b2ac44349b"
 	en := aesdata.NewEncryptedStorage(secretkey)
-	store, err := websession.NewJSONSession(ss, en)
+	store, err := jsonstore.NewJSONSession(ss, en)
 	assert.NoError(t, err)
 
 	// Initialize a new session manager and configure the session lifetime.

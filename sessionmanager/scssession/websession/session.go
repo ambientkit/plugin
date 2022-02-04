@@ -12,12 +12,6 @@ import (
 	"github.com/alexedwards/scs/v2"
 )
 
-// Sessionstorer reads and writes data to an object.
-type Sessionstorer interface {
-	Save([]byte) error
-	Load() ([]byte, error)
-}
-
 // Session stores session level information
 type Session struct {
 	Name    string

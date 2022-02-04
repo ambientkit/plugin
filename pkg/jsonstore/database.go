@@ -1,4 +1,4 @@
-package websession
+package jsonstore
 
 import (
 	"encoding/json"
@@ -20,7 +20,7 @@ type SessionData struct {
 }
 
 // Load all sessions.
-func (sd *SessionDatabase) Load(ss Sessionstorer, en Encrypter) error {
+func (sd *SessionDatabase) Load(ss SessionStorer, en Encrypter) error {
 	b, err := ss.Load()
 	if err != nil {
 		return err
@@ -44,7 +44,7 @@ func (sd *SessionDatabase) Load(ss Sessionstorer, en Encrypter) error {
 }
 
 // Save all sessions.
-func (sd *SessionDatabase) Save(ss Sessionstorer, en Encrypter) error {
+func (sd *SessionDatabase) Save(ss SessionStorer, en Encrypter) error {
 	var b []byte
 	var err error
 

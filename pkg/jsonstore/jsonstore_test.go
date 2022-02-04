@@ -1,4 +1,4 @@
-package websession_test
+package jsonstore
 
 import (
 	"io/ioutil"
@@ -7,8 +7,7 @@ import (
 	"time"
 
 	"github.com/ambientkit/plugin/pkg/aesdata"
-	"github.com/ambientkit/plugin/sessionmanager/scssession/websession"
-	"github.com/ambientkit/plugin/storage/localstorage/store"
+	"github.com/ambientkit/plugin/pkg/filestore"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -17,12 +16,12 @@ func TestNewJSONSession(t *testing.T) {
 	f := "data.bin"
 	err := ioutil.WriteFile(f, []byte(""), 0644)
 	assert.NoError(t, err)
-	ss := store.NewLocalStorage(f)
+	ss := filestore.New(f)
 
 	// Set up the session storage provider.
 	secretkey := "82a18fbbfed2694bb15d512a70c53b1a088e669966918d3d474564b2ac44349b"
 	en := aesdata.NewEncryptedStorage(secretkey)
-	store, err := websession.NewJSONSession(ss, en)
+	store, err := NewJSONSession(ss, en)
 	assert.NoError(t, err)
 
 	token := "abc"

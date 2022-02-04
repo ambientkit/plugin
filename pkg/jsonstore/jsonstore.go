@@ -1,8 +1,14 @@
-package websession
+package jsonstore
 
 import (
 	"time"
 )
+
+// SessionStorer reads and writes data to an object.
+type SessionStorer interface {
+	Save([]byte) error
+	Load() ([]byte, error)
+}
 
 // Encrypter represents a data encrypter.
 type Encrypter interface {
@@ -12,12 +18,12 @@ type Encrypter interface {
 
 // JSONSession contains session and encryption objects.
 type JSONSession struct {
-	sessionstorer Sessionstorer
+	sessionstorer SessionStorer
 	encrypter     Encrypter
 }
 
 // NewJSONSession returns a new JSONSession.
-func NewJSONSession(sd Sessionstorer, encrypter Encrypter) (*JSONSession, error) {
+func NewJSONSession(sd SessionStorer, encrypter Encrypter) (*JSONSession, error) {
 	s := &JSONSession{
 		sessionstorer: sd,
 		encrypter:     encrypter,

@@ -8,6 +8,7 @@ import (
 	"github.com/alexedwards/scs/v2"
 	"github.com/ambientkit/ambient"
 	"github.com/ambientkit/plugin/pkg/aesdata"
+	"github.com/ambientkit/plugin/pkg/jsonstore"
 	"github.com/ambientkit/plugin/sessionmanager/scssession/websession"
 )
 
@@ -75,7 +76,7 @@ func (p *Plugin) Middleware() []func(next http.Handler) http.Handler {
 func (p *Plugin) SessionManager(logger ambient.Logger, ss ambient.SessionStorer) (ambient.AppSession, error) {
 	// Set up the session storage provider.
 	en := aesdata.NewEncryptedStorage(p.sessionKey)
-	store, err := websession.NewJSONSession(ss, en)
+	store, err := jsonstore.NewJSONSession(ss, en)
 	if err != nil {
 		return nil, err
 	}

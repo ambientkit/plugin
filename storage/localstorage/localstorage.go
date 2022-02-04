@@ -3,7 +3,7 @@ package localstorage
 
 import (
 	"github.com/ambientkit/ambient"
-	"github.com/ambientkit/plugin/storage/localstorage/store"
+	"github.com/ambientkit/plugin/pkg/filestore"
 )
 
 // Plugin represents an Ambient plugin.
@@ -33,8 +33,8 @@ func (p *Plugin) PluginVersion() string {
 // Storage returns data and session storage.
 func (p *Plugin) Storage(logger ambient.Logger) (ambient.DataStorer, ambient.SessionStorer, error) {
 	// Use local filesytem for site and session information.
-	ds := store.NewLocalStorage(p.sitePath)
-	ss := store.NewLocalStorage(p.sessionPath)
+	ds := filestore.New(p.sitePath)
+	ss := filestore.New(p.sessionPath)
 
 	return ds, ss, nil
 }
