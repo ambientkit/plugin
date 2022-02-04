@@ -29,6 +29,11 @@ require (
 )
 
 require (
+	github.com/gorilla/securecookie v1.1.1 // indirect
+	github.com/gorilla/sessions v1.2.1 // indirect
+)
+
+require (
 	cloud.google.com/go v0.100.2 // indirect
 	cloud.google.com/go/compute v1.1.0 // indirect
 	cloud.google.com/go/iam v0.1.1 // indirect

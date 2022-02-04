@@ -10,7 +10,7 @@ import (
 	"runtime"
 
 	"github.com/ambientkit/ambient"
-	"github.com/ambientkit/plugin/templateengine/htmlengine/lib/templatebuffer"
+	"github.com/ambientkit/plugin/pkg/templatebuffer"
 )
 
 // Engine represents a HTML template engine.

@@ -1,11 +1,11 @@
 package main
 
 import (
-	"crypto/rand"
-	"encoding/hex"
 	"fmt"
 	"log"
 	"os"
+
+	"github.com/ambientkit/plugin/pkg/uuid"
 )
 
 func init() {
@@ -21,12 +21,6 @@ func init() {
 
 func main() {
 	// Generate a new private key for AES-256.
-	bytes := make([]byte, 32)
-	if _, err := rand.Read(bytes); err != nil {
-		panic(err.Error())
-	}
-
-	// Encode key in bytes to string for saving.
-	key := hex.EncodeToString(bytes)
+	key := uuid.EncodedString(32)
 	fmt.Printf("AMB_SESSION_KEY=%v\n", key)
 }

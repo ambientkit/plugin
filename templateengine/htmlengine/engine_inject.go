@@ -3,7 +3,7 @@ package htmlengine
 import (
 	"html/template"
 
-	"github.com/ambientkit/plugin/templateengine/htmlengine/lib/templatebuffer"
+	"github.com/ambientkit/plugin/pkg/templatebuffer"
 )
 
 func (te *Engine) inject(t *template.Template, field string, content string, fm template.FuncMap, data map[string]interface{}) (*template.Template, error) {

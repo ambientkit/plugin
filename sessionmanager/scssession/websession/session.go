@@ -3,13 +3,13 @@ package websession
 
 import (
 	"context"
-	"crypto/rand"
 	"errors"
 	"fmt"
 	"net/http"
 	"strings"
 
 	"github.com/alexedwards/scs/v2"
+	"github.com/ambientkit/plugin/pkg/uuid"
 )
 
 // Session stores session level information
@@ -90,7 +90,7 @@ func (s *Session) DeleteSessionValue(r *http.Request, name string) {
 // SetCSRF sets a cross site request forgery token for the current request to
 // allow for validation during form submission.
 func (s *Session) SetCSRF(r *http.Request) string {
-	token := generate(32)
+	token := uuid.RandomString(32)
 	path := "csrf_" + r.URL.Path
 	s.SetSessionValue(r, path, token)
 	return token
@@ -110,17 +110,4 @@ func (s *Session) CSRF(r *http.Request, token string) bool {
 	}
 
 	return false
-}
-
-// Generate a token.
-// Source: https://devpy.wordpress.com/2013/10/24/create-random-string-in-golang/
-func generate(length int) string {
-	alphanum := "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-	var bytes = make([]byte, length)
-	rand.Read(bytes)
-	for i, b := range bytes {
-		bytes[i] = alphanum[b%byte(len(alphanum))]
-	}
-
-	return string(bytes)
 }

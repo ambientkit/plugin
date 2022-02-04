@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/ambientkit/plugin/generic/bearblog/lib/totp"
+	"github.com/ambientkit/plugin/pkg/totp"
 	qrcode "github.com/skip2/go-qrcode"
 )
 
