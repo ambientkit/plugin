@@ -1,6 +1,8 @@
 package zaplogger
 
 import (
+	"io"
+
 	"github.com/ambientkit/ambient"
 	"github.com/mattn/go-colorable"
 	"go.uber.org/zap"
@@ -17,16 +19,23 @@ type Logger struct {
 }
 
 // NewLogger returns a new logger with a default log level of error.
-func NewLogger(appName string, appVersion string) *Logger {
+func NewLogger(appName string, appVersion string, optionalWriter io.Writer) *Logger {
 	loglevel := zap.NewAtomicLevel()
 	encoderCfg := zap.NewProductionEncoderConfig()
 	encoderCfg.TimeKey = "" // Disable timestamps.
 	encoderCfg.EncodeLevel = zapcore.CapitalColorLevelEncoder
+
+	var writer io.Writer
+	if optionalWriter == nil {
+		writer = colorable.NewColorableStdout()
+	} else {
+		writer = optionalWriter
+	}
+
 	base := zap.New(zapcore.NewCore(
 		zapcore.NewConsoleEncoder(encoderCfg),
 		//zapcore.NewJSONEncoder(encoderCfg),
-		zapcore.AddSync(colorable.NewColorableStdout()),
-		//zapcore.Lock(os.Stdout),
+		zapcore.AddSync(writer),
 		loglevel,
 	))
 

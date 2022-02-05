@@ -1,6 +1,8 @@
 package logruslogger
 
 import (
+	"io"
+
 	"github.com/ambientkit/ambient"
 	"github.com/sirupsen/logrus"
 )
@@ -14,10 +16,13 @@ type Logger struct {
 }
 
 // NewLogger returns a new logger with a default log level of error.
-func NewLogger(appName string, appVersion string) *Logger {
+func NewLogger(appName string, appVersion string, optionalWriter io.Writer) *Logger {
 	var base = logrus.New()
 	//base.SetFormatter(&logrus.JSONFormatter{})
 	base.Level = logrus.InfoLevel
+	if optionalWriter != nil {
+		base.Out = optionalWriter
+	}
 
 	return &Logger{
 		log: base,
@@ -40,27 +45,30 @@ func (l *Logger) logentry() *logrus.Entry {
 func (l *Logger) SetLogLevel(level ambient.LogLevel) {
 	// Set log level temporarily to info.
 	l.log.Level = logrus.InfoLevel
+	loglevel := logrus.InfoLevel
 
 	switch level {
 	case ambient.LogLevelDebug:
-		l.log.Level = logrus.DebugLevel
+		loglevel = logrus.DebugLevel
 		l.logentry().Infoln("logruslogger: log level set to:", "debug")
 	case ambient.LogLevelInfo:
-		l.log.Level = logrus.InfoLevel
+		loglevel = logrus.InfoLevel
 		l.logentry().Infoln("logruslogger: log level set to:", "info")
 	case ambient.LogLevelWarn:
-		l.log.Level = logrus.WarnLevel
+		loglevel = logrus.WarnLevel
 		l.logentry().Infoln("logruslogger: log level set to:", "warn")
 	case ambient.LogLevelError:
-		l.log.Level = logrus.ErrorLevel
+		loglevel = logrus.ErrorLevel
 		l.logentry().Infoln("logruslogger: log level set to:", "error")
 	case ambient.LogLevelFatal:
-		l.log.Level = logrus.FatalLevel
+		loglevel = logrus.FatalLevel
 		l.logentry().Infoln("loglogrusloggerrus: log level set to:", "fatal")
 	default:
-		l.log.Level = logrus.InfoLevel
+		loglevel = logrus.InfoLevel
 		l.logentry().Infoln("logruslogger: log level set to:", "info")
 	}
+
+	l.log.Level = loglevel
 }
 
 // Debug is equivalent to log.Printf() + "\n" if format is not empty.

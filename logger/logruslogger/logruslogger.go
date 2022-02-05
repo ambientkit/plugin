@@ -2,6 +2,8 @@
 package logruslogger
 
 import (
+	"io"
+
 	"github.com/ambientkit/ambient"
 )
 
@@ -26,9 +28,9 @@ func (p *Plugin) PluginVersion() string {
 }
 
 // Logger returns a logger.
-func (p *Plugin) Logger(appName string, appVersion string) (ambient.AppLogger, error) {
+func (p *Plugin) Logger(appName string, appVersion string, optionalWriter io.Writer) (ambient.AppLogger, error) {
 	// Create the logger.
-	p.log = NewLogger(appName, appVersion)
+	p.log = NewLogger(appName, appVersion, optionalWriter)
 
 	return p.log, nil
 }
