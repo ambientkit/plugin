@@ -152,13 +152,13 @@ When a change to the app is made or data is read or modified in `site.bin` file,
 A few things to note:
 - Logger plugin and storage plugin are automatically trusted because they are loaded before the plugin system boots.
 - Router plugin and template engine plugin are automatically trusted because they are explicitly passed to the plugin system.
-- Logger, storage, template engine, and router won't have the `Enable()` func called so it will only be able to use parts of the toolkit that are passed in when their respective functions are called. You can also remove the `*ambient.PluginBase` and `*ambient.Toolkit` from the main struct since they won't be used. You can see [zaplogger](plugin/logger/zaplogger/zaplogger.go) as an example.
+- Logger, storage, template engine, and router won't have the `Enable()` func called so it will only be able to use parts of the toolkit that are passed in when their respective functions are called. You can also remove the `*ambient.PluginBase` and `*ambient.Toolkit` from the main struct since they won't be used. You can see [zaplogger](logger/zaplogger/zaplogger.go) as an example.
 - Session manager should always have a middleware component to it so shouldn't be listed in the Plugins section, but it should be listed in the Middleware section. Be sure to define it only once and then use it as both a parameter for `ambient.PluginLoader.SessionManager` and `ambient.PluginLoader.Middleware`. You define it in middleware so you can control when it gets called relative to other middleware.
 - Plugin manager should be in the trusted plugins list since it's required to enable other plugins.
 
 ## Plugin Functions
 
-Ambient supports the following types of plugin functions via the [Plugin interface](ambient.go):
+Ambient supports the following types of plugin functions via the [Plugin interface](https://github.com/ambientkit/ambient/blob/main/ambient.go):
 
 - logger
 - storage system
@@ -346,6 +346,18 @@ The template engine plugin must include the MVP code as well as the `TemplateEng
 func (p *Plugin) TemplateEngine(logger ambient.Logger, injector ambient.AssetInjector) (ambient.Renderer, error) {
 	tmpl := NewTemplateEngine(logger, injector)
 	return tmpl, nil
+}
+```
+
+The function should take in both the Logger and [`AssetInjector`](https://github.com/ambientkit/ambient/blob/main/asset_injector.go).
+
+```go
+// AssetInjector represents code that can inject files into a template.
+type AssetInjector interface {
+	Inject(injector LayoutInjector, t *template.Template, r *http.Request,
+		layoutType LayoutType, vars map[string]interface{}) (*template.Template, error)
+	DebugTemplates() bool
+	EscapeTemplates() bool
 }
 ```
 
