@@ -178,7 +178,7 @@ The main difference between the plugins is what functions are called in them.
 
 ### Logger
 
-A [logger](plugin/logruslogger/logruslogger.go) outputs messages at different levels: fatal, error, warn, info, and debug. It's helpful when you can provide more information during troubleshooting by changing the log level because you can get to the bottom of issues quicker. The logger is used by the Ambient internal system and is made available to plugins as well.
+A [logger](logger/logruslogger/logruslogger.go) outputs messages at different levels: fatal, error, warn, info, and debug. It's helpful when you can provide more information during troubleshooting by changing the log level because you can get to the bottom of issues quicker. The logger is used by the Ambient internal system and is made available to plugins as well.
 
 The logger plugin must include the MVP code as well as the `Logger()` function.
 
@@ -191,7 +191,7 @@ func (p *Plugin) Logger(appName string, appVersion string) (ambient.AppLogger, e
 }
 ```
 
-The function should return an object that satisfies the [`AppLogger`](ambient_logger.go) interface. You should probably also add in an option to output in either human readable format (tabs) or JSON to make it easy to work with in development or in production.
+The function should return an object that satisfies the [`AppLogger`](https://github.com/ambientkit/ambient/blob/main/ambient_logger.go) interface. You should probably also add in an option to output in either human readable format (tabs) or JSON to make it easy to work with in development or in production.
 
 ```go
 package ambient
@@ -236,7 +236,7 @@ const (
 
 ### Storage System
 
-A [storage system](plugin/gcpbucketstorage/gcpbucketstorage.go) stores the web app settings (title, content, scheme, URL, etc.) as well as plugin status (enabled/disabled), settings, and permissions granted.
+A [storage system](storage/gcpbucketstorage/gcpbucketstorage.go) stores the web app settings (title, content, scheme, URL, etc.) as well as plugin status (enabled/disabled), settings, and permissions granted.
 
 The storage system plugin must include the MVP code as well as the `Storage()` function.
 
@@ -265,7 +265,7 @@ func (p *Plugin) Storage(logger ambient.Logger) (ambient.DataStorer, ambient.Ses
 }
 ```
 
-The function should return objects that satisfy the [`DataStorer`](ambient_datastorer.go) interface and the [`SessionStorer`](ambient_sessionstorer.go) interface. Notice you don't have to worry about the type of data. This makes it easy to read or write to any medium.
+The function should return objects that satisfy the [`DataStorer`](https://github.com/ambientkit/ambient/blob/main/ambient_datastorer.go) interface and the [`SessionStorer`](https://github.com/ambientkit/ambient/blob/main/ambient_sessionstorer.go) interface. Notice you don't have to worry about the type of data. This makes it easy to read or write to any medium.
 
 ```go
 // DataStorer reads and writes data to an object.
@@ -284,7 +284,7 @@ type SessionStorer interface {
 
 ### Session Manager
 
-A [session manager](plugin/scssession/scssession.go) authenticates and verify users.
+A [session manager](sessionmanager/scssession/scssession.go) authenticates and verify users.
 
 The session manager plugin must include the MVP code as well as the `SessionManager()` function. It should also include a `Middleware()` function to verify users when they try to access authenticated routes. You can get more information in the the [Middleware](#middleware) section below.
 
@@ -317,7 +317,7 @@ func (p *Plugin) Middleware() []func(next http.Handler) http.Handler {
 }
 ```
 
-The `SessionManager()` function should return an object that satisfies the [`AppSession`](ambient_session.go) interface. The `Middleware()` function should return an object that satisfies the `[]func(next http.Handler) http.Handler` definition.
+The `SessionManager()` function should return an object that satisfies the [`AppSession`](https://github.com/ambientkit/ambient/blob/main/ambient_session.go) interface. The `Middleware()` function should return an object that satisfies the `[]func(next http.Handler) http.Handler` definition.
 
 ```go
 // AppSession represents a user session.
@@ -337,7 +337,7 @@ type AppSession interface {
 
 ### Template Engine
 
-A [template engine](plugin/htmlengine/htmlengine.go) renders content to the `ResponseWriter`.
+A [template engine](templateengine/htmlengine/htmlengine.go) renders content to the `ResponseWriter`.
 
 The template engine plugin must include the MVP code as well as the `TemplateEngine()` function.
 
@@ -361,7 +361,7 @@ type AssetInjector interface {
 }
 ```
 
-The function should return an object that satisfies the [`Renderer`](ambient_renderer.go) interface. The page and post allow you to define two different formats when rendering content so you can have the assets affect each differently.
+The function should return an object that satisfies the [`Renderer`](https://github.com/ambientkit/ambient/blob/main/ambient_renderer.go) interface. The page and post allow you to define two different formats when rendering content so you can have the assets affect each differently.
 
 ```go
 // Renderer represents a template renderer.
@@ -381,7 +381,7 @@ type Renderer interface {
 
 ### Router
 
-A [router](plugin/awayrouter/awayrouter.go) handles web requests based on the HTTP method and route.
+A [router](router/awayrouter/awayrouter.go) handles web requests based on the HTTP method and route.
 
 A router plugin must include the MVP code as well as the `Router()` function.
 
@@ -398,7 +398,7 @@ func (p *Plugin) Router(logger ambient.Logger, te ambient.Renderer) (ambient.App
 }
 ```
 
-The function should return an object that satisfies the [`AppRouter`](ambient_router.go) interface. Note the router needs to support clearing routes which may require extending popular router packages.
+The function should return an object that satisfies the [`AppRouter`](https://github.com/ambientkit/ambient/blob/main/ambient_router.go) interface. Note the router needs to support clearing routes which may require extending popular router packages.
 
 ```go
 // AppRouter represents a router.
@@ -428,7 +428,7 @@ type Router interface {
 
 ### Middleware
 
-[Middleware](plugin/scssession/scssession.go) runs code before or after a route is served. It's useful for tasks like loging a request, checking if the user is authenticated, and compressing the response.
+[Middleware](sessionmanager/scssession/scssession.go) runs code before or after a route is served. It's useful for tasks like loging a request, checking if the user is authenticated, and compressing the response.
 
 A middleware plugin must include the MVP code as well as the `Middleware()` function.
 
@@ -447,7 +447,7 @@ The `Middleware()` function should return an object that satisfies the `[]func(n
 
 The `Routes()` function registers HTTP handlers with the router.
 
-A [plugin with routes](plugin/simplelogin/simplelogin.go) defined must include the MVP code as well as the `Routes()` function.
+A [plugin with routes](generic/simplelogin/simplelogin.go) defined must include the MVP code as well as the `Routes()` function.
 
 ```go
 // Routes gets routes for the plugin.
@@ -475,7 +475,7 @@ func (p *Plugin) Home(w http.ResponseWriter, r *http.Request) (status int, err e
 
 The `GrantRequests()` function returns a list of permissions required by the plugin. The admin of the app must enable each of the permissions.
 
-A [plugin](plugin/prism/prism.go) that needs to make changes to the app or interact with its data must include the MVP code as well as the `GrantRequests()` function.
+A [plugin](generic/prism/prism.go) that needs to make changes to the app or interact with its data must include the MVP code as well as the `GrantRequests()` function.
 
 ```go
 // GrantRequests returns a list of grants requested by the plugin.
@@ -488,13 +488,13 @@ func (p *Plugin) GrantRequests() []ambient.GrantRequest {
 }
 ```
 
-The function returns a `[]GrantRequest` object. You can see the full list of permissions in [model_grant.go](model_grant.go).
+The function returns a `[]GrantRequest` object. You can see the full list of permissions in [model_grant.go](https://github.com/ambientkit/ambient/blob/main/model_grant.go).
 
 ### Settings
 
 The `Settings()` function returns a list of settings that can be edited from the pluginmanager UI.
 
-A [plugin](plugin/simplelogin/simplelogin.go) that has configurable settings should use MVP code as well as the `Settings()` function.
+A [plugin](generic/simplelogin/simplelogin.go) that has configurable settings should use MVP code as well as the `Settings()` function.
 
 ```go
 // Settings returns a list of user settable fields.
@@ -543,13 +543,13 @@ func (p *Plugin) Settings() []ambient.Setting {
 }
 ```
 
-You can see all of the available setting types in the [model_setting.go](model_setting.go) file.
+You can see all of the available setting types in the [model_setting.go](https://github.com/ambientkit/ambient/blob/main/model_setting.go) file.
 
 ### Assets
 
 The `Assets()` function returns a list of assets that can modify the template output. They can be used to link to local resources like stylesheets and javascript files or they can link to external resources. You can also define the header and footer for template output. Assets support templating from a string or from a template. You can even add HTML tags to the template output. They are pretty powerful and support a bunch of use cases.
 
-A [plugin](plugin/simplelogin/simplelogin.go) that has assets should use MVP code as well as the `Assets()` function.
+A [plugin](generic/simplelogin/simplelogin.go) that has assets should use MVP code as well as the `Assets()` function.
 
 ```go
 // Assets returns a list of assets and an embedded filesystem.
@@ -625,13 +625,13 @@ func (p *Plugin) Assets() ([]ambient.Asset, *embed.FS) {
 }
 ```
 
-You can see all of the available setting types in the [asset.go](asset.go) file.
+You can see all of the available setting types in the [asset.go](https://github.com/ambientkit/ambient/blob/main/asset.go) file.
 
 ### Funcmaps
 
 The `FuncMap()` function returns a `template.FuncMap` that can be used in the templates. They can also be used in assets which is pretty cool.
 
-A [plugin](plugin/disqus/diqus.go) that needs a FuncMap for templates should use MVP code as well as the `Assets()` function.
+A [plugin](generic/disqus/diqus.go) that needs a FuncMap for templates should use MVP code as well as the `Assets()` function.
 
 ```go
 // FuncMap returns a callable function when passed in a request.
