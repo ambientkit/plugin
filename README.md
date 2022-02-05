@@ -243,23 +243,14 @@ The storage system plugin must include the MVP code as well as the `Storage()` f
 ```go
 // Storage returns data and session storage.
 func (p *Plugin) Storage(logger ambient.Logger) (ambient.DataStorer, ambient.SessionStorer, error) {
-	var ds ambient.DataStorer
-	var ss ambient.SessionStorer
-
-	if envdetect.RunningLocalDev() {
-		// Use local filesytem when developing.
-		ds = store.NewLocalStorage(p.sitePath)
-		ss = store.NewLocalStorage(p.sessionPath)
-	} else {
-		bucket, err := p.Site.PluginSettingString(Bucket)
-		if err != nil {
-			return nil, nil, err
-		}
-
-		// Use Google when running in GCP.
-		ds = store.NewGCPStorage(bucket, p.sitePath)
-		ss = store.NewGCPStorage(bucket, p.sessionPath)
+	// Load the bucket from the environment variable.
+	bucket := os.Getenv(BucketEnv)
+	if len(bucket) == 0 {
+		return nil, nil, fmt.Errorf("%v: environment variable, %v, is missing", p.PluginName(), BucketEnv)
 	}
+
+	ds := store.NewGCPStorage(bucket, p.sitePath)
+	ss := store.NewGCPStorage(bucket, p.sessionPath)
 
 	return ds, ss, nil
 }
