@@ -19,7 +19,7 @@ import (
 
 var storageFile = "data.bin"
 
-// Run the standard router test suite.
+// Run the standard session manager test suite.
 func TestMain(t *testing.T) {
 	ts := sessmgrtestsuite.New()
 
