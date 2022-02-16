@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/ambientkit/ambient"
-	"github.com/ambientkit/ambient/pkg/envdetect"
+	"github.com/ambientkit/ambient/lib/envdetect"
 	"github.com/ambientkit/plugin/storage/awsbucketstorage"
 	"github.com/ambientkit/plugin/storage/azureblobstorage"
 	"github.com/ambientkit/plugin/storage/gcpbucketstorage"
@@ -20,11 +20,11 @@ func StorageBasedOnCloud(sitePath string, sessionPath string) ambient.StoragePlu
 	var storage ambient.StoragePlugin
 	if envdetect.RunningLocalDev() {
 		storage = localstorage.New(sitePath, sessionPath)
-	} else if envdetect.RunningInGoogle() {
+	} else if RunningInGoogle() {
 		storage = gcpbucketstorage.New(sitePath, sessionPath)
-	} else if envdetect.RunningInAWS() {
+	} else if RunningInAWS() {
 		storage = awsbucketstorage.New(sitePath, sessionPath)
-	} else if envdetect.RunningInAzureFunction() {
+	} else if RunningInAzureFunction() {
 		storage = azureblobstorage.New(sitePath, sessionPath)
 	} else {
 		// Defaulting to local storage.
