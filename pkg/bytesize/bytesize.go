@@ -33,6 +33,11 @@ const (
 	YB
 )
 
+// String returns float64 in bytes.
+func String(b float64) string {
+	return ByteSize(b).String()
+}
+
 func (b ByteSize) String() string {
 	switch {
 	case b >= YB:

@@ -42,8 +42,6 @@ const (
 	NegativeParen
 )
 
-/////////////////////////////}
-
 func negativeFormat(i interface{}, negativeType Negative) string {
 	p := message.NewPrinter(language.English)
 
