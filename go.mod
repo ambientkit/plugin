@@ -16,15 +16,18 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.24.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dgryski/dgoogauth v0.0.0-20190221195224-5a805980a5f3
+	github.com/disintegration/imaging v1.6.2
 	github.com/go-chi/chi v1.5.4
 	github.com/go-playground/validator/v10 v10.10.0
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gorilla/sessions v1.2.1
+	github.com/haisum/recaptcha v0.0.0-20170327142240-7d3b8053900e
 	github.com/josephspurrier/rove v0.0.0-20190513125012-6843a2df19ca
 	github.com/mattn/go-colorable v0.1.12
 	github.com/microcosm-cc/bluemonday v1.0.17
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c
 	github.com/russross/blackfriday/v2 v2.1.0
+	github.com/rwcarlsen/goexif v0.0.0-20190401172101-9e8deecbddbd
 	github.com/sirupsen/logrus v1.8.1
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/stretchr/testify v1.7.0
@@ -39,6 +42,7 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/jmoiron/sqlx v1.3.4 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
+	golang.org/x/image v0.0.0-20191009234506-e7c1f5e7dbb8 // indirect
 )
 
 require (
