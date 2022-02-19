@@ -14,8 +14,10 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.13.1
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.9.1
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.24.1
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dgryski/dgoogauth v0.0.0-20190221195224-5a805980a5f3
 	github.com/go-chi/chi v1.5.4
+	github.com/go-playground/validator/v10 v10.10.0
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gorilla/sessions v1.2.1
 	github.com/josephspurrier/rove v0.0.0-20190513125012-6843a2df19ca
@@ -32,8 +34,11 @@ require (
 )
 
 require (
+	github.com/go-playground/locales v0.14.0 // indirect
+	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/jmoiron/sqlx v1.3.4 // indirect
+	github.com/leodido/go-urn v1.2.1 // indirect
 )
 
 require (
