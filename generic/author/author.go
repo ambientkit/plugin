@@ -10,7 +10,6 @@ import (
 // Plugin represents an Ambient plugin.
 type Plugin struct {
 	*ambient.PluginBase
-	*ambient.Toolkit
 }
 
 // New returns an Ambient plugin that sets an author meta tag in the HTML header.
@@ -34,12 +33,6 @@ const (
 	// Author allows user to set the author.
 	Author = "Author"
 )
-
-// Enable accepts the toolkit.
-func (p *Plugin) Enable(toolkit *ambient.Toolkit) error {
-	p.Toolkit = toolkit
-	return nil
-}
 
 // GrantRequests returns a list of grants requested by the plugin.
 func (p *Plugin) GrantRequests() []ambient.GrantRequest {

@@ -12,7 +12,6 @@ import (
 // Plugin represents an Ambient plugin.
 type Plugin struct {
 	*ambient.PluginBase
-	*ambient.Toolkit
 
 	secret         []byte
 	sessionTimeout time.Duration
@@ -37,12 +36,6 @@ func (p *Plugin) PluginName() string {
 // PluginVersion returns the plugin version.
 func (p *Plugin) PluginVersion() string {
 	return "1.0.0"
-}
-
-// Enable accepts the toolkit.
-func (p *Plugin) Enable(toolkit *ambient.Toolkit) error {
-	p.Toolkit = toolkit
-	return nil
 }
 
 // Middleware returns router middleware.

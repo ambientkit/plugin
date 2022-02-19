@@ -13,7 +13,6 @@ import (
 // Plugin represents an Ambient plugin.
 type Plugin struct {
 	*ambient.PluginBase
-	*ambient.Toolkit
 	dbinfo *DBInfo
 }
 

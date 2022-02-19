@@ -12,7 +12,6 @@ import (
 // Plugin represents an Ambient plugin.
 type Plugin struct {
 	*ambient.PluginBase
-	*ambient.Toolkit
 
 	urlForProxy  *url.URL
 	prefixForAPI string
