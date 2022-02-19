@@ -34,28 +34,28 @@ const (
 )
 
 // String returns float64 in bytes.
-func String(b float64) string {
-	return ByteSize(b).String()
+func String(b float64, decimals int) string {
+	return ByteSize(b).String(decimals)
 }
 
-func (b ByteSize) String() string {
+func (b ByteSize) String(decimals int) string {
 	switch {
 	case b >= YB:
-		return fmt.Sprintf("%.2f YB", b/YB)
+		return fmt.Sprintf("%."+fmt.Sprint(decimals)+"f YB", b/YB)
 	case b >= ZB:
-		return fmt.Sprintf("%.2f ZB", b/ZB)
+		return fmt.Sprintf("%."+fmt.Sprint(decimals)+"f ZB", b/ZB)
 	case b >= EB:
-		return fmt.Sprintf("%.2f EB", b/EB)
+		return fmt.Sprintf("%."+fmt.Sprint(decimals)+"f EB", b/EB)
 	case b >= PB:
-		return fmt.Sprintf("%.2f PB", b/PB)
+		return fmt.Sprintf("%."+fmt.Sprint(decimals)+"f PB", b/PB)
 	case b >= TB:
-		return fmt.Sprintf("%.2f TB", b/TB)
+		return fmt.Sprintf("%."+fmt.Sprint(decimals)+"f TB", b/TB)
 	case b >= GB:
-		return fmt.Sprintf("%.2f GB", b/GB)
+		return fmt.Sprintf("%."+fmt.Sprint(decimals)+"f GB", b/GB)
 	case b >= MB:
-		return fmt.Sprintf("%.2f MB", b/MB)
+		return fmt.Sprintf("%."+fmt.Sprint(decimals)+"f MB", b/MB)
 	case b >= KB:
-		return fmt.Sprintf("%.2f KB", b/KB)
+		return fmt.Sprintf("%."+fmt.Sprint(decimals)+"f KB", b/KB)
 	}
-	return fmt.Sprintf("%.2f B", b)
+	return fmt.Sprintf("%."+fmt.Sprint(decimals)+"f B", b)
 }
