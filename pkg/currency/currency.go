@@ -2,60 +2,90 @@ package currency
 
 import (
 	"fmt"
-	"strconv"
-	"strings"
+	"math"
+
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 )
 
-// Format numbers with commas and dollar signs. Only works below
-// $1 million.
-func Format(i int) string {
-	s := strconv.Itoa(i)
-
-	if i < 1000 {
-		return fmt.Sprintf("$%v", s)
-	} else if i < 10000 {
-		return fmt.Sprintf("$%v,%v", s[0:1], s[1:])
-	} else if i < 100000 {
-		return fmt.Sprintf("$%v,%v", s[0:2], s[2:])
-	} else if i < 1000000 {
-		return fmt.Sprintf("$%v,%v", s[0:3], s[3:])
-	}
-
-	return fmt.Sprintf("$%v", s)
+// FormatIntNegativeSign returns a string with dollar sign, commas, and a minus sign if
+// negative.
+func FormatIntNegativeSign(i int) string {
+	return negativeFormat(i, NegativeSign)
 }
 
-// FormatFloat converts a float into a currency with commas and a dollar sign.
-func FormatFloat(i float64) string {
-	f := fmt.Sprintf("%.2f", i)
+// FormatIntParens returns a string with dollar sign, commas, and in parenthesis
+// if negative.
+func FormatIntParens(i int) string {
+	return negativeFormat(i, NegativeParen)
+}
 
-	final := make([]string, 0)
+// FormatFloat64NegativeSign reurns a string with dollar sign, commas, and in
+// parenthesis if negative.
+func FormatFloat64NegativeSign(i float64) string {
+	return negativeFormat(i, NegativeSign)
+}
 
-	small := ""
-	counter := 0
+// FormatFloat64Parens reurns a string with dollar sign, commas, and a minus
+// sign if negative.
+func FormatFloat64Parens(i float64) string {
+	return negativeFormat(i, NegativeParen)
+}
 
-	for i := 0; i < len(f); i++ {
-		char := string(f[len(f)-i-1])
+// Negative is format of showing a negative currency.
+type Negative int64
 
-		small = char + small
+const (
+	// NegativeSign shows currency with a minus sign.
+	NegativeSign Negative = iota
+	// NegativeParen shows currency in parenthesis.
+	NegativeParen
+)
 
-		if i < 3 {
-			continue
-		}
+/////////////////////////////}
 
-		counter++
+func negativeFormat(i interface{}, negativeType Negative) string {
+	p := message.NewPrinter(language.English)
 
-		if counter < 3 {
-			continue
-		}
+	raw := ""
+	negative := false
 
-		final = append([]string{small}, final...)
-		small = ""
-		counter = 0
+	switch v := i.(type) {
+	case int:
+		var abs int
+		abs, negative = absInt(v)
+		raw = p.Sprintf("$%d", abs)
+	case float64:
+		var abs float64
+		abs, negative = absFloat64(v)
+		raw = p.Sprintf("$%.2f", abs)
 	}
 
-	if len(small) > 0 {
-		final = append([]string{small}, final...)
+	if negative {
+		switch negativeType {
+		case NegativeSign:
+			return fmt.Sprintf("-%s", raw)
+		case NegativeParen:
+			return fmt.Sprintf("(%s)", raw)
+		}
 	}
 
-	return "$" + strings.Join(final, ",")
+	return raw
+}
+
+// absInt returns absolute value for int and whether it was negative or not.
+func absInt(i int) (absInt int, negative bool) {
+	if i < 0 {
+		return -i, true
+	}
+	return i, false
+}
+
+// absFloat64 returns absolute value for a float and whether it was negative or not.
+func absFloat64(i float64) (absFloat64 float64, negative bool) {
+	abs := math.Abs(i)
+	if abs != i {
+		return abs, true
+	}
+	return i, false
 }
