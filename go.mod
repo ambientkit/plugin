@@ -18,6 +18,7 @@ require (
 	github.com/go-chi/chi v1.5.4
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gorilla/sessions v1.2.1
+	github.com/josephspurrier/rove v0.0.0-20190513125012-6843a2df19ca
 	github.com/mattn/go-colorable v0.1.12
 	github.com/microcosm-cc/bluemonday v1.0.17
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c
@@ -28,6 +29,11 @@ require (
 	go.uber.org/zap v1.20.0
 	golang.org/x/crypto v0.0.0-20220128200615-198e4374d7ed
 	jaytaylor.com/html2text v0.0.0-20211105163654-bc68cce691ba
+)
+
+require (
+	github.com/go-sql-driver/mysql v1.6.0 // indirect
+	github.com/jmoiron/sqlx v1.3.4 // indirect
 )
 
 require (
