@@ -13,7 +13,8 @@ import (
 // Plugin represents an Ambient plugin.
 type Plugin struct {
 	*ambient.PluginBase
-	dbinfo *DBInfo
+	dbinfo       *DBInfo
+	dbconnection *mysql.MySQL
 }
 
 // DBInfo represent the DB info.
@@ -60,7 +61,10 @@ func (p *Plugin) PluginVersion() string {
 
 // Enable accepts the toolkit.
 func (p *Plugin) Enable(toolkit *ambient.Toolkit) error {
-	p.Toolkit = toolkit
+	err := p.PluginBase.Enable(toolkit)
+	if err != nil {
+		return err
+	}
 
 	// Create the MySQL connection information from environment variables.
 	connInfo, err := mysql.NewConnection(p.dbinfo.Prefix)
@@ -82,15 +86,29 @@ func (p *Plugin) Enable(toolkit *ambient.Toolkit) error {
 		return err
 	}
 
+	err = c.DB.Close()
+	if err != nil {
+		return err
+	}
+
 	// Create a new MySQL database object.
-	db, err := mysql.New(connInfo)
+	p.dbconnection, err = mysql.New(connInfo)
 	if err != nil {
 		return err
 	}
 
 	// Migrate database.
-	r := rove.NewChangesetMigration(db, p.dbinfo.Changeset)
+	r := rove.NewChangesetMigration(p.dbconnection, p.dbinfo.Changeset)
 	r.Verbose = p.dbinfo.Verbose
 	r.Checksum = p.dbinfo.ChecksumMode
 	return r.Migrate(0)
+}
+
+// Disable handles any plugin cleanup tasks.
+func (p *Plugin) Disable() error {
+	if p.dbconnection != nil {
+		return p.dbconnection.DB.Close()
+	}
+
+	return nil
 }
