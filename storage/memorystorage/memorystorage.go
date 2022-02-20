@@ -28,6 +28,7 @@ func (p *Plugin) PluginVersion() string {
 func (p *Plugin) Storage(logger ambient.Logger) (ambient.DataStorer, ambient.SessionStorer, error) {
 	// Use local filesytem for site and session information.
 	ds := memorystore.New()
+	ds.Initalize("{}")
 	ss := memorystore.New()
 
 	return ds, ss, nil

@@ -18,6 +18,13 @@ func New() *MemoryStore {
 	}
 }
 
+// Initalize sets the initial content if it's empty.
+func (s *MemoryStore) Initalize(content string) {
+	if len(s.content) == 0 {
+		s.content = content
+	}
+}
+
 // Load returns a file contents from the filesystem.
 func (s *MemoryStore) Load() ([]byte, error) {
 	s.m.RLock()

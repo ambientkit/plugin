@@ -16,7 +16,7 @@ default: amb
 .PHONY: update
 update:
 	go get -u -f -d ./...
-	go mod tidy
+	go mod tidy -compat=1.17
 
 # Pass in ARGS.
 # https://stackoverflow.com/a/14061796
@@ -29,7 +29,7 @@ endif
 .PHONY: update-ambient
 update-ambient:
 	go get -u github.com/ambientkit/ambient@${ARGS}
-	go mod tidy
+	go mod tidy -compat=1.17
 
 # Update dependencies of other repos using this repo.
 .PHONY: update-children
