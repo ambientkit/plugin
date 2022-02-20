@@ -33,6 +33,7 @@ func (p *Plugin) PluginVersion() string {
 // GrantRequests returns a list of grants requested by the plugin.
 func (p *Plugin) GrantRequests() []ambient.GrantRequest {
 	return []ambient.GrantRequest{
+		{Grant: ambient.GrantRouterMiddlewareWrite, Description: "Access to block request if user is not logged in."},
 		{Grant: ambient.GrantUserAuthenticatedRead, Description: "Access to read the plugin settings."},
 	}
 }

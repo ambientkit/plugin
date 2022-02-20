@@ -32,6 +32,7 @@ func (p *Plugin) PluginVersion() string {
 // GrantRequests returns a list of grants requested by the plugin.
 func (p *Plugin) GrantRequests() []ambient.GrantRequest {
 	return []ambient.GrantRequest{
+		{Grant: ambient.GrantRouterMiddlewareWrite, Description: "Access to read and write ETag headers on responses."},
 		{Grant: ambient.GrantPluginSettingRead, Description: "Access to read MaxAge setting."},
 	}
 }

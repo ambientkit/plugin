@@ -89,7 +89,7 @@ func (te *Engine) pluginPartial(w http.ResponseWriter, r *http.Request, mainTemp
 }
 
 // pluginContent converts a site post from markdown to HTML and then outputs to response
-// writer. Returns an HTTP status code and an error if one occurs.
+// writer. Returns a HTTP status code and an error if one occurs.
 func (te *Engine) pluginContent(w http.ResponseWriter, r *http.Request, mainTemplate string, layoutType ambient.LayoutType, postContent string, statusCode int, fm template.FuncMap, vars map[string]interface{}) (status int, err error) {
 	// Parse the main template with the functions.
 	t, err := te.generateTemplate(r, mainTemplate, layoutType, vars)

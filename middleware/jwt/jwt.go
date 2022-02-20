@@ -38,6 +38,13 @@ func (p *Plugin) PluginVersion() string {
 	return "1.0.0"
 }
 
+// GrantRequests returns a list of grants requested by the plugin.
+func (p *Plugin) GrantRequests() []ambient.GrantRequest {
+	return []ambient.GrantRequest{
+		{Grant: ambient.GrantRouterMiddlewareWrite, Description: "Access to force authentication on routes using JWTs."},
+	}
+}
+
 // Middleware returns router middleware.
 func (p *Plugin) Middleware() []func(next http.Handler) http.Handler {
 	jwt := NewJWT(p.whitelist, jwtoken.New(p.secret, p.sessionTimeout), p.Toolkit.Site)

@@ -29,6 +29,13 @@ func (p *Plugin) PluginVersion() string {
 	return "1.0.0"
 }
 
+// GrantRequests returns a list of grants requested by the plugin.
+func (p *Plugin) GrantRequests() []ambient.GrantRequest {
+	return []ambient.GrantRequest{
+		{Grant: ambient.GrantRouterMiddlewareWrite, Description: "Access to log each user request."},
+	}
+}
+
 // Middleware returns router middleware.
 func (p *Plugin) Middleware() []func(next http.Handler) http.Handler {
 	return []func(next http.Handler) http.Handler{

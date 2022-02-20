@@ -39,6 +39,13 @@ func (p *Plugin) PluginVersion() string {
 	return "1.0.0"
 }
 
+// GrantRequests returns a list of grants requested by the plugin.
+func (p *Plugin) GrantRequests() []ambient.GrantRequest {
+	return []ambient.GrantRequest{
+		{Grant: ambient.GrantRouterMiddlewareWrite, Description: "Access to proxy requests based on request URL."},
+	}
+}
+
 // Enable accepts the toolkit.
 func (p *Plugin) Enable(toolkit *ambient.Toolkit) error {
 	err := p.PluginBase.Enable(toolkit)
