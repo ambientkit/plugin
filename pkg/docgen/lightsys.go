@@ -27,7 +27,33 @@ func LighweightAppSetup(appName string, p ambient.Plugin, trust bool) *App {
 		trusted[p.PluginName()] = true
 	}
 
-	sessionManager := scssession.New(uuid.EncodedString(32))
+	pluginList := []ambient.Plugin{
+		p,
+	}
+
+	defaultSessionManager := scssession.New(uuid.EncodedString(32))
+	var sessionManager ambient.SessionManagerPlugin
+
+	// Determine if the plugin satisfies the session manager interface.
+	sm, ok := p.(ambient.SessionManagerPlugin)
+	if ok {
+		sessionManager = sm
+		// Remove plugin if actually a session manager.
+		pluginList = []ambient.Plugin{}
+	} else {
+		sessionManager = defaultSessionManager
+	}
+
+	var middleware ambient.MiddlewarePlugin
+
+	// Determine if the plugin satisfies the middleware interface.
+	mw, ok := p.(ambient.MiddlewarePlugin)
+	if ok {
+		middleware = mw
+	} else {
+		middleware = defaultSessionManager
+	}
+
 	mux := routerecorder.New()
 	plugins := &ambient.PluginLoader{
 		// Core plugins are implicitly trusted.
@@ -37,12 +63,10 @@ func LighweightAppSetup(appName string, p ambient.Plugin, trust bool) *App {
 		// Trusted plugins are those that are typically needed to boot so they
 		// will be enabled and given full access.
 		TrustedPlugins: trusted,
-		Plugins: []ambient.Plugin{
-			p,
-		},
+		Plugins:        pluginList,
 		Middleware: []ambient.MiddlewarePlugin{
 			// Middleware - executes bottom to top.
-			sessionManager, // Session manager middleware.
+			middleware, // Session manager middleware.
 		},
 	}
 	ambientApp, logger, err := ambient.NewApp(appName, "1.0",
