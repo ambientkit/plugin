@@ -32,6 +32,7 @@ require (
 	github.com/stretchr/testify v1.7.0
 	go.uber.org/zap v1.20.0
 	golang.org/x/crypto v0.0.0-20220128200615-198e4374d7ed
+	golang.org/x/tools v0.1.5
 	jaytaylor.com/html2text v0.0.0-20211105163654-bc68cce691ba
 )
 
@@ -42,6 +43,7 @@ require (
 	github.com/jmoiron/sqlx v1.3.4 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	golang.org/x/image v0.0.0-20191009234506-e7c1f5e7dbb8 // indirect
+	golang.org/x/mod v0.4.2 // indirect
 )
 
 require (
