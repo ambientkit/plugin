@@ -8,7 +8,7 @@ Package description is an Ambient plugin that sets a description meta tag in the
 
 ## Plugin Type
 
-The plugin can be used as the follow core types:
+The plugin can be used as the following core types:
 
 - **Logger:** false
 - **Storage System:** false

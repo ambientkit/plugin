@@ -8,7 +8,7 @@ Package rssfeed is an Ambient plugin that provides an RSS feed.
 
 ## Plugin Type
 
-The plugin can be used as the follow core types:
+The plugin can be used as the following core types:
 
 - **Logger:** false
 - **Storage System:** false

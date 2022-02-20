@@ -8,7 +8,7 @@ Package bearcss is an Ambient plugin that provides styles from the Bear Blog (ht
 
 ## Plugin Type
 
-The plugin can be used as the follow core types:
+The plugin can be used as the following core types:
 
 - **Logger:** false
 - **Storage System:** false

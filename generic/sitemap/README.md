@@ -8,7 +8,7 @@ Package sitemap is an Ambient plugin that provides a sitemap.
 
 ## Plugin Type
 
-The plugin can be used as the follow core types:
+The plugin can be used as the following core types:
 
 - **Logger:** false
 - **Storage System:** false

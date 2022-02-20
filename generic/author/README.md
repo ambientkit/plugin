@@ -8,7 +8,7 @@ Package author is an Ambient plugin that sets an author meta tag in the HTML hea
 
 ## Plugin Type
 
-The plugin can be used as the follow core types:
+The plugin can be used as the following core types:
 
 - **Logger:** false
 - **Storage System:** false

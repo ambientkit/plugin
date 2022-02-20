@@ -8,7 +8,7 @@ Package azureblobstorage is an Ambient plugin that provides storage in Azure Blo
 
 ## Plugin Type
 
-The plugin can be used as the follow core types:
+The plugin can be used as the following core types:
 
 - **Logger:** false
 - **Storage System:** true

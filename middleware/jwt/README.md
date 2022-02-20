@@ -8,7 +8,7 @@ Package jwt is an Ambient plugin that enables jwt.
 
 ## Plugin Type
 
-The plugin can be used as the follow core types:
+The plugin can be used as the following core types:
 
 - **Logger:** false
 - **Storage System:** false

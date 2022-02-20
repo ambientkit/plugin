@@ -8,7 +8,7 @@ Package charset is an Ambient plugin that sets a charset meta tag in the HTML he
 
 ## Plugin Type
 
-The plugin can be used as the follow core types:
+The plugin can be used as the following core types:
 
 - **Logger:** false
 - **Storage System:** false
