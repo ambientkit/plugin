@@ -1,8 +1,8 @@
-# scssession
+# redirecttourl
 
-Package scssession is an Ambient plugin that provides session management using SCS.
+Package redirecttourl is an Ambient plugin with middlware that redirects to the correct site URL.
 
-**Import:** github.com/ambientkit/plugin/sessionmanager/scssession
+**Import:** github.com/ambientkit/plugin/middleware/redirecttourl
 
 **Version:** 1.0.0
 
@@ -14,23 +14,29 @@ The plugin can be used as the follow core types:
 - **Storage System:** false
 - **Router:** false
 - **Template Engine:** false
-- **Session Manager:** true
+- **Session Manager:** false
 
 ## Grants
 
-The plugin request the following grants (1):
+The plugin request the following grants (2):
 
 - **Name**: router.middleware:write
-  - **Description**: Access to read and write session data for the user.
+  - **Description**: Access to redirect to the correct URL if the user request URL doesn&#39;t match.
+- **Name**: site.plugin:read
+  - **Description**: Access to read the scheme and URL settings to redirect to.
 
 ## Settings
 
-The plugin has the follow settings (1):
+The plugin has the follow settings (2):
 
-- **Name**: Session Key
-  - **Type**: password
-  - **Hidden**: true
-  - **Default**: 01a38e853b28ac72f2e66afafc23f0bf0c04f90d49e93864c14c51f3d5555b98
+- **Name**: Site Scheme
+  - **Type**: input
+  - **Description**: http or https
+  - **Hidden**: false
+- **Name**: Site URL
+  - **Type**: input
+  - **Description**: example: domain.com
+  - **Hidden**: false
 
 ## Routes
 
@@ -62,26 +68,23 @@ import (
 
 	"github.com/ambientkit/ambient"
 	"github.com/ambientkit/plugin/logger/zaplogger"
-	"github.com/ambientkit/plugin/pkg/uuid"
-	"github.com/ambientkit/plugin/sessionmanager/scssession"
+	"github.com/ambientkit/plugin/middleware/redirecttourl"
 	"github.com/ambientkit/plugin/storage/memorystorage"
 )
 
 func main() {
-	sessionManager := scssession.New(uuid.EncodedString(32))
-
 	plugins := &ambient.PluginLoader{
 		// Core plugins are implicitly trusted.
 		Router:         nil,
 		TemplateEngine: nil,
-		SessionManager: sessionManager,
+		SessionManager: nil,
 		// Trusted plugins are those that are typically needed to boot so they
 		// will be enabled and given full access.
 		TrustedPlugins: map[string]bool{},
 		Plugins:        []ambient.Plugin{},
 		Middleware: []ambient.MiddlewarePlugin{
 			// Middleware - executes bottom to top.
-			sessionManager,
+			redirecttourl.New(),
 		},
 	}
 	_, _, err := ambient.NewApp("myapp", "1.0",

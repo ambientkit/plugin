@@ -1,24 +1,17 @@
-package zaplogger_test
+package jwt_test
 
 import (
-	"bufio"
 	"log"
 	"testing"
+	"time"
 
 	"github.com/ambientkit/ambient"
 	"github.com/ambientkit/plugin/logger/zaplogger"
+	"github.com/ambientkit/plugin/middleware/jwt"
 	"github.com/ambientkit/plugin/pkg/docgen"
-	"github.com/ambientkit/plugin/pkg/loggertestsuite"
+	"github.com/ambientkit/plugin/pkg/uuid"
 	"github.com/ambientkit/plugin/storage/memorystorage"
 )
-
-// Run the standard logger test suite.
-func TestMain(t *testing.T) {
-	rt := loggertestsuite.New()
-	rt.Run(t, func(writer *bufio.Writer) ambient.AppLogger {
-		return zaplogger.NewLogger("app", "1.0", writer)
-	})
-}
 
 func ExampleNew() {
 	plugins := &ambient.PluginLoader{
@@ -30,8 +23,9 @@ func ExampleNew() {
 		// will be enabled and given full access.
 		TrustedPlugins: map[string]bool{},
 		Plugins:        []ambient.Plugin{},
-		Middleware:     []ambient.MiddlewarePlugin{
+		Middleware: []ambient.MiddlewarePlugin{
 			// Middleware - executes bottom to top.
+			jwt.New([]byte(uuid.EncodedString(32)), time.Hour*1, []string{}),
 		},
 	}
 	_, _, err := ambient.NewApp("myapp", "1.0",
@@ -46,5 +40,5 @@ func ExampleNew() {
 }
 
 func TestGenerateDocs(t *testing.T) {
-	docgen.Generate(t, zaplogger.New(), "")
+	docgen.Generate(t, jwt.New([]byte(uuid.EncodedString(32)), time.Hour*1, []string{}), "")
 }

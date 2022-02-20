@@ -1,26 +1,23 @@
-package zaplogger_test
+package proxyrequest_test
 
 import (
-	"bufio"
 	"log"
+	"net/url"
 	"testing"
 
 	"github.com/ambientkit/ambient"
 	"github.com/ambientkit/plugin/logger/zaplogger"
+	"github.com/ambientkit/plugin/middleware/proxyrequest"
 	"github.com/ambientkit/plugin/pkg/docgen"
-	"github.com/ambientkit/plugin/pkg/loggertestsuite"
 	"github.com/ambientkit/plugin/storage/memorystorage"
 )
 
-// Run the standard logger test suite.
-func TestMain(t *testing.T) {
-	rt := loggertestsuite.New()
-	rt.Run(t, func(writer *bufio.Writer) ambient.AppLogger {
-		return zaplogger.NewLogger("app", "1.0", writer)
-	})
-}
-
 func ExampleNew() {
+	URL, err := url.Parse("http://localhost:8080")
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+
 	plugins := &ambient.PluginLoader{
 		// Core plugins are implicitly trusted.
 		Router:         nil,
@@ -30,11 +27,12 @@ func ExampleNew() {
 		// will be enabled and given full access.
 		TrustedPlugins: map[string]bool{},
 		Plugins:        []ambient.Plugin{},
-		Middleware:     []ambient.MiddlewarePlugin{
+		Middleware: []ambient.MiddlewarePlugin{
 			// Middleware - executes bottom to top.
+			proxyrequest.New(URL, "/api"),
 		},
 	}
-	_, _, err := ambient.NewApp("myapp", "1.0",
+	_, _, err = ambient.NewApp("myapp", "1.0",
 		zaplogger.New(),
 		ambient.StoragePluginGroup{
 			Storage: memorystorage.New(),
@@ -46,5 +44,10 @@ func ExampleNew() {
 }
 
 func TestGenerateDocs(t *testing.T) {
-	docgen.Generate(t, zaplogger.New(), "")
+	URL, err := url.Parse("http://localhost:8080")
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+
+	docgen.Generate(t, proxyrequest.New(URL, "/api"), "")
 }

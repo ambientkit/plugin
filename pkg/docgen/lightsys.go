@@ -38,7 +38,7 @@ func LighweightAppSetup(appName string, p ambient.Plugin, trust bool) *App {
 	sm, ok := p.(ambient.SessionManagerPlugin)
 	if ok {
 		sessionManager = sm
-		// Remove plugin if actually a session manager.
+		// Remove plugin from plugin list.
 		pluginList = []ambient.Plugin{}
 	} else {
 		sessionManager = defaultSessionManager
@@ -50,6 +50,8 @@ func LighweightAppSetup(appName string, p ambient.Plugin, trust bool) *App {
 	mw, ok := p.(ambient.MiddlewarePlugin)
 	if ok {
 		middleware = mw
+		// Remove plugin from plugin list.
+		pluginList = []ambient.Plugin{}
 	} else {
 		middleware = defaultSessionManager
 	}
