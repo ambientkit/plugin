@@ -4,7 +4,7 @@
         {{if .plugins }}
             {{range $p := .plugins}}
             <p>
-                <h3>{{.Name}}</h3>
+                <h3>{{.Name}} {{.PluginData.Version}}</h3>
                 <label for="id_{{.Name}}">Enable:</label>
                 <input type="checkbox" name="{{.Name}}" id="id_{{.Name}}" {{if .Enabled}}checked{{end}}>
                 <span class="helptext">
