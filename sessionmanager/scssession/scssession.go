@@ -40,6 +40,13 @@ func (p *Plugin) PluginVersion() string {
 	return "1.0.0"
 }
 
+// GrantRequests returns a list of grants requested by the plugin.
+func (p *Plugin) GrantRequests() []ambient.GrantRequest {
+	return []ambient.GrantRequest{
+		{Grant: ambient.GrantRouterMiddlewareWrite, Description: "Access to read and write session data for the user."},
+	}
+}
+
 const (
 	// SessionKey allows user to set the session key.
 	SessionKey = "Session Key"
