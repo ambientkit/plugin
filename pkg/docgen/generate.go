@@ -86,6 +86,8 @@ func (d *Doc) funcMap() template.FuncMap {
 				out += fmt.Sprintf("  - **Hidden**: %v\n", v.Hide)
 
 				if v.Default != nil {
+					// Don't show defaults for passwords since they should be
+					// randomly generated on each load when generating docs.
 					if v.Type == ambient.InputPassword {
 						out += fmt.Sprintf("  - **Has Default**: %v\n", true)
 					} else {
