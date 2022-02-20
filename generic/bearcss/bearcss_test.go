@@ -1,15 +1,14 @@
-package rove_test
+package bearcss_test
 
 import (
 	"log"
 	"testing"
 
 	"github.com/ambientkit/ambient"
-	"github.com/ambientkit/plugin/generic/rove"
+	"github.com/ambientkit/plugin/generic/bearcss"
 	"github.com/ambientkit/plugin/logger/zaplogger"
 	"github.com/ambientkit/plugin/pkg/docgen"
 	"github.com/ambientkit/plugin/storage/memorystorage"
-	"github.com/stretchr/testify/assert"
 )
 
 func ExampleNew() {
@@ -22,7 +21,7 @@ func ExampleNew() {
 		// will be enabled and given full access.
 		TrustedPlugins: map[string]bool{},
 		Plugins: []ambient.Plugin{
-			rove.New(nil),
+			bearcss.New(),
 		},
 		Middleware: []ambient.MiddlewarePlugin{
 			// Middleware - executes bottom to top.
@@ -40,19 +39,5 @@ func ExampleNew() {
 }
 
 func TestGenerateDocs(t *testing.T) {
-	docgen.Generate(t, rove.New(nil), "")
-}
-
-func TestMain(t *testing.T) {
-	var err error
-	// docker run --name=mysql57 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -d mysql:5.7
-	// docker rm mysql57 -f
-	// os.Setenv("DB_USERNAME", "root")
-	// os.Setenv("DB_PASSWORD", "password")
-	// os.Setenv("DB_HOSTNAME", "localhost")
-	// os.Setenv("DB_PORT", "3306")
-	// os.Setenv("DB_NAME", "main")
-	// p := rove.New(nil)
-	// err = p.Enable(nil)
-	assert.NoError(t, err)
+	docgen.Generate(t, bearcss.New(), "")
 }

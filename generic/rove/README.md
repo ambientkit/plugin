@@ -1,18 +1,64 @@
-package rove_test
+# rove
+
+Package rove is an Ambient plugin that provides MySQL migrations.
+
+**Import:** github.com/ambientkit/plugin/generic/rove
+
+**Version:** 1.0.0
+
+## Plugin Type
+
+The plugin can be used as the follow core types:
+
+- **Logger:** false
+- **Storage System:** false
+- **Router:** false
+- **Template Engine:** false
+- **Session Manager:** false
+
+## Grants
+
+The plugin does not request any grants.
+
+## Settings
+
+The plugin does not have any settings.
+
+## Routes
+
+The plugin does not have any routes.
+
+## Middleware
+
+The plugin does not have any middleware.
+
+## FuncMap
+
+The plugin does not have a FuncMap.
+
+## Assets
+
+The plugin does not inject any assets.
+
+## Embedded Files
+
+The plugin does not have any embedded files.
+
+## Example Usage
+
+```go
+package main
 
 import (
 	"log"
-	"testing"
 
 	"github.com/ambientkit/ambient"
 	"github.com/ambientkit/plugin/generic/rove"
 	"github.com/ambientkit/plugin/logger/zaplogger"
-	"github.com/ambientkit/plugin/pkg/docgen"
 	"github.com/ambientkit/plugin/storage/memorystorage"
-	"github.com/stretchr/testify/assert"
 )
 
-func ExampleNew() {
+func main() {
 	plugins := &ambient.PluginLoader{
 		// Core plugins are implicitly trusted.
 		Router:         nil,
@@ -38,21 +84,4 @@ func ExampleNew() {
 		log.Fatalln(err.Error())
 	}
 }
-
-func TestGenerateDocs(t *testing.T) {
-	docgen.Generate(t, rove.New(nil), "")
-}
-
-func TestMain(t *testing.T) {
-	var err error
-	// docker run --name=mysql57 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -d mysql:5.7
-	// docker rm mysql57 -f
-	// os.Setenv("DB_USERNAME", "root")
-	// os.Setenv("DB_PASSWORD", "password")
-	// os.Setenv("DB_HOSTNAME", "localhost")
-	// os.Setenv("DB_PORT", "3306")
-	// os.Setenv("DB_NAME", "main")
-	// p := rove.New(nil)
-	// err = p.Enable(nil)
-	assert.NoError(t, err)
-}
+```

@@ -25,7 +25,7 @@ func main() {
 		log.Fatalln("Incorrect number of arguments, you must pass in the password.")
 	}
 
-	// Generate a new private key.
+	// Generate a password hash.
 	s, err := passhash.HashString(os.Args[1])
 	if err != nil {
 		log.Fatalln(err.Error())

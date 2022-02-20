@@ -1,18 +1,26 @@
-package rove_test
+package bearblog_test
 
 import (
+	"encoding/base64"
 	"log"
+	"os"
 	"testing"
 
 	"github.com/ambientkit/ambient"
-	"github.com/ambientkit/plugin/generic/rove"
+	"github.com/ambientkit/plugin/generic/bearblog"
 	"github.com/ambientkit/plugin/logger/zaplogger"
 	"github.com/ambientkit/plugin/pkg/docgen"
+	"github.com/ambientkit/plugin/pkg/passhash"
 	"github.com/ambientkit/plugin/storage/memorystorage"
-	"github.com/stretchr/testify/assert"
 )
 
 func ExampleNew() {
+	// Generate a password hash.
+	s, err := passhash.HashString(os.Args[1])
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+
 	plugins := &ambient.PluginLoader{
 		// Core plugins are implicitly trusted.
 		Router:         nil,
@@ -22,13 +30,13 @@ func ExampleNew() {
 		// will be enabled and given full access.
 		TrustedPlugins: map[string]bool{},
 		Plugins: []ambient.Plugin{
-			rove.New(nil),
+			bearblog.New(base64.StdEncoding.EncodeToString([]byte(s))),
 		},
 		Middleware: []ambient.MiddlewarePlugin{
 			// Middleware - executes bottom to top.
 		},
 	}
-	_, _, err := ambient.NewApp("myapp", "1.0",
+	_, _, err = ambient.NewApp("myapp", "1.0",
 		zaplogger.New(),
 		ambient.StoragePluginGroup{
 			Storage: memorystorage.New(),
@@ -40,19 +48,11 @@ func ExampleNew() {
 }
 
 func TestGenerateDocs(t *testing.T) {
-	docgen.Generate(t, rove.New(nil), "")
-}
+	// Generate a password hash.
+	s, err := passhash.HashString(os.Args[1])
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
 
-func TestMain(t *testing.T) {
-	var err error
-	// docker run --name=mysql57 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -d mysql:5.7
-	// docker rm mysql57 -f
-	// os.Setenv("DB_USERNAME", "root")
-	// os.Setenv("DB_PASSWORD", "password")
-	// os.Setenv("DB_HOSTNAME", "localhost")
-	// os.Setenv("DB_PORT", "3306")
-	// os.Setenv("DB_NAME", "main")
-	// p := rove.New(nil)
-	// err = p.Enable(nil)
-	assert.NoError(t, err)
+	docgen.Generate(t, bearblog.New(base64.StdEncoding.EncodeToString([]byte(s))), "")
 }
