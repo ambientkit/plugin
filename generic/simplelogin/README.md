@@ -68,7 +68,7 @@ The plugin has the follow settings (8):
 - **Name**: Password
   - **Type**: password
   - **Hidden**: true
-  - **Default**: JDJhJDEwJDF3bGVJS1dQR3lvWVMwSjNBYzEvaWVpaHlRcWVXRjhIYmUvOFgvR1EwNzh5b3IzM0wzMC82
+  - **Has Default**: true
 - **Name**: MFA Key
   - **Type**: password
   - **Description**: Generate an MFA key. Plugin must be enabled first.
@@ -111,14 +111,14 @@ The plugin does not have any middleware.
 
 The plugin has the follow FuncMap items (8):
 
+  - {{simplelogin_Authenticated}}
   - {{simplelogin_MFAEnabled}}
+  - {{simplelogin_PageURL}}
+  - {{simplelogin_PublishedPages}}
+  - {{simplelogin_SiteFooter}}
+  - {{simplelogin_SiteSubtitle}}
   - {{simplelogin_Stamp}}
   - {{simplelogin_StampFriendly}}
-  - {{simplelogin_PublishedPages}}
-  - {{simplelogin_SiteSubtitle}}
-  - {{simplelogin_Authenticated}}
-  - {{simplelogin_SiteFooter}}
-  - {{simplelogin_PageURL}}
 
 ## Assets
 

@@ -68,7 +68,7 @@ The plugin has the follow settings (9):
 - **Name**: Password
   - **Type**: password
   - **Hidden**: true
-  - **Default**: JDJhJDEwJE1tS0tMUDlzb1YudW5VZ0RkYzFzZ2VMOEJseWpzQ05kUjVUMFMwRE0udlhPaGp5aHRIQWdT
+  - **Has Default**: true
 - **Name**: MFA Key
   - **Type**: password
   - **Description**: Generate an MFA key. Plugin must be enabled first.
@@ -123,14 +123,14 @@ The plugin does not have any middleware.
 
 The plugin has the follow FuncMap items (8):
 
-  - {{bearblog_SiteSubtitle}}
   - {{bearblog_Authenticated}}
-  - {{bearblog_SiteFooter}}
-  - {{bearblog_PageURL}}
   - {{bearblog_MFAEnabled}}
+  - {{bearblog_PageURL}}
+  - {{bearblog_PublishedPages}}
+  - {{bearblog_SiteFooter}}
+  - {{bearblog_SiteSubtitle}}
   - {{bearblog_Stamp}}
   - {{bearblog_StampFriendly}}
-  - {{bearblog_PublishedPages}}
 
 ## Assets
 

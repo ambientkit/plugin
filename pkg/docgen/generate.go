@@ -86,7 +86,11 @@ func (d *Doc) funcMap() template.FuncMap {
 				out += fmt.Sprintf("  - **Hidden**: %v\n", v.Hide)
 
 				if v.Default != nil {
-					out += fmt.Sprintf("  - **Has Default**: %v\n", true)
+					if v.Type == ambient.InputPassword {
+						out += fmt.Sprintf("  - **Has Default**: %v\n", true)
+					} else {
+						out += fmt.Sprintf("  - **Default**: %v\n", v.Default)
+					}
 				}
 			}
 		}
