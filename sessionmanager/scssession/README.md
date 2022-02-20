@@ -30,7 +30,7 @@ The plugin has the follow settings (1):
 - **Name**: Session Key
   - **Type**: password
   - **Hidden**: true
-  - **Default**: 01a38e853b28ac72f2e66afafc23f0bf0c04f90d49e93864c14c51f3d5555b98
+  - **Default**: 92d17f88b1ee6b16dfdc83aeda59bf4b67fb2ee03c98e86a7e68798df2dcb2fc
 
 ## Routes
 

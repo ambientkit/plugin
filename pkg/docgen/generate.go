@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"sort"
 	"strings"
 
 	"github.com/ambientkit/ambient"
@@ -85,7 +86,7 @@ func (d *Doc) funcMap() template.FuncMap {
 				out += fmt.Sprintf("  - **Hidden**: %v\n", v.Hide)
 
 				if v.Default != nil {
-					out += fmt.Sprintf("  - **Default**: %v\n", v.Default)
+					out += fmt.Sprintf("  - **Has Default**: %v\n", true)
 				}
 			}
 		}
@@ -104,8 +105,16 @@ func (d *Doc) funcMap() template.FuncMap {
 		} else {
 			fm := fmr(req)
 			out += fmt.Sprintf("The plugin has the follow FuncMap items (%v):\n\n", len(fm))
+
+			arr := make([]string, 0)
 			for k := range fm {
-				out += fmt.Sprintf("  - {{%v}}\n", k)
+				arr = append(arr, k)
+			}
+
+			sort.Strings(arr)
+
+			for _, v := range arr {
+				out += fmt.Sprintf("  - {{%v}}\n", v)
 			}
 		}
 
