@@ -93,4 +93,4 @@ func main() {
 
 ---
 
-Docgen by [Ambient](https://ambientkit.github.io/docs/)
+Docgen by [Ambient](https://ambientkit.github.io/)
