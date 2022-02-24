@@ -36,6 +36,7 @@ func (p *Plugin) PluginVersion() string {
 func (p *Plugin) GrantRequests() []ambient.GrantRequest {
 	return []ambient.GrantRequest{
 		{Grant: ambient.GrantSiteAssetWrite, Description: "Access to add StackEdit JavaScript on pages."},
+		{Grant: ambient.GrantRouterRouteWrite, Description: "Access to add StackEdit JavaScript to URL."},
 	}
 }
 
