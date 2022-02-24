@@ -32,6 +32,13 @@ func (p *Plugin) PluginVersion() string {
 	return "1.0.0"
 }
 
+// GrantRequests returns a list of grants requested by the plugin.
+func (p *Plugin) GrantRequests() []ambient.GrantRequest {
+	return []ambient.GrantRequest{
+		{Grant: ambient.GrantSiteAssetWrite, Description: "Access to add StackEdit JavaScript on pages."},
+	}
+}
+
 // Assets returns a list of assets and an embedded filesystem.
 func (p *Plugin) Assets() ([]ambient.Asset, *embed.FS) {
 	return []ambient.Asset{
