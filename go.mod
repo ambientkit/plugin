@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go/storage v1.19.0
 	github.com/Azure/azure-storage-blob-go v0.14.0
 	github.com/alexedwards/scs/v2 v2.5.0
-	github.com/ambientkit/ambient v0.0.0-20220220191021-8e728eaa1f06
+	github.com/ambientkit/ambient v0.0.0-20220224234028-e02efc9bb1db
 	github.com/ambientkit/away v0.0.0-20220204201214-109176be7537
 	github.com/ambientkit/httprouter v1.3.1-0.20220202000709-b54b023f0606
 	github.com/ambientkit/mux v1.8.1-0.20220202013649-f01d64bb1111

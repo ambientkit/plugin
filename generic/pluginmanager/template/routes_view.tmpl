@@ -1,0 +1,17 @@
+<h1>{{.title}}</h1>
+<a href="{{URLPrefix}}/dashboard/plugins">Back</a>
+{{if .settings }}
+    {{range $id, $p := .routes}}
+    <p>
+        <div>{{.Method}} {{.Path}}</div>
+    </p>
+    {{end}}
+{{else}}
+<p>
+    <span>
+        <i>
+            No routes.
+        </i>
+    </span>
+</p>
+{{end}}

@@ -13,6 +13,7 @@ type pluginWithSettings struct {
 	Settings []ambient.Setting
 	Grants   []ambient.GrantRequest
 	Trusted  bool
+	Routes   []ambient.Route
 }
 
 func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (status int, err error) {
@@ -50,12 +51,18 @@ func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (status int, err e
 			return p.Site.Error(err)
 		}
 
+		routes, err := p.Site.PluginNeighborRoutesList(pluginName)
+		if err != nil {
+			return p.Site.Error(err)
+		}
+
 		arr = append(arr, pluginWithSettings{
 			Name:       pluginName,
 			PluginData: plugins[pluginName],
 			Grants:     grantList,
 			Settings:   settingsList,
 			Trusted:    trusted,
+			Routes:     routes,
 		})
 	}
 

@@ -43,6 +43,7 @@ func (p *Plugin) GrantRequests() []ambient.GrantRequest {
 		{Grant: ambient.GrantPluginNeighborSettingWrite, Description: "Access to write to other plugin settings"},
 		{Grant: ambient.GrantPluginNeighborGrantRead, Description: "Access to read grant requests for plugins"},
 		{Grant: ambient.GrantPluginNeighborGrantWrite, Description: "Access to approve grants for plugins."},
+		{Grant: ambient.GrantPluginNeighborRouteRead, Description: "Access to read routes for plugins."},
 		{Grant: ambient.GrantRouterNeighborRouteClear, Description: "Access to clear routes for plugins."},
 		{Grant: ambient.GrantRouterRouteWrite, Description: "Access to create routes for editing the plugins."},
 		{Grant: ambient.GrantPluginTrustedRead, Description: "Access to read if a plugin is trusted or not."},
@@ -58,4 +59,5 @@ func (p *Plugin) Routes() {
 	p.Mux.Post("/dashboard/plugins/{id}/settings", p.settingsUpdate)
 	p.Mux.Get("/dashboard/plugins/{id}/grants", p.grantsEdit)
 	p.Mux.Post("/dashboard/plugins/{id}/grants", p.grantsUpdate)
+	p.Mux.Get("/dashboard/plugins/{id}/routes", p.routesView)
 }
