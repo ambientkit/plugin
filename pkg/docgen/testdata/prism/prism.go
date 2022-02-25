@@ -178,7 +178,7 @@ func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (status int, err 
 	return
 }
 
-// FuncMap returns a callable function when passed in a request.
+// FuncMap returns a callable function that accepts a request.
 func (p *Plugin) FuncMap() func(r *http.Request) template.FuncMap {
 	return func(r *http.Request) template.FuncMap {
 		fm := make(template.FuncMap)

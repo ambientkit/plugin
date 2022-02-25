@@ -66,17 +66,14 @@ func (p *Plugin) Routes() {
 	p.Mux.Get("/dashboard/plugins/{id}/routes", p.routesView)
 }
 
-// FuncMap returns a callable function when passed in a request.
+// FuncMap returns a callable function that accepts a request.
 func (p *Plugin) FuncMap() func(r *http.Request) template.FuncMap {
-	return p.funcMap
-}
+	return func(r *http.Request) template.FuncMap {
+		fm := make(template.FuncMap)
+		fm["pluginmanager_URLHasParam"] = func(s string) bool {
+			return strings.Contains(s, "{")
+		}
 
-// funcMap returns a map of template functions that can be used in templates.
-func (p *Plugin) funcMap(r *http.Request) template.FuncMap {
-	fm := make(template.FuncMap)
-	fm["pluginmanager_URLHasParam"] = func(s string) bool {
-		return strings.Contains(s, "{")
+		return fm
 	}
-
-	return fm
 }

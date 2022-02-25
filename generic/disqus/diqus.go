@@ -121,7 +121,7 @@ func (p *Plugin) Assets() ([]ambient.Asset, *embed.FS) {
 	}, &assets
 }
 
-// FuncMap returns a callable function when passed in a request.
+// FuncMap returns a callable function that accepts a request.
 func (p *Plugin) FuncMap() func(r *http.Request) template.FuncMap {
 	return func(r *http.Request) template.FuncMap {
 		fm := make(template.FuncMap)
