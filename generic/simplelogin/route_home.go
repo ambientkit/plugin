@@ -21,7 +21,7 @@ func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (status int, err 
 
 	vars := make(map[string]interface{})
 	vars["postcontent"] = p.sanitized(content)
-	return p.Render.Page(w, r, assets, "template/content/home", p.funcMap(r), vars)
+	return p.Render.Page(w, r, assets, "template/content/home", p.FuncMap(), vars)
 }
 
 func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (status int, err error) {
@@ -72,7 +72,7 @@ func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (status int, err e
 	vars["scheme"] = siteScheme
 	vars["footer"] = footer
 
-	return p.Render.Page(w, r, assets, "template/content/home_edit", p.funcMap(r), vars)
+	return p.Render.Page(w, r, assets, "template/content/home_edit", p.FuncMap(), vars)
 }
 
 func (p *Plugin) update(w http.ResponseWriter, r *http.Request) (status int, err error) {

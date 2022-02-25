@@ -4,8 +4,6 @@ package bearblog
 import (
 	"embed"
 	"fmt"
-	"html/template"
-	"net/http"
 
 	"github.com/ambientkit/ambient"
 )
@@ -246,9 +244,4 @@ func (p *Plugin) Assets() ([]ambient.Asset, *embed.FS) {
 	})
 
 	return arr, &assets
-}
-
-// FuncMap returns a callable function that accepts a request.
-func (p *Plugin) FuncMap() func(r *http.Request) template.FuncMap {
-	return p.funcMap
 }

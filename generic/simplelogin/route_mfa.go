@@ -13,7 +13,7 @@ import (
 func (p *Plugin) mfa(w http.ResponseWriter, r *http.Request) (status int, err error) {
 	vars := make(map[string]interface{})
 	vars["title"] = "MFA Generate"
-	return p.Render.Page(w, r, assets, "template/content/mfa", p.funcMap(r), vars)
+	return p.Render.Page(w, r, assets, "template/content/mfa", p.FuncMap(), vars)
 }
 
 func (p *Plugin) mfaPost(w http.ResponseWriter, r *http.Request) (status int, err error) {
@@ -38,5 +38,5 @@ func (p *Plugin) mfaPost(w http.ResponseWriter, r *http.Request) (status int, er
 
 	vars["mfa"] = fmt.Sprintf("The secret you can paste into the settings screen is: %v. The URI is: %v", secret, URI)
 	vars["qrcode"] = base64.StdEncoding.EncodeToString(png)
-	return p.Render.Page(w, r, assets, "template/content/mfa", p.funcMap(r), vars)
+	return p.Render.Page(w, r, assets, "template/content/mfa", p.FuncMap(), vars)
 }

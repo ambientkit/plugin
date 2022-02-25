@@ -18,5 +18,5 @@ func (p *Plugin) routesView(w http.ResponseWriter, r *http.Request) (status int,
 
 	vars["routes"] = routes
 
-	return p.Render.Page(w, r, assets, "template/routes_view", p.FuncMap()(r), vars)
+	return p.Render.Page(w, r, assets, "template/routes_view", p.FuncMap(), vars)
 }
