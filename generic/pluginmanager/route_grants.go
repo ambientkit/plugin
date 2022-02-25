@@ -49,7 +49,7 @@ func (p *Plugin) grantsEdit(w http.ResponseWriter, r *http.Request) (status int,
 	vars["trusted"] = trusted
 	vars["grants"] = arr
 
-	return p.Render.Page(w, r, assets, "template/grants_edit", nil, vars)
+	return p.Render.Page(w, r, assets, "template/grants_edit", p.funcMap(r), vars)
 }
 
 func (p *Plugin) grantsUpdate(w http.ResponseWriter, r *http.Request) (status int, err error) {

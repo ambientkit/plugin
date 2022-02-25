@@ -1,9 +1,18 @@
 <h1>{{.title}}</h1>
 <a href="{{URLPrefix}}/dashboard/plugins">Back</a>
-{{if .settings }}
+{{if .routes }}
+    <p><strong>Total active routes: {{len .routes}}</strong></p>
     {{range $id, $p := .routes}}
     <p>
+        {{if eq .Method "GET"}}
+            {{if pluginmanager_URLHasParam .Path}}
+            <div>{{.Method}} {{.Path}}</div>
+            {{else}}
+            <div>{{.Method}} <a href="{{URLPrefix}}{{.Path}}" target="_blank">{{.Path}}</a></div>
+            {{end}}    
+        {{else}}
         <div>{{.Method}} {{.Path}}</div>
+        {{end}}
     </p>
     {{end}}
 {{else}}

@@ -3,6 +3,9 @@ package pluginmanager
 
 import (
 	"embed"
+	"html/template"
+	"net/http"
+	"strings"
 
 	"github.com/ambientkit/ambient"
 )
@@ -39,6 +42,7 @@ func (p *Plugin) GrantRequests() []ambient.GrantRequest {
 		{Grant: ambient.GrantSitePluginEnable, Description: "Access to enable plugins."},
 		{Grant: ambient.GrantSitePluginDisable, Description: "Access to disable plugins."},
 		{Grant: ambient.GrantSitePluginDelete, Description: "Access to delete plugin storage."},
+		{Grant: ambient.GrantSiteFuncMapWrite, Description: "Access add FuncMap for template helpers."},
 		{Grant: ambient.GrantPluginNeighborSettingRead, Description: "Access to read other plugin settings."},
 		{Grant: ambient.GrantPluginNeighborSettingWrite, Description: "Access to write to other plugin settings"},
 		{Grant: ambient.GrantPluginNeighborGrantRead, Description: "Access to read grant requests for plugins"},
@@ -60,4 +64,19 @@ func (p *Plugin) Routes() {
 	p.Mux.Get("/dashboard/plugins/{id}/grants", p.grantsEdit)
 	p.Mux.Post("/dashboard/plugins/{id}/grants", p.grantsUpdate)
 	p.Mux.Get("/dashboard/plugins/{id}/routes", p.routesView)
+}
+
+// FuncMap returns a callable function when passed in a request.
+func (p *Plugin) FuncMap() func(r *http.Request) template.FuncMap {
+	return p.funcMap
+}
+
+// funcMap returns a map of template functions that can be used in templates.
+func (p *Plugin) funcMap(r *http.Request) template.FuncMap {
+	fm := make(template.FuncMap)
+	fm["pluginmanager_URLHasParam"] = func(s string) bool {
+		return strings.Contains(s, "{")
+	}
+
+	return fm
 }

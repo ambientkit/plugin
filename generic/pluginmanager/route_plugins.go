@@ -51,9 +51,13 @@ func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (status int, err e
 			return p.Site.Error(err)
 		}
 
-		routes, err := p.Site.PluginNeighborRoutesList(pluginName)
-		if err != nil {
-			return p.Site.Error(err)
+		routes := make([]ambient.Route, 0)
+		// Only enabled plugins have routes.
+		if plugins[pluginName].Enabled {
+			routes, err = p.Site.PluginNeighborRoutesList(pluginName)
+			if err != nil {
+				return p.Site.Error(err)
+			}
 		}
 
 		arr = append(arr, pluginWithSettings{
@@ -68,7 +72,7 @@ func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (status int, err e
 
 	vars["plugins"] = arr
 
-	return p.Render.Page(w, r, assets, "template/plugins_edit", nil, vars)
+	return p.Render.Page(w, r, assets, "template/plugins_edit", p.funcMap(r), vars)
 }
 
 func (p *Plugin) update(w http.ResponseWriter, r *http.Request) (status int, err error) {

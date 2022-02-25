@@ -10,9 +10,9 @@
                 <span class="helptext">
                 {{if .Grants}}<a href="{{URLPrefix}}/dashboard/plugins/{{.Name}}/grants">Grants</a>{{end}}
                 {{if .Settings}}<a href="{{URLPrefix}}/dashboard/plugins/{{.Name}}/settings">Settings</a>{{end}}
+                {{if .Routes}}<a href="{{URLPrefix}}/dashboard/plugins/{{.Name}}/routes">Routes</a>{{end}}
                 <a href="{{URLPrefix}}/dashboard/plugins/{{.Name}}/delete">Reset</a>
-                {{if.Trusted}}[Trusted]{{end}}
-                {{if.Routes}}<a href="{{URLPrefix}}/dashboard/plugins/{{.Name}}/routes">Routes</a>{{end}}
+                {{if .Trusted}}[Trusted]{{end}}
                 </span>
             </p>
             {{end}}
