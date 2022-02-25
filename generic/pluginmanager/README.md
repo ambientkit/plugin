@@ -18,7 +18,7 @@ The plugin can be used as the following core types:
 
 ## Grants
 
-The plugin request the following grants (11):
+The plugin request the following grants (13):
 
 - **Name**: site.plugin:read
   - **Description**: Access to read the plugins.
@@ -28,6 +28,8 @@ The plugin request the following grants (11):
   - **Description**: Access to disable plugins.
 - **Name**: site.plugin:delete
   - **Description**: Access to delete plugin storage.
+- **Name**: site.funcmap:write
+  - **Description**: Access add FuncMap for template helpers.
 - **Name**: plugin.neighborsetting:read
   - **Description**: Access to read other plugin settings.
 - **Name**: plugin.neighborsetting:write
@@ -36,6 +38,8 @@ The plugin request the following grants (11):
   - **Description**: Access to read grant requests for plugins
 - **Name**: plugin.neighborgrant:write
   - **Description**: Access to approve grants for plugins.
+- **Name**: plugin.neighborroute:read
+  - **Description**: Access to read routes for plugins.
 - **Name**: router.neighborroute:clear
   - **Description**: Access to clear routes for plugins.
 - **Name**: router.route:write
@@ -49,7 +53,7 @@ The plugin does not have any settings.
 
 ## Routes
 
-The plugin has the following routes (7):
+The plugin has the following routes (8):
   - **Method:** GET | **Path:** /dashboard/plugins
   - **Method:** POST | **Path:** /dashboard/plugins
   - **Method:** GET | **Path:** /dashboard/plugins/{id}/delete
@@ -57,6 +61,7 @@ The plugin has the following routes (7):
   - **Method:** POST | **Path:** /dashboard/plugins/{id}/settings
   - **Method:** GET | **Path:** /dashboard/plugins/{id}/grants
   - **Method:** POST | **Path:** /dashboard/plugins/{id}/grants
+  - **Method:** GET | **Path:** /dashboard/plugins/{id}/routes
 
 ## Middleware
 
@@ -64,7 +69,9 @@ The plugin does not have any middleware.
 
 ## FuncMap
 
-The plugin does not have a FuncMap.
+The plugin has the follow FuncMap items (1):
+
+  - {{pluginmanager_URLHasParam}}
 
 ## Assets
 

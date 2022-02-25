@@ -18,7 +18,12 @@ The plugin can be used as the following core types:
 
 ## Grants
 
-The plugin does not request any grants.
+The plugin request the following grants (2):
+
+- **Name**: site.asset:write
+  - **Description**: Access to add StackEdit JavaScript on pages.
+- **Name**: router.route:write
+  - **Description**: Access to add StackEdit JavaScript to URL.
 
 ## Settings
 
