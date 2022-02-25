@@ -105,8 +105,15 @@ func (p *Plugin) update(w http.ResponseWriter, r *http.Request) (status int, err
 			continue
 		}
 
+		trusted, err := p.Site.PluginTrusted(name)
+		if err != nil {
+			return p.Site.Error(err)
+		}
+
 		enable := (r.FormValue(name) == "on")
-		if !enable && info.Enabled {
+		// Only disable plugins that are enabled and not trusted since trusted
+		// plugins can't be disabled.
+		if !enable && info.Enabled && !trusted {
 			// Disable the plugin.
 			err = p.Site.DisablePlugin(name, true)
 			if err != nil {

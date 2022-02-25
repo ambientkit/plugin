@@ -97,10 +97,16 @@ func (te *Engine) pluginContent(w http.ResponseWriter, r *http.Request, mainTemp
 		return http.StatusInternalServerError, err
 	}
 
+	// Ensure it's callable.
+	f := template.FuncMap{}
+	if fm != nil {
+		f = fm(r)
+	}
+
 	//TODO: If we were going to use a filter on content, this is where it would go.
 
 	// Parse the plugin template separately for security.
-	content, err := templatebuffer.ParseTemplate(postContent, fm(r), vars)
+	content, err := templatebuffer.ParseTemplate(postContent, f, vars)
 	if err != nil {
 		return http.StatusInternalServerError, err
 	}
