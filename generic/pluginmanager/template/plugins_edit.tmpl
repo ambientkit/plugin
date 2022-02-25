@@ -6,7 +6,7 @@
             <p>
                 <h3>{{.Name}} {{.PluginData.Version}}</h3>
                 <label for="id_{{.Name}}">Enable:</label>
-                <input type="checkbox" name="{{.Name}}" id="id_{{.Name}}" {{if .Enabled}}checked{{end}}>
+                <input type="checkbox" name="{{.Name}}" id="id_{{.Name}}" {{if .Enabled}}checked{{end}} {{if .Trusted}}disabled{{end}}>
                 <span class="helptext">
                 {{if .Grants}}<a href="{{URLPrefix}}/dashboard/plugins/{{.Name}}/grants">Grants</a>{{end}}
                 {{if .Settings}}<a href="{{URLPrefix}}/dashboard/plugins/{{.Name}}/settings">Settings</a>{{end}}
