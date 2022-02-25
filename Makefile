@@ -18,6 +18,11 @@ update:
 	go get -u -f -d ./...
 	go mod tidy -compat=1.17
 
+# Run go mod tidy.
+.PHONY: tidy
+tidy:
+	go mod tidy -compat=1.17
+
 # Pass in ARGS.
 # https://stackoverflow.com/a/14061796
 ifeq (update-ambient,$(firstword $(MAKECMDGOALS)))
