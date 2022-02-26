@@ -57,6 +57,7 @@ import (
 	"time"
 
 	"github.com/ambientkit/ambient"
+	"github.com/ambientkit/ambient/pkg/ambientapp"
 	"github.com/ambientkit/plugin/logger/zaplogger"
 	"github.com/ambientkit/plugin/middleware/jwt"
 	"github.com/ambientkit/plugin/pkg/uuid"
@@ -78,7 +79,7 @@ func main() {
 			jwt.New([]byte(uuid.EncodedString(32)), time.Hour*1, []string{}),
 		},
 	}
-	_, _, err := ambient.NewApp("myapp", "1.0",
+	_, _, err := ambientapp.NewApp("myapp", "1.0",
 		zaplogger.New(),
 		ambient.StoragePluginGroup{
 			Storage: memorystorage.New(),

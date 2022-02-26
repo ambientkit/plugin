@@ -60,6 +60,7 @@ import (
 	"log"
 
 	"github.com/ambientkit/ambient"
+	"github.com/ambientkit/ambient/pkg/ambientapp"
 	"github.com/ambientkit/plugin/generic/description"
 	"github.com/ambientkit/plugin/logger/zaplogger"
 	"github.com/ambientkit/plugin/storage/memorystorage"
@@ -81,7 +82,7 @@ func main() {
 			// Middleware - executes bottom to top.
 		},
 	}
-	_, _, err := ambient.NewApp("myapp", "1.0",
+	_, _, err := ambientapp.NewApp("myapp", "1.0",
 		zaplogger.New(),
 		ambient.StoragePluginGroup{
 			Storage: memorystorage.New(),

@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/ambientkit/ambient"
+	"github.com/ambientkit/ambient/pkg/ambientapp"
 	"github.com/ambientkit/plugin/logger/zaplogger"
 	"github.com/ambientkit/plugin/pkg/uuid"
 	"github.com/ambientkit/plugin/router/routerecorder"
@@ -71,7 +72,7 @@ func LighweightAppSetup(appName string, p ambient.Plugin, trust bool) *App {
 			middleware, // Session manager middleware.
 		},
 	}
-	ambientApp, logger, err := ambient.NewApp(appName, "1.0",
+	ambientApp, logger, err := ambientapp.NewApp(appName, "1.0",
 		zaplogger.New(),
 		ambient.StoragePluginGroup{
 			Storage: memorystorage.New(),

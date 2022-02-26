@@ -27,7 +27,7 @@ func ExampleNew() {
 			// Middleware - executes bottom to top.
 		},
 	}
-	_, _, err := ambient.NewApp("myapp", "1.0",
+	_, _, err := ambientapp.NewApp("myapp", "1.0",
 		zaplogger.New(),
 		ambient.StoragePluginGroup{
 			Storage: memorystorage.New(),
