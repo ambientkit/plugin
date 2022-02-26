@@ -25,7 +25,7 @@ func (p *Plugin) PluginVersion() string {
 	return "1.0.0"
 }
 
-// Routes gets routes for the plugin.
+// Routes sets routes for the plugin.
 func (p *Plugin) Routes() {
 	p.Mux.Get("/robots.txt", p.index)
 }

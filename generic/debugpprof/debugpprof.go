@@ -37,7 +37,7 @@ func (p *Plugin) GrantRequests() []ambient.GrantRequest {
 	}
 }
 
-// Routes gets routes for the plugin.
+// Routes sets routes for the plugin.
 func (p *Plugin) Routes() {
 	p.Mux.Get("/debug/pprof", p.Mux.Wrap(p.index))
 	p.Mux.Get("/debug/pprof/{pprof}", p.Mux.Wrap(p.profile))

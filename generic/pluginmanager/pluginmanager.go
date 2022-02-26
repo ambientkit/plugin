@@ -54,7 +54,7 @@ func (p *Plugin) GrantRequests() []ambient.GrantRequest {
 	}
 }
 
-// Routes gets routes for the plugin.
+// Routes sets routes for the plugin.
 func (p *Plugin) Routes() {
 	p.Mux.Get("/dashboard/plugins", p.edit)
 	p.Mux.Post("/dashboard/plugins", p.update)

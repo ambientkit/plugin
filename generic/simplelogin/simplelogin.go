@@ -127,7 +127,7 @@ func (p *Plugin) Settings() []ambient.Setting {
 	}
 }
 
-// Routes gets routes for the plugin.
+// Routes sets routes for the plugin.
 func (p *Plugin) Routes() {
 	p.Mux.Get("/", p.index)
 	p.Mux.Get("/dashboard", p.edit)

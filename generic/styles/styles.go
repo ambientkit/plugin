@@ -102,7 +102,7 @@ func (p *Plugin) Assets() ([]ambient.Asset, *embed.FS) {
 	return arr, nil
 }
 
-// Routes gets routes for the plugin.
+// Routes sets routes for the plugin.
 func (p *Plugin) Routes() {
 	p.Mux.Get("/plugins/styles/css/style.css", p.index)
 }

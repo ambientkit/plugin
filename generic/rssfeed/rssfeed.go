@@ -105,7 +105,7 @@ func (p *Plugin) Assets() ([]ambient.Asset, *embed.FS) {
 	}, nil
 }
 
-// Routes gets routes for the plugin.
+// Routes sets routes for the plugin.
 func (p *Plugin) Routes() {
 	// FIXME: This can't be changed dynamically.
 	feedURL, err := p.Site.PluginSettingString(FeedURL)
