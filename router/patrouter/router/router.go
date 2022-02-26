@@ -4,7 +4,7 @@ package router
 import (
 	"net/http"
 
-	"github.com/ambientkit/pat"
+	"github.com/bmizerany/pat"
 )
 
 // Mux contains the router.
@@ -32,12 +32,6 @@ func (m *Mux) SetServeHTTP(csh func(w http.ResponseWriter, r *http.Request, stat
 // SetNotFound sets the NotFound function.
 func (m *Mux) SetNotFound(notFound http.Handler) {
 	m.router.NotFound = notFound
-}
-
-// Clear will remove a method and path from the router.
-func (m *Mux) Clear(method string, path string) {
-	// Overwrite instead of delete.
-	m.router.Clear(method, path, m.router.NotFound)
 }
 
 // ServeHTTP routes the incoming http.Request based on method and path

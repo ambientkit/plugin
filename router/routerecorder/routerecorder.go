@@ -52,9 +52,6 @@ func (p *Plugin) Router(logger ambient.Logger, te ambient.Renderer) (ambient.App
 	return p, nil
 }
 
-// Clear will remove a method and path from the router.
-func (p *Plugin) Clear(method string, path string) {}
-
 // SetServeHTTP sets the ServeHTTP function.
 func (p *Plugin) SetServeHTTP(h func(w http.ResponseWriter, r *http.Request, status int, err error)) {
 }
@@ -84,6 +81,11 @@ func (p *Plugin) Patch(path string, fn func(http.ResponseWriter, *http.Request) 
 // Put registers a pattern with the router.
 func (p *Plugin) Put(path string, fn func(http.ResponseWriter, *http.Request) (status int, err error)) {
 	p.handleRoute(path, http.MethodPut)
+}
+
+// Handle registers a pattern with the router.
+func (p *Plugin) Handle(method string, path string, fn func(http.ResponseWriter, *http.Request) (status int, err error)) {
+	p.handleRoute(path, method)
 }
 
 // Head registers a pattern with the router.

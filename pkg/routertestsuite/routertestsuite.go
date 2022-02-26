@@ -41,7 +41,6 @@ func (ts *TestSuite) Run(t *testing.T, mux func() ambient.AppRouter) {
 	ts.Test400(t, mux())
 	ts.TestNotFound(t, mux())
 	ts.TestBadRequest(t, mux())
-	ts.TestClear(t, mux())
 }
 
 // defaultServeHTTP is the default ServeHTTP function that receives the status and error from
@@ -352,33 +351,4 @@ func (ts *TestSuite) TestBadRequest(t *testing.T, mux ambient.AppRouter) {
 	mux.Error(http.StatusBadRequest, w, r)
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
-}
-
-// TestClear .
-func (ts *TestSuite) TestClear(t *testing.T, mux ambient.AppRouter) {
-	mux.SetServeHTTP(defaultServeHTTP)
-
-	called := false
-
-	mux.Get("/user", func(w http.ResponseWriter, r *http.Request) (status int, err error) {
-		called = true
-		return http.StatusOK, nil
-	})
-
-	r := httptest.NewRequest("GET", "/user", nil)
-	w := httptest.NewRecorder()
-	mux.ServeHTTP(w, r)
-	resp := w.Result()
-	assert.Equal(t, http.StatusOK, resp.StatusCode)
-	assert.True(t, called)
-
-	called = false
-	mux.Clear("GET", "/user")
-
-	r = httptest.NewRequest("GET", "/user", nil)
-	w = httptest.NewRecorder()
-	mux.ServeHTTP(w, r)
-	resp = w.Result()
-	assert.Equal(t, http.StatusNotFound, resp.StatusCode)
-	assert.False(t, called)
 }

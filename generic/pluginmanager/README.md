@@ -18,7 +18,7 @@ The plugin can be used as the following core types:
 
 ## Grants
 
-The plugin request the following grants (13):
+The plugin request the following grants (12):
 
 - **Name**: site.plugin:read
   - **Description**: Access to read the plugins.
@@ -40,8 +40,6 @@ The plugin request the following grants (13):
   - **Description**: Access to approve grants for plugins.
 - **Name**: plugin.neighborroute:read
   - **Description**: Access to read routes for plugins.
-- **Name**: router.neighborroute:clear
-  - **Description**: Access to clear routes for plugins.
 - **Name**: router.route:write
   - **Description**: Access to create routes for editing the plugins.
 - **Name**: plugin.trusted:read

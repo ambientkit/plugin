@@ -37,12 +37,6 @@ func (m *Mux) SetNotFound(notFound http.Handler) {
 	m.router.NotFound(notFound.ServeHTTP)
 }
 
-// Clear will remove a method and path from the router.
-func (m *Mux) Clear(method string, path string) {
-	// Overwrite instead of delete.
-	m.router.Method(method, path, m.notFound)
-}
-
 // ServeHTTP routes the incoming http.Request based on method and path
 // extracting path parameters as it goes.
 func (m *Mux) ServeHTTP(w http.ResponseWriter, r *http.Request) {

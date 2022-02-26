@@ -6,22 +6,23 @@ require (
 	cloud.google.com/go/storage v1.19.0
 	github.com/Azure/azure-storage-blob-go v0.14.0
 	github.com/alexedwards/scs/v2 v2.5.0
-	github.com/ambientkit/ambient v0.0.0-20220226045505-c05cf2ff2d88
-	github.com/ambientkit/away v0.0.0-20220204201214-109176be7537
-	github.com/ambientkit/httprouter v1.3.1-0.20220202000709-b54b023f0606
-	github.com/ambientkit/mux v1.8.1-0.20220202013649-f01d64bb1111
+	github.com/ambientkit/ambient v0.0.0-20220226170806-99611fbe4647
+	github.com/ambientkit/away v0.0.0-20220226144500-f0b722f78428
 	github.com/aws/aws-sdk-go-v2 v1.13.0
 	github.com/aws/aws-sdk-go-v2/config v1.13.1
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.9.1
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.24.1
+	github.com/bmizerany/pat v0.0.0-20210406213842-e4b6760bdd6f
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/dgryski/dgoogauth v0.0.0-20190221195224-5a805980a5f3
 	github.com/disintegration/imaging v1.6.2
 	github.com/go-chi/chi v1.5.4
 	github.com/go-playground/validator/v10 v10.10.0
+	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gorilla/sessions v1.2.1
 	github.com/josephspurrier/rove v0.0.0-20190513125012-6843a2df19ca
+	github.com/julienschmidt/httprouter v1.3.0
 	github.com/mattn/go-colorable v0.1.12
 	github.com/microcosm-cc/bluemonday v1.0.17
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c
@@ -51,7 +52,6 @@ require (
 	cloud.google.com/go/compute v1.1.0 // indirect
 	cloud.google.com/go/iam v0.1.1 // indirect
 	github.com/Azure/azure-pipeline-go v0.2.3 // indirect
-	github.com/ambientkit/pat v0.0.0-20220201235809-856b4ac36048
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.2.0 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.8.0 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.10.0 // indirect
