@@ -1,6 +1,6 @@
 # awayrouter
 
-Package awayrouter is an Ambient plugin for a router using a variation of the way router.
+Package awayrouter is an Ambient plugin for a router using a variation of the matryer/way router.
 
 **Import:** github.com/ambientkit/plugin/router/awayrouter
 
