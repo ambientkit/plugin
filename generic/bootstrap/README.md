@@ -1,8 +1,8 @@
-# tailwindcss
+# bootstrap
 
-Package tailwindcss is an Ambient plugin that adds the Tailwind CSS library to all pages: https://tailwindcsscss.com/.
+Package bootstrap is an Ambient plugin that adds the Bootstrap library to all pages: https://getbootstrap.com/.
 
-**Import:** github.com/ambientkit/plugin/generic/tailwindcss
+**Import:** github.com/ambientkit/plugin/generic/bootstrap
 
 **Version:** 1.0.0
 
@@ -23,7 +23,7 @@ The plugin request the following grants (2):
 - **Name**: plugin.setting:read
   - **Description**: Access to read the version setting.
 - **Name**: site.asset:write
-  - **Description**: Access to add the Tailwind CSS JavaScript tag to every page.
+  - **Description**: Access to add the Bootstrap CSS and JavaScript tags to every page.
 
 ## Settings
 
@@ -31,9 +31,10 @@ The plugin has the follow settings (1):
 
 - **Name**: Version
   - **Type**: input
-  - **Description**: When blank, will use the latest version. Ex: 3.0.23
-    - **URL**: https://github.com/tailwindlabs/tailwindcss/releases
+  - **Description**: Version cannot be left blank. Ex: 5.1.3
+    - **URL**: https://github.com/twbs/bootstrap/releases
   - **Hidden**: false
+  - **Default**: 5.1.3
 
 ## Routes
 
@@ -49,12 +50,20 @@ The plugin does not have a FuncMap.
 
 ## Assets
 
-The plugin injects the following assets (1):
+The plugin injects the following assets (2):
 
-  - **Type:** javascript
+  - **Type:** stylesheet
     - **Location:** head
     - **External:** true
-    - **Path:** https://cdn.tailwindcss.com/
+    - **Path:** https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
+    - **Attributes (1):** 
+      - **Name:** crossorigin | **Value:** anonymous
+  - **Type:** javascript
+    - **Location:** body
+    - **External:** true
+    - **Path:** https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js
+    - **Attributes (1):** 
+      - **Name:** crossorigin | **Value:** anonymous
 
 ## Embedded Files
 
@@ -70,7 +79,7 @@ import (
 
 	"github.com/ambientkit/ambient"
 	"github.com/ambientkit/ambient/pkg/ambientapp"
-	"github.com/ambientkit/plugin/generic/tailwindcss"
+	"github.com/ambientkit/plugin/generic/bootstrap"
 	"github.com/ambientkit/plugin/logger/zaplogger"
 	"github.com/ambientkit/plugin/storage/memorystorage"
 )
@@ -85,7 +94,7 @@ func main() {
 		// will be enabled and given full access.
 		TrustedPlugins: map[string]bool{},
 		Plugins: []ambient.Plugin{
-			tailwindcss.New(),
+			bootstrap.New(),
 		},
 		Middleware: []ambient.MiddlewarePlugin{
 			// Middleware - executes bottom to top.

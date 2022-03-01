@@ -1,5 +1,5 @@
-// Package tailwindcss is an Ambient plugin that adds the Tailwind CSS library to all pages: https://tailwindcsscss.com/.
-package tailwindcss
+// Package bootstrap is an Ambient plugin that adds the Bootstrap library to all pages: https://getbootstrap.com/.
+package bootstrap
 
 import (
 	"embed"
@@ -13,7 +13,7 @@ type Plugin struct {
 	*ambient.PluginBase
 }
 
-// New returns a new tailwindcss plugin.
+// New returns a new bootstrap plugin.
 func New() *Plugin {
 	return &Plugin{
 		PluginBase: &ambient.PluginBase{},
@@ -22,7 +22,7 @@ func New() *Plugin {
 
 // PluginName returns the plugin name.
 func (p *Plugin) PluginName() string {
-	return "tailwindcss"
+	return "bootstrap"
 }
 
 // PluginVersion returns the plugin version.
@@ -34,7 +34,7 @@ func (p *Plugin) PluginVersion() string {
 func (p *Plugin) GrantRequests() []ambient.GrantRequest {
 	return []ambient.GrantRequest{
 		{Grant: ambient.GrantPluginSettingRead, Description: "Access to read the version setting."},
-		{Grant: ambient.GrantSiteAssetWrite, Description: "Access to add the Tailwind CSS JavaScript tag to every page."},
+		{Grant: ambient.GrantSiteAssetWrite, Description: "Access to add the Bootstrap CSS and JavaScript tags to every page."},
 	}
 }
 
@@ -47,10 +47,11 @@ const (
 func (p *Plugin) Settings() []ambient.Setting {
 	return []ambient.Setting{
 		{
-			Name: Version,
+			Name:    Version,
+			Default: "5.1.3",
 			Description: ambient.SettingDescription{
-				Text: "When blank, will use the latest version. Ex: 3.0.23",
-				URL:  "https://github.com/tailwindlabs/tailwindcss/releases",
+				Text: "Version cannot be left blank. Ex: 5.1.3",
+				URL:  "https://github.com/twbs/bootstrap/releases",
 			},
 		},
 	}
@@ -59,17 +60,35 @@ func (p *Plugin) Settings() []ambient.Setting {
 // Assets returns a list of assets and an embedded filesystem.
 func (p *Plugin) Assets() ([]ambient.Asset, *embed.FS) {
 	version, err := p.Site.PluginSettingString(Version)
-	if err != nil {
+	if err != nil || len(version) == 0 {
 		// Otherwise don't set the assets.
 		return nil, nil
 	}
 
 	return []ambient.Asset{
 		{
-			Filetype: ambient.AssetJavaScript,
+			Filetype: ambient.AssetStylesheet,
 			Location: ambient.LocationHead,
 			External: true,
-			Path:     fmt.Sprintf("https://cdn.tailwindcss.com/%v", version),
+			Path:     fmt.Sprintf("https://cdn.jsdelivr.net/npm/bootstrap@%v/dist/css/bootstrap.min.css", version),
+			Attributes: []ambient.Attribute{
+				{
+					Name:  "crossorigin",
+					Value: "anonymous",
+				},
+			},
+		},
+		{
+			Filetype: ambient.AssetJavaScript,
+			Location: ambient.LocationBody,
+			External: true,
+			Path:     fmt.Sprintf("https://cdn.jsdelivr.net/npm/bootstrap@%v/dist/js/bootstrap.bundle.min.js", version),
+			Attributes: []ambient.Attribute{
+				{
+					Name:  "crossorigin",
+					Value: "anonymous",
+				},
+			},
 		},
 	}, nil
 }
