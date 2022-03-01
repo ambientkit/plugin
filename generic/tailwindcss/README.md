@@ -1,8 +1,8 @@
-# htmx
+# tailwindcss
 
-Package htmx is an Ambient plugin that adds the htmx JavaScript library to all pages: https://htmx.org/.
+Package tailwindcss is an Ambient plugin that adds the tailwindcss JavaScript library to all pages: https://tailwindcsscss.com/.
 
-**Import:** github.com/ambientkit/plugin/generic/htmx
+**Import:** github.com/ambientkit/plugin/generic/tailwindcss
 
 **Version:** 1.0.0
 
@@ -23,7 +23,7 @@ The plugin request the following grants (2):
 - **Name**: plugin.setting:read
   - **Description**: Access to read the version setting.
 - **Name**: site.asset:write
-  - **Description**: Access to add the htmx JavaScript tag to every page.
+  - **Description**: Access to add the tailwindcss CSS tag to every page.
 
 ## Settings
 
@@ -31,10 +31,9 @@ The plugin has the follow settings (1):
 
 - **Name**: Version
   - **Type**: input
-  - **Description**: Version cannot be left blank. Ex: 1.7.0
-    - **URL**: https://github.com/bigskysoftware/htmx/tags
+  - **Description**: When blank, will use the latest version. Ex: 3.0.23
+    - **URL**: https://github.com/tailwindlabs/tailwindcss/releases
   - **Hidden**: false
-  - **Default**: 1.7.0
 
 ## Routes
 
@@ -55,7 +54,7 @@ The plugin injects the following assets (1):
   - **Type:** javascript
     - **Location:** head
     - **External:** true
-    - **Path:** https://unpkg.com/htmx.org@1.7.0
+    - **Path:** https://cdn.tailwindcss.com/
 
 ## Embedded Files
 
@@ -71,7 +70,7 @@ import (
 
 	"github.com/ambientkit/ambient"
 	"github.com/ambientkit/ambient/pkg/ambientapp"
-	"github.com/ambientkit/plugin/generic/htmx"
+	"github.com/ambientkit/plugin/generic/tailwindcss"
 	"github.com/ambientkit/plugin/logger/zaplogger"
 	"github.com/ambientkit/plugin/storage/memorystorage"
 )
@@ -86,7 +85,7 @@ func main() {
 		// will be enabled and given full access.
 		TrustedPlugins: map[string]bool{},
 		Plugins: []ambient.Plugin{
-			htmx.New(),
+			tailwindcss.New(),
 		},
 		Middleware: []ambient.MiddlewarePlugin{
 			// Middleware - executes bottom to top.
