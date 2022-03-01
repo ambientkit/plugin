@@ -108,4 +108,4 @@ func main() {
 
 ---
 
-Docgen by [Ambient](https://ambientkit.github.io/)
+Docgen by [Ambient](https://ambientkit.github.io)
