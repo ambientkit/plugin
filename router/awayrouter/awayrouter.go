@@ -74,13 +74,17 @@ func (p *Plugin) setupRouter(logger ambient.Logger, mux ambient.AppRouter, te am
 				}
 			}
 
-			status, err = te.Error(w, r, fmt.Sprintf("<h1>%v</h1>%v", status, errText), status, nil, nil)
-			if err != nil {
+			if te != nil {
+				status, err = te.Error(w, r, fmt.Sprintf("<h1>%v</h1>%v", status, errText), status, nil, nil)
 				if err != nil {
-					logger.Info("awayrouter: error in rendering error template (%v): %v", status, err.Error())
+					if err != nil {
+						logger.Info("awayrouter: error in rendering error template (%v): %v", status, err.Error())
+					}
+					http.Error(w, "500 internal server error", http.StatusInternalServerError)
+					return
 				}
-				http.Error(w, "500 internal server error", http.StatusInternalServerError)
-				return
+			} else {
+				http.Error(w, errText, status)
 			}
 		}
 	}
