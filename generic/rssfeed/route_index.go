@@ -13,7 +13,7 @@ import (
 )
 
 // Returns a page for web crawlers.
-func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (err error) {
 	// Resource: https://www.rssboard.org/rss-specification
 	// Rsource: https://validator.w3.org/feed/check.cgi
 
@@ -99,7 +99,7 @@ func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (status int, err 
 
 	output, err := xml.MarshalIndent(m, "  ", "    ")
 	if err != nil {
-		return http.StatusInternalServerError, err
+		return p.Mux.StatusError(http.StatusInternalServerError, err)
 	}
 
 	header := []byte(xml.Header)

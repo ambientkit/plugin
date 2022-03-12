@@ -11,7 +11,7 @@ import (
 	"jaytaylor.com/html2text"
 )
 
-func (p *Plugin) postIndex(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) postIndex(w http.ResponseWriter, r *http.Request) (err error) {
 	vars := make(map[string]interface{})
 
 	tags, err := p.Site.Tags(true)
@@ -60,7 +60,7 @@ func (p *Plugin) postIndex(w http.ResponseWriter, r *http.Request) (status int, 
 	return p.Render.Page(w, r, assets, "template/content/bloglist_index", p.FuncMap(), vars)
 }
 
-func (p *Plugin) postShow(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) postShow(w http.ResponseWriter, r *http.Request) (err error) {
 	slug := p.Mux.Param(r, "slug")
 
 	post, err := p.Site.PostBySlug(slug)
@@ -76,7 +76,7 @@ func (p *Plugin) postShow(w http.ResponseWriter, r *http.Request) (status int, e
 
 	// Show 404 if not published and not in preview mode.
 	if !post.Published && !preview {
-		return http.StatusNotFound, nil
+		return p.Mux.StatusError(http.StatusNotFound, nil)
 	}
 
 	vars := make(map[string]interface{})

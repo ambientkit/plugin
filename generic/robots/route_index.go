@@ -6,7 +6,7 @@ import (
 )
 
 // Robots returns a page for web crawlers.
-func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (err error) {
 	w.Header().Set("Content-Type", "text/plain")
 	text :=
 		`User-agent: *

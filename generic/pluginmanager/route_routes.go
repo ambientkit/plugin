@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-func (p *Plugin) routesView(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) routesView(w http.ResponseWriter, r *http.Request) (err error) {
 	pluginName := p.Mux.Param(r, "id")
 
 	vars := make(map[string]interface{})

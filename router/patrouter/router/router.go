@@ -4,6 +4,7 @@ package router
 import (
 	"net/http"
 
+	"github.com/ambientkit/ambient"
 	"github.com/bmizerany/pat"
 )
 
@@ -12,7 +13,7 @@ type Mux struct {
 	router *pat.PatternServeMux
 
 	// customServeHTTP is the serve function.
-	customServeHTTP func(w http.ResponseWriter, r *http.Request, status int, err error)
+	customServeHTTP func(w http.ResponseWriter, r *http.Request, err error)
 }
 
 // New returns an instance of the router.
@@ -25,7 +26,7 @@ func New() *Mux {
 }
 
 // SetServeHTTP sets the ServeHTTP function.
-func (m *Mux) SetServeHTTP(csh func(w http.ResponseWriter, r *http.Request, status int, err error)) {
+func (m *Mux) SetServeHTTP(csh func(w http.ResponseWriter, r *http.Request, err error)) {
 	m.customServeHTTP = csh
 }
 
@@ -40,9 +41,19 @@ func (m *Mux) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	m.router.ServeHTTP(w, r)
 }
 
+// StatusError returns error with a status code.
+func (m *Mux) StatusError(status int, err error) error {
+	return ambient.StatusError{Code: status, Err: err}
+}
+
 // Error shows error page based on the status code.
 func (m *Mux) Error(status int, w http.ResponseWriter, r *http.Request) {
-	m.customServeHTTP(w, r, status, nil)
+	if m.customServeHTTP != nil {
+		m.customServeHTTP(w, r, ambient.StatusError{Code: status, Err: nil})
+		return
+	}
+
+	http.Error(w, http.StatusText(status), status)
 }
 
 // Param returns a URL parameter.
@@ -51,8 +62,8 @@ func (m *Mux) Param(r *http.Request, param string) string {
 }
 
 // Wrap a standard http handler so it can be used easily.
-func (m *Mux) Wrap(handler http.HandlerFunc) func(w http.ResponseWriter, r *http.Request) (status int, err error) {
-	return func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (m *Mux) Wrap(handler http.HandlerFunc) func(w http.ResponseWriter, r *http.Request) (err error) {
+	return func(w http.ResponseWriter, r *http.Request) (err error) {
 		handler.ServeHTTP(w, r)
 		return
 	}

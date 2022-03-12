@@ -45,13 +45,14 @@ func (ts *TestSuite) Run(t *testing.T, mux func() ambient.AppRouter) {
 
 // defaultServeHTTP is the default ServeHTTP function that receives the status and error from
 // the function call.
-var defaultServeHTTP = func(w http.ResponseWriter, r *http.Request, status int,
-	err error) {
-	if status >= 400 {
-		if err != nil {
-			http.Error(w, err.Error(), status)
-		} else {
-			http.Error(w, "", status)
+var defaultServeHTTP = func(w http.ResponseWriter, r *http.Request, err error) {
+	if err != nil {
+		switch e := err.(type) {
+		case ambient.Error:
+			http.Error(w, e.Error(), e.Status())
+		default:
+			http.Error(w, http.StatusText(http.StatusInternalServerError),
+				http.StatusInternalServerError)
 		}
 	}
 }
@@ -61,9 +62,9 @@ func (ts *TestSuite) TestParams(t *testing.T, mux ambient.AppRouter) {
 	mux.SetServeHTTP(defaultServeHTTP)
 
 	outParam := ""
-	mux.Get("/user/{name}", func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	mux.Get("/user/{name}", func(w http.ResponseWriter, r *http.Request) (err error) {
 		outParam = mux.Param(r, "name")
-		return http.StatusOK, nil
+		return nil
 	})
 
 	r := httptest.NewRequest("GET", "/user/john", nil)
@@ -80,9 +81,9 @@ func (ts *TestSuite) TestInstance(t *testing.T, mux ambient.AppRouter) {
 	mux.SetServeHTTP(defaultServeHTTP)
 
 	outParam := ""
-	mux.Get("/user/{name}", func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	mux.Get("/user/{name}", func(w http.ResponseWriter, r *http.Request) (err error) {
 		outParam = mux.Param(r, "name")
-		return http.StatusOK, nil
+		return nil
 	})
 
 	r := httptest.NewRequest("GET", "/user/john", nil)
@@ -102,10 +103,10 @@ func (ts *TestSuite) TestPostForm(t *testing.T, mux ambient.AppRouter) {
 	form.Add("username", "jsmith")
 
 	outParam := ""
-	mux.Post("/user", func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	mux.Post("/user", func(w http.ResponseWriter, r *http.Request) (err error) {
 		r.ParseForm()
 		outParam = r.FormValue("username")
-		return http.StatusOK, nil
+		return nil
 	})
 
 	r := httptest.NewRequest("POST", "/user", strings.NewReader(form.Encode()))
@@ -128,13 +129,13 @@ func (ts *TestSuite) TestPostJSON(t *testing.T, mux ambient.AppRouter) {
 	assert.Nil(t, err)
 
 	outParam := ""
-	mux.Post("/user", func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	mux.Post("/user", func(w http.ResponseWriter, r *http.Request) (err error) {
 		b, err := ioutil.ReadAll(r.Body)
 		assert.Nil(t, err)
 		r.Body.Close()
 		outParam = string(b)
 		assert.Equal(t, `{"username":"jsmith"}`, string(b))
-		return http.StatusOK, nil
+		return nil
 	})
 
 	r := httptest.NewRequest("POST", "/user", bytes.NewBuffer(j))
@@ -153,9 +154,9 @@ func (ts *TestSuite) TestGet(t *testing.T, mux ambient.AppRouter) {
 
 	called := false
 
-	mux.Get("/user", func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	mux.Get("/user", func(w http.ResponseWriter, r *http.Request) (err error) {
 		called = true
-		return http.StatusOK, nil
+		return nil
 	})
 
 	r := httptest.NewRequest("GET", "/user", nil)
@@ -171,9 +172,9 @@ func (ts *TestSuite) TestDelete(t *testing.T, mux ambient.AppRouter) {
 
 	called := false
 
-	mux.Delete("/user", func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	mux.Delete("/user", func(w http.ResponseWriter, r *http.Request) (err error) {
 		called = true
-		return http.StatusOK, nil
+		return nil
 	})
 
 	r := httptest.NewRequest("DELETE", "/user", nil)
@@ -189,9 +190,9 @@ func (ts *TestSuite) TestHead(t *testing.T, mux ambient.AppRouter) {
 
 	called := false
 
-	mux.Head("/user", func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	mux.Head("/user", func(w http.ResponseWriter, r *http.Request) (err error) {
 		called = true
-		return http.StatusOK, nil
+		return nil
 	})
 
 	r := httptest.NewRequest("HEAD", "/user", nil)
@@ -207,9 +208,9 @@ func (ts *TestSuite) TestOptions(t *testing.T, mux ambient.AppRouter) {
 
 	called := false
 
-	mux.Options("/user", func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	mux.Options("/user", func(w http.ResponseWriter, r *http.Request) (err error) {
 		called = true
-		return http.StatusOK, nil
+		return nil
 	})
 
 	r := httptest.NewRequest("OPTIONS", "/user", nil)
@@ -225,9 +226,9 @@ func (ts *TestSuite) TestPatch(t *testing.T, mux ambient.AppRouter) {
 
 	called := false
 
-	mux.Patch("/user", func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	mux.Patch("/user", func(w http.ResponseWriter, r *http.Request) (err error) {
 		called = true
-		return http.StatusOK, nil
+		return nil
 	})
 
 	r := httptest.NewRequest("PATCH", "/user", nil)
@@ -243,9 +244,9 @@ func (ts *TestSuite) TestPut(t *testing.T, mux ambient.AppRouter) {
 
 	called := false
 
-	mux.Put("/user", func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	mux.Put("/user", func(w http.ResponseWriter, r *http.Request) (err error) {
 		called = true
-		return http.StatusOK, nil
+		return nil
 	})
 
 	r := httptest.NewRequest("PUT", "/user", nil)
@@ -261,9 +262,9 @@ func (ts *TestSuite) Test404(t *testing.T, mux ambient.AppRouter) {
 
 	called := false
 
-	mux.Get("/user", func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	mux.Get("/user", func(w http.ResponseWriter, r *http.Request) (err error) {
 		called = true
-		return http.StatusOK, nil
+		return nil
 	})
 
 	r := httptest.NewRequest("GET", "/badroute", nil)
@@ -280,9 +281,9 @@ func (ts *TestSuite) Test500NoError(t *testing.T, mux ambient.AppRouter) {
 
 	called := true
 
-	mux.Get("/user", func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	mux.Get("/user", func(w http.ResponseWriter, r *http.Request) (err error) {
 		called = true
-		return http.StatusInternalServerError, nil
+		return ambient.StatusError{Code: http.StatusInternalServerError, Err: nil}
 	})
 
 	r := httptest.NewRequest("GET", "/user", nil)
@@ -300,9 +301,9 @@ func (ts *TestSuite) Test500WithError(t *testing.T, mux ambient.AppRouter) {
 	called := true
 	specificError := errors.New("specific error")
 
-	mux.Get("/user", func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+	mux.Get("/user", func(w http.ResponseWriter, r *http.Request) (err error) {
 		called = true
-		return http.StatusInternalServerError, specificError
+		return ambient.StatusError{Code: http.StatusInternalServerError, Err: specificError}
 	})
 
 	r := httptest.NewRequest("GET", "/user", nil)

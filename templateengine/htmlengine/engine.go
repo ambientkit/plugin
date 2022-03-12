@@ -28,42 +28,42 @@ func NewTemplateEngine(logger ambient.Logger, assetInjector ambient.AssetInjecto
 }
 
 // Page renders using the page layout.
-func (te *Engine) Page(w http.ResponseWriter, r *http.Request, assets embed.FS, partialTemplate string, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (status int, err error) {
+func (te *Engine) Page(w http.ResponseWriter, r *http.Request, assets embed.FS, partialTemplate string, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (err error) {
 	return te.pluginPartial(w, r, "layout/page", ambient.LayoutPage, assets, partialTemplate, http.StatusOK, fm, vars)
 }
 
 // PageContent renders using the page content.
-func (te *Engine) PageContent(w http.ResponseWriter, r *http.Request, content string, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (status int, err error) {
+func (te *Engine) PageContent(w http.ResponseWriter, r *http.Request, content string, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (err error) {
 	return te.pluginContent(w, r, "layout/page", ambient.LayoutPage, content, http.StatusOK, fm, vars)
 }
 
 // Post renders using the post layout.
-func (te *Engine) Post(w http.ResponseWriter, r *http.Request, assets embed.FS, partialTemplate string, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (status int, err error) {
+func (te *Engine) Post(w http.ResponseWriter, r *http.Request, assets embed.FS, partialTemplate string, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (err error) {
 	return te.pluginPartial(w, r, "layout/page", ambient.LayoutPost, assets, partialTemplate, http.StatusOK, fm, vars)
 }
 
 // PostContent renders using the post content.
-func (te *Engine) PostContent(w http.ResponseWriter, r *http.Request, content string, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (status int, err error) {
+func (te *Engine) PostContent(w http.ResponseWriter, r *http.Request, content string, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (err error) {
 	return te.pluginContent(w, r, "layout/page", ambient.LayoutPost, content, http.StatusOK, fm, vars)
 }
 
 // Error renders HTML to a response writer and returns a 404 status code
 // and an error if one occurs.
-func (te *Engine) Error(w http.ResponseWriter, r *http.Request, content string, statusCode int, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (status int, err error) {
+func (te *Engine) Error(w http.ResponseWriter, r *http.Request, content string, statusCode int, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (err error) {
 	return te.pluginContent(w, r, "layout/page", ambient.LayoutPage, content, statusCode, fm, vars)
 }
 
-func (te *Engine) pluginPartial(w http.ResponseWriter, r *http.Request, mainTemplate string, layoutType ambient.LayoutType, assets embed.FS, partialTemplate string, statusCode int, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (status int, err error) {
+func (te *Engine) pluginPartial(w http.ResponseWriter, r *http.Request, mainTemplate string, layoutType ambient.LayoutType, assets embed.FS, partialTemplate string, statusCode int, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (err error) {
 	// Parse the main template with the functions.
 	t, err := te.generateTemplate(r, mainTemplate, layoutType, vars)
 	if err != nil {
-		return http.StatusInternalServerError, err
+		return ambient.StatusError{Code: http.StatusInternalServerError, Err: err}
 	}
 
 	// Parse the plugin template separately for security.
 	content, err := templatebuffer.ParseTemplateFS(assets, fmt.Sprintf("%v.tmpl", partialTemplate), fm(r), vars)
 	if err != nil {
-		return http.StatusInternalServerError, err
+		return ambient.StatusError{Code: http.StatusInternalServerError, Err: err}
 	}
 
 	// Output debug information.
@@ -76,13 +76,13 @@ func (te *Engine) pluginPartial(w http.ResponseWriter, r *http.Request, mainTemp
 	// Escape the content.
 	t, err = te.escapeContent(t, "content", content)
 	if err != nil {
-		return http.StatusInternalServerError, err
+		return ambient.StatusError{Code: http.StatusInternalServerError, Err: err}
 	}
 
 	// Execute the template and write out if no error.
 	err = templatebuffer.ParseExistingTemplateWithResponse(w, r, t, statusCode, nil)
 	if err != nil {
-		return http.StatusInternalServerError, err
+		return ambient.StatusError{Code: http.StatusInternalServerError, Err: err}
 	}
 
 	return
@@ -90,11 +90,11 @@ func (te *Engine) pluginPartial(w http.ResponseWriter, r *http.Request, mainTemp
 
 // pluginContent converts a site post from markdown to HTML and then outputs to response
 // writer. Returns a HTTP status code and an error if one occurs.
-func (te *Engine) pluginContent(w http.ResponseWriter, r *http.Request, mainTemplate string, layoutType ambient.LayoutType, postContent string, statusCode int, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (status int, err error) {
+func (te *Engine) pluginContent(w http.ResponseWriter, r *http.Request, mainTemplate string, layoutType ambient.LayoutType, postContent string, statusCode int, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (err error) {
 	// Parse the main template with the functions.
 	t, err := te.generateTemplate(r, mainTemplate, layoutType, vars)
 	if err != nil {
-		return http.StatusInternalServerError, err
+		return ambient.StatusError{Code: http.StatusInternalServerError, Err: err}
 	}
 
 	// Ensure it's callable.
@@ -108,7 +108,7 @@ func (te *Engine) pluginContent(w http.ResponseWriter, r *http.Request, mainTemp
 	// Parse the plugin template separately for security.
 	content, err := templatebuffer.ParseTemplate(postContent, f, vars)
 	if err != nil {
-		return http.StatusInternalServerError, err
+		return ambient.StatusError{Code: http.StatusInternalServerError, Err: err}
 	}
 
 	// Output debug information.
@@ -121,13 +121,13 @@ func (te *Engine) pluginContent(w http.ResponseWriter, r *http.Request, mainTemp
 	// Escape the content.
 	t, err = te.escapeContent(t, "content", content)
 	if err != nil {
-		return http.StatusInternalServerError, err
+		return ambient.StatusError{Code: http.StatusInternalServerError, Err: err}
 	}
 
 	// Execute the template and write out if no error.
 	err = templatebuffer.ParseExistingTemplateWithResponse(w, r, t, statusCode, nil)
 	if err != nil {
-		return http.StatusInternalServerError, err
+		return ambient.StatusError{Code: http.StatusInternalServerError, Err: err}
 	}
 
 	return

@@ -10,7 +10,7 @@ import (
 )
 
 // login allows a user to login to the dashboard.
-func (p *Plugin) login(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) login(w http.ResponseWriter, r *http.Request) (err error) {
 	vars := make(map[string]interface{})
 	vars["title"] = "Login"
 	vars["token"] = p.Site.SetCSRF(r)
@@ -18,14 +18,14 @@ func (p *Plugin) login(w http.ResponseWriter, r *http.Request) (status int, err 
 	return p.Render.Page(w, r, assets, "template/content/login", p.FuncMap(), vars)
 }
 
-func (p *Plugin) loginPost(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) loginPost(w http.ResponseWriter, r *http.Request) (err error) {
 	r.ParseForm()
 
 	// CSRF protection.
 	success := p.Site.CSRF(r, r.FormValue("token"))
 	if !success {
 		p.Log.Debug("simplelogin: failed CSRF validation")
-		return http.StatusBadRequest, nil
+		return p.Mux.StatusError(http.StatusBadRequest, nil)
 	}
 
 	username := r.FormValue("username")
@@ -64,7 +64,7 @@ func (p *Plugin) loginPost(w http.ResponseWriter, r *http.Request) (status int, 
 
 		mfaSuccess, err = totp.Authenticate(imfa, mfakey)
 		if err != nil {
-			return http.StatusInternalServerError, err
+			return p.Mux.StatusError(http.StatusInternalServerError, err)
 		}
 	}
 
@@ -72,7 +72,7 @@ func (p *Plugin) loginPost(w http.ResponseWriter, r *http.Request) (status int, 
 	// signs are difficult to work with.
 	hashDecoded, err := base64.StdEncoding.DecodeString(allowedPassword)
 	if err != nil {
-		return http.StatusInternalServerError, err
+		return p.Mux.StatusError(http.StatusInternalServerError, err)
 	}
 	passMatch := passhash.MatchString(string(hashDecoded), password)
 
@@ -103,7 +103,7 @@ func (p *Plugin) loginPost(w http.ResponseWriter, r *http.Request) (status int, 
 	return
 }
 
-func (p *Plugin) logout(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) logout(w http.ResponseWriter, r *http.Request) (err error) {
 	err = p.Site.UserLogout(r)
 	if err != nil {
 		p.Log.Info("logout failed: %v", err.Error())

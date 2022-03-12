@@ -165,7 +165,7 @@ func (p *Plugin) Routes() {
 }
 
 // index returns CSS file.
-func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (err error) {
 	// Get the styles.
 	s, err := p.Site.PluginSetting(Styles)
 	if err != nil {

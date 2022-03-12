@@ -16,7 +16,7 @@ type pluginWithSettings struct {
 	Routes   []ambient.Route
 }
 
-func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {
 	vars := make(map[string]interface{})
 	vars["title"] = "Plugin Manager"
 	vars["token"] = p.Site.SetCSRF(r)
@@ -75,13 +75,13 @@ func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (status int, err e
 	return p.Render.Page(w, r, assets, "template/plugins_edit", p.FuncMap(), vars)
 }
 
-func (p *Plugin) update(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) update(w http.ResponseWriter, r *http.Request) (err error) {
 	r.ParseForm()
 
 	// CSRF protection.
 	ok := p.Site.CSRF(r, r.FormValue("token"))
 	if !ok {
-		return http.StatusBadRequest, nil
+		return p.Mux.StatusError(http.StatusBadRequest, nil)
 	}
 
 	// Get list of plugin names.
@@ -142,7 +142,7 @@ func (p *Plugin) update(w http.ResponseWriter, r *http.Request) (status int, err
 	return
 }
 
-func (p *Plugin) destroy(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) destroy(w http.ResponseWriter, r *http.Request) (err error) {
 	ID := p.Mux.Param(r, "id")
 
 	plugins, err := p.Site.Plugins()
@@ -151,7 +151,7 @@ func (p *Plugin) destroy(w http.ResponseWriter, r *http.Request) (status int, er
 	}
 
 	if _, ok := plugins[ID]; !ok {
-		return http.StatusNotFound, nil
+		return p.Mux.StatusError(http.StatusNotFound, nil)
 	}
 
 	err = p.Site.DeletePlugin(ID)

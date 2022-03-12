@@ -6,7 +6,7 @@ import (
 	"sort"
 )
 
-func (p *Plugin) showEnv(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) showEnv(w http.ResponseWriter, r *http.Request) (err error) {
 	vars := make(map[string]interface{})
 	vars["title"] = "Server Environment Variables"
 

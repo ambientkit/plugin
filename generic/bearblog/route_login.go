@@ -10,15 +10,14 @@ import (
 )
 
 // login allows a user to login to the dashboard.
-func (p *Plugin) login(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) login(w http.ResponseWriter, r *http.Request) (err error) {
 	slug := p.Mux.Param(r, "slug")
 	loginURL, err := p.Site.PluginSetting(LoginURL)
 	if err != nil {
 		return p.Site.Error(err)
 	}
-
 	if slug != loginURL {
-		return http.StatusNotFound, nil
+		return p.Mux.StatusError(http.StatusNotFound, nil)
 	}
 
 	vars := make(map[string]interface{})
@@ -28,7 +27,7 @@ func (p *Plugin) login(w http.ResponseWriter, r *http.Request) (status int, err 
 	return p.Render.Page(w, r, assets, "template/content/login", p.FuncMap(), vars)
 }
 
-func (p *Plugin) loginPost(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) loginPost(w http.ResponseWriter, r *http.Request) (err error) {
 	slug := p.Mux.Param(r, "slug")
 	loginURL, err := p.Site.PluginSetting(LoginURL)
 	if err != nil {
@@ -36,7 +35,7 @@ func (p *Plugin) loginPost(w http.ResponseWriter, r *http.Request) (status int, 
 	}
 
 	if slug != loginURL {
-		return http.StatusNotFound, nil
+		return p.Mux.StatusError(http.StatusNotFound, nil)
 	}
 
 	r.ParseForm()
@@ -44,7 +43,7 @@ func (p *Plugin) loginPost(w http.ResponseWriter, r *http.Request) (status int, 
 	// CSRF protection.
 	success := p.Site.CSRF(r, r.FormValue("token"))
 	if !success {
-		return http.StatusBadRequest, nil
+		return p.Mux.StatusError(http.StatusBadRequest, nil)
 	}
 
 	username := r.FormValue("username")
@@ -83,7 +82,7 @@ func (p *Plugin) loginPost(w http.ResponseWriter, r *http.Request) (status int, 
 
 		mfaSuccess, err = totp.Authenticate(imfa, mfakey)
 		if err != nil {
-			return http.StatusInternalServerError, err
+			return p.Mux.StatusError(http.StatusInternalServerError, err)
 		}
 	}
 
@@ -91,7 +90,7 @@ func (p *Plugin) loginPost(w http.ResponseWriter, r *http.Request) (status int, 
 	// signs are difficult to work with.
 	hashDecoded, err := base64.StdEncoding.DecodeString(allowedPassword)
 	if err != nil {
-		return http.StatusInternalServerError, err
+		return p.Mux.StatusError(http.StatusInternalServerError, err)
 	}
 	passMatch := passhash.MatchString(string(hashDecoded), password)
 
@@ -122,7 +121,7 @@ func (p *Plugin) loginPost(w http.ResponseWriter, r *http.Request) (status int, 
 	return
 }
 
-func (p *Plugin) logout(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) logout(w http.ResponseWriter, r *http.Request) (err error) {
 	err = p.Site.UserLogout(r)
 	if err != nil {
 		p.Log.Info("logout failed: %v", err.Error())

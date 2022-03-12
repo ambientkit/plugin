@@ -10,13 +10,13 @@ import (
 	qrcode "github.com/skip2/go-qrcode"
 )
 
-func (p *Plugin) mfa(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) mfa(w http.ResponseWriter, r *http.Request) (err error) {
 	vars := make(map[string]interface{})
 	vars["title"] = "MFA Generate"
 	return p.Render.Page(w, r, assets, "template/content/mfa", p.FuncMap(), vars)
 }
 
-func (p *Plugin) mfaPost(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) mfaPost(w http.ResponseWriter, r *http.Request) (err error) {
 	vars := make(map[string]interface{})
 	vars["title"] = "MFA Generate"
 

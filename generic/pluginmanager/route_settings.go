@@ -15,7 +15,7 @@ type pluginSetting struct {
 	Description ambient.SettingDescription
 }
 
-func (p *Plugin) settingsEdit(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) settingsEdit(w http.ResponseWriter, r *http.Request) (err error) {
 	pluginName := p.Mux.Param(r, "id")
 
 	vars := make(map[string]interface{})
@@ -52,14 +52,14 @@ func (p *Plugin) settingsEdit(w http.ResponseWriter, r *http.Request) (status in
 	return p.Render.Page(w, r, assets, "template/settings_edit", p.FuncMap(), vars)
 }
 
-func (p *Plugin) settingsUpdate(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) settingsUpdate(w http.ResponseWriter, r *http.Request) (err error) {
 	pluginName := p.Mux.Param(r, "id")
 	r.ParseForm()
 
 	// CSRF protection.
 	ok := p.Site.CSRF(r, r.FormValue("token"))
 	if !ok {
-		return http.StatusBadRequest, nil
+		return p.Mux.StatusError(http.StatusBadRequest, nil)
 	}
 
 	settings, err := p.Site.PluginNeighborSettingsList(pluginName)

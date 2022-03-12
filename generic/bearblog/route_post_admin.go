@@ -8,7 +8,7 @@ import (
 	"github.com/ambientkit/plugin/pkg/uuid"
 )
 
-func (p *Plugin) postAdminIndex(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) postAdminIndex(w http.ResponseWriter, r *http.Request) (err error) {
 	vars := make(map[string]interface{})
 	vars["title"] = "Posts"
 
@@ -22,7 +22,7 @@ func (p *Plugin) postAdminIndex(w http.ResponseWriter, r *http.Request) (status 
 	return p.Render.Page(w, r, assets, "template/content/bloglist_edit", p.FuncMap(), vars)
 }
 
-func (p *Plugin) postAdminCreate(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) postAdminCreate(w http.ResponseWriter, r *http.Request) (err error) {
 	vars := make(map[string]interface{})
 	vars["title"] = "New post"
 	vars["token"] = p.Site.SetCSRF(r)
@@ -30,10 +30,10 @@ func (p *Plugin) postAdminCreate(w http.ResponseWriter, r *http.Request) (status
 	return p.Render.Page(w, r, assets, "template/content/post_create", p.FuncMap(), vars)
 }
 
-func (p *Plugin) postAdminStore(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) postAdminStore(w http.ResponseWriter, r *http.Request) (err error) {
 	ID, err := uuid.Generate()
 	if err != nil {
-		return http.StatusInternalServerError, err
+		return p.Mux.StatusError(http.StatusInternalServerError, err)
 	}
 
 	r.ParseForm()
@@ -41,7 +41,7 @@ func (p *Plugin) postAdminStore(w http.ResponseWriter, r *http.Request) (status 
 	// CSRF protection.
 	success := p.Site.CSRF(r, r.FormValue("token"))
 	if !success {
-		return http.StatusBadRequest, nil
+		return p.Mux.StatusError(http.StatusBadRequest, nil)
 	}
 
 	now := time.Now()
@@ -58,7 +58,7 @@ func (p *Plugin) postAdminStore(w http.ResponseWriter, r *http.Request) (status 
 	}
 	ts, err := time.Parse("2006-01-02", pubDate)
 	if err != nil {
-		return http.StatusInternalServerError, err
+		return p.Mux.StatusError(http.StatusInternalServerError, err)
 	}
 	post.Timestamp = ts
 	post.Content = r.FormValue("content")
@@ -76,7 +76,7 @@ func (p *Plugin) postAdminStore(w http.ResponseWriter, r *http.Request) (status 
 	return
 }
 
-func (p *Plugin) postAdminEdit(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) postAdminEdit(w http.ResponseWriter, r *http.Request) (err error) {
 	vars := make(map[string]interface{})
 	vars["title"] = "Edit post"
 	vars["token"] = p.Site.SetCSRF(r)
@@ -101,7 +101,7 @@ func (p *Plugin) postAdminEdit(w http.ResponseWriter, r *http.Request) (status i
 	return p.Render.Page(w, r, assets, "template/content/post_edit", p.FuncMap(), vars)
 }
 
-func (p *Plugin) postAdminUpdate(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) postAdminUpdate(w http.ResponseWriter, r *http.Request) (err error) {
 	ID := p.Mux.Param(r, "id")
 
 	post, err := p.Site.PostByID(ID)
@@ -115,7 +115,7 @@ func (p *Plugin) postAdminUpdate(w http.ResponseWriter, r *http.Request) (status
 	// CSRF protection.
 	success := p.Site.CSRF(r, r.FormValue("token"))
 	if !success {
-		return http.StatusBadRequest, nil
+		return p.Mux.StatusError(http.StatusBadRequest, nil)
 	}
 
 	now := time.Now()
@@ -127,7 +127,7 @@ func (p *Plugin) postAdminUpdate(w http.ResponseWriter, r *http.Request) (status
 	pubDate := r.FormValue("published_date")
 	ts, err := time.Parse("2006-01-02", pubDate)
 	if err != nil {
-		return http.StatusInternalServerError, err
+		return p.Mux.StatusError(http.StatusInternalServerError, err)
 	}
 	post.Timestamp = ts
 	post.Content = r.FormValue("content")
@@ -145,7 +145,7 @@ func (p *Plugin) postAdminUpdate(w http.ResponseWriter, r *http.Request) (status
 	return
 }
 
-func (p *Plugin) postAdminDestroy(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) postAdminDestroy(w http.ResponseWriter, r *http.Request) (err error) {
 	ID := p.Mux.Param(r, "id")
 
 	_, err = p.Site.PostByID(ID)

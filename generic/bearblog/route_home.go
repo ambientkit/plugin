@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (err error) {
 	content, err := p.Site.Content()
 	if err != nil {
 		return p.Site.Error(err)
@@ -19,7 +19,7 @@ func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (status int, err 
 	return p.Render.Page(w, r, assets, "template/content/home", p.FuncMap(), vars)
 }
 
-func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {
 	siteContent, err := p.Site.Content()
 	if err != nil {
 		return p.Site.Error(err)
@@ -76,13 +76,13 @@ func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (status int, err e
 	return p.Render.Page(w, r, assets, "template/content/home_edit", p.FuncMap(), vars)
 }
 
-func (p *Plugin) update(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) update(w http.ResponseWriter, r *http.Request) (err error) {
 	r.ParseForm()
 
 	// CSRF protection.
 	success := p.Site.CSRF(r, r.FormValue("token"))
 	if !success {
-		return http.StatusBadRequest, nil
+		return p.Mux.StatusError(http.StatusBadRequest, nil)
 	}
 
 	err = p.Site.SetTitle(r.FormValue("title"))
@@ -124,7 +124,7 @@ func (p *Plugin) update(w http.ResponseWriter, r *http.Request) (status int, err
 	return
 }
 
-func (p *Plugin) reload(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) reload(w http.ResponseWriter, r *http.Request) (err error) {
 	err = p.Site.Load()
 	if err != nil {
 		p.Site.Error(err)

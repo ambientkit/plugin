@@ -20,7 +20,7 @@ func TestFormSuccess(t *testing.T) {
 	mux := NewRouter()
 
 	mux.Handle("POST", "/user/:user_id", Handler(
-		func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+		func(w http.ResponseWriter, r *http.Request) (err error) {
 			called = true
 
 			// swagger:parameters UserCreate
@@ -42,7 +42,7 @@ func TestFormSuccess(t *testing.T) {
 			assert.Equal(t, "10", req.UserID)
 			assert.Equal(t, "john", req.FirstName)
 			assert.Equal(t, "smith", req.LastName)
-			return http.StatusOK, nil
+			return nil
 		}))
 
 	form := url.Values{}
@@ -63,7 +63,7 @@ func TestFormFailValidate(t *testing.T) {
 	mux := NewRouter()
 
 	mux.Handle("POST", "/user/:user_id", Handler(
-		func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+		func(w http.ResponseWriter, r *http.Request) (err error) {
 			called = true
 
 			// swagger:parameters UserCreate
@@ -86,7 +86,7 @@ func TestFormFailValidate(t *testing.T) {
 			assert.Equal(t, "10", req.UserID)
 			assert.Equal(t, "john", req.FirstName)
 			assert.Equal(t, "smith", req.LastName)
-			return http.StatusOK, nil
+			return nil
 		}))
 
 	form := url.Values{}
@@ -107,7 +107,7 @@ func TestFormNil(t *testing.T) {
 	mux := NewRouter()
 
 	mux.Handle("POST", "/user/:user_id", Handler(
-		func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+		func(w http.ResponseWriter, r *http.Request) (err error) {
 			called = true
 
 			// swagger:parameters UserCreate
@@ -130,7 +130,7 @@ func TestFormNil(t *testing.T) {
 			assert.Equal(t, "", req.UserID)
 			assert.Equal(t, "", req.FirstName)
 			assert.Equal(t, "", req.LastName)
-			return http.StatusOK, nil
+			return nil
 		}))
 
 	r := httptest.NewRequest("POST", "/user/10", nil)
@@ -147,7 +147,7 @@ func TestFormMissingPointer(t *testing.T) {
 	mux := NewRouter()
 
 	mux.Handle("POST", "/user/:user_id", Handler(
-		func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+		func(w http.ResponseWriter, r *http.Request) (err error) {
 			called = true
 
 			// swagger:parameters UserCreate
@@ -170,7 +170,7 @@ func TestFormMissingPointer(t *testing.T) {
 			assert.Equal(t, "", req.UserID)
 			assert.Equal(t, "", req.FirstName)
 			assert.Equal(t, "", req.LastName)
-			return http.StatusOK, nil
+			return nil
 		}))
 
 	form := url.Values{}
@@ -191,7 +191,7 @@ func TestJSONSuccess(t *testing.T) {
 	mux := NewRouter()
 
 	mux.Handle("POST", "/user/:user_id", Handler(
-		func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+		func(w http.ResponseWriter, r *http.Request) (err error) {
 			called = true
 
 			// swagger:parameters UserCreate
@@ -217,7 +217,7 @@ func TestJSONSuccess(t *testing.T) {
 			assert.Equal(t, "10", req.UserID)
 			assert.Equal(t, "john", req.FirstName)
 			assert.Equal(t, "smith", req.LastName)
-			return http.StatusOK, nil
+			return nil
 		}))
 
 	form := make(map[string]string)
@@ -239,7 +239,7 @@ func TestJSONFailure(t *testing.T) {
 	mux := NewRouter()
 
 	mux.Handle("POST", "/user/:user_id", Handler(
-		func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+		func(w http.ResponseWriter, r *http.Request) (err error) {
 			called = true
 
 			// swagger:parameters UserCreate
@@ -264,7 +264,7 @@ func TestJSONFailure(t *testing.T) {
 			assert.Equal(t, "", req.UserID)
 			assert.Equal(t, "", req.FirstName)
 			assert.Equal(t, "", req.LastName)
-			return http.StatusOK, nil
+			return nil
 		}))
 
 	form := url.Values{}
@@ -285,7 +285,7 @@ func TestJSONFailureNil(t *testing.T) {
 	mux := NewRouter()
 
 	mux.Handle("POST", "/user/:user_id", Handler(
-		func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+		func(w http.ResponseWriter, r *http.Request) (err error) {
 			called = true
 
 			// swagger:parameters UserCreate
@@ -310,7 +310,7 @@ func TestJSONFailureNil(t *testing.T) {
 			assert.Equal(t, "", req.UserID)
 			assert.Equal(t, "", req.FirstName)
 			assert.Equal(t, "", req.LastName)
-			return http.StatusOK, nil
+			return nil
 		}))
 
 	r := httptest.NewRequest("POST", "/user/10", nil)
@@ -327,7 +327,7 @@ func TestJSONFailureDataType(t *testing.T) {
 	mux := NewRouter()
 
 	mux.Handle("POST", "/user/:user_id", Handler(
-		func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+		func(w http.ResponseWriter, r *http.Request) (err error) {
 			called = true
 
 			// swagger:parameters UserCreate
@@ -352,7 +352,7 @@ func TestJSONFailureDataType(t *testing.T) {
 			assert.Equal(t, "10", req.UserID)
 			assert.Equal(t, "", req.FirstName)
 			assert.Equal(t, "", req.LastName)
-			return http.StatusOK, nil
+			return nil
 		}))
 
 	// Try to parse to JSON and should not fail.

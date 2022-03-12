@@ -53,8 +53,7 @@ func (p *Plugin) Router(logger ambient.Logger, te ambient.Renderer) (ambient.App
 }
 
 // SetServeHTTP sets the ServeHTTP function.
-func (p *Plugin) SetServeHTTP(h func(w http.ResponseWriter, r *http.Request, status int, err error)) {
-}
+func (p *Plugin) SetServeHTTP(h func(w http.ResponseWriter, r *http.Request, err error)) {}
 
 // ServeHTTP routes the incoming http.Request based on method and path
 // extracting path parameters as it goes.
@@ -64,42 +63,42 @@ func (p *Plugin) ServeHTTP(w http.ResponseWriter, r *http.Request) {}
 func (p *Plugin) SetNotFound(notFound http.Handler) {}
 
 // Get registers a pattern with the router.
-func (p *Plugin) Get(path string, fn func(http.ResponseWriter, *http.Request) (status int, err error)) {
+func (p *Plugin) Get(path string, fn func(http.ResponseWriter, *http.Request) (err error)) {
 	p.handleRoute(path, http.MethodGet)
 }
 
 // Post registers a pattern with the router.
-func (p *Plugin) Post(path string, fn func(http.ResponseWriter, *http.Request) (status int, err error)) {
+func (p *Plugin) Post(path string, fn func(http.ResponseWriter, *http.Request) (err error)) {
 	p.handleRoute(path, http.MethodPost)
 }
 
 // Patch registers a pattern with the router.
-func (p *Plugin) Patch(path string, fn func(http.ResponseWriter, *http.Request) (status int, err error)) {
+func (p *Plugin) Patch(path string, fn func(http.ResponseWriter, *http.Request) (err error)) {
 	p.handleRoute(path, http.MethodPatch)
 }
 
 // Put registers a pattern with the router.
-func (p *Plugin) Put(path string, fn func(http.ResponseWriter, *http.Request) (status int, err error)) {
+func (p *Plugin) Put(path string, fn func(http.ResponseWriter, *http.Request) (err error)) {
 	p.handleRoute(path, http.MethodPut)
 }
 
 // Handle registers a pattern with the router.
-func (p *Plugin) Handle(method string, path string, fn func(http.ResponseWriter, *http.Request) (status int, err error)) {
+func (p *Plugin) Handle(method string, path string, fn func(http.ResponseWriter, *http.Request) (err error)) {
 	p.handleRoute(path, method)
 }
 
 // Head registers a pattern with the router.
-func (p *Plugin) Head(path string, fn func(http.ResponseWriter, *http.Request) (status int, err error)) {
+func (p *Plugin) Head(path string, fn func(http.ResponseWriter, *http.Request) (err error)) {
 	p.handleRoute(path, http.MethodHead)
 }
 
 // Options registers a pattern with the router.
-func (p *Plugin) Options(path string, fn func(http.ResponseWriter, *http.Request) (status int, err error)) {
+func (p *Plugin) Options(path string, fn func(http.ResponseWriter, *http.Request) (err error)) {
 	p.handleRoute(path, http.MethodOptions)
 }
 
 // Delete registers a pattern with the router.
-func (p *Plugin) Delete(path string, fn func(http.ResponseWriter, *http.Request) (status int, err error)) {
+func (p *Plugin) Delete(path string, fn func(http.ResponseWriter, *http.Request) (err error)) {
 	p.handleRoute(path, http.MethodDelete)
 }
 
@@ -108,10 +107,15 @@ func (p *Plugin) Param(r *http.Request, name string) string {
 	return ""
 }
 
+// StatusError returns an error with the status code.
+func (p *Plugin) StatusError(status int, err error) error {
+	return ambient.StatusError{Code: status, Err: err}
+}
+
 // Error shows error page based on the status code.
 func (p *Plugin) Error(status int, w http.ResponseWriter, r *http.Request) {}
 
 // Wrap a standard http handler so it can be used easily.
-func (p *Plugin) Wrap(handler http.HandlerFunc) func(w http.ResponseWriter, r *http.Request) (status int, err error) {
+func (p *Plugin) Wrap(handler http.HandlerFunc) func(w http.ResponseWriter, r *http.Request) (err error) {
 	return nil
 }
