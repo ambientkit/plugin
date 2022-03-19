@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/ambientkit/ambient"
+	"github.com/ambientkit/ambient/pkg/ambientapp"
 	"github.com/ambientkit/plugin/logger/zaplogger"
 	"github.com/ambientkit/plugin/pkg/docgen"
 	"github.com/ambientkit/plugin/pkg/docgen/testdata/prism"

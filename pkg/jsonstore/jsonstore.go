@@ -85,3 +85,19 @@ func (s *JSONSession) Delete(token string) error {
 
 	return sd.Save(s.sessionstorer, s.encrypter)
 }
+
+// All returns a map of all records.
+func (s *JSONSession) All() (map[string][]byte, error) {
+	sd := new(SessionDatabase)
+	err := sd.Load(s.sessionstorer, s.encrypter)
+	if err != nil {
+		return nil, err
+	}
+
+	m := make(map[string][]byte)
+	for _, v := range sd.Records {
+		m[v.ID] = v.Data
+	}
+
+	return m, nil
+}

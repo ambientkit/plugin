@@ -1,6 +1,6 @@
 # redirecttourl
 
-Package redirecttourl is an Ambient plugin with middlware that redirects to the correct site URL.
+Package redirecttourl is an Ambient plugin with middleware that redirects to the correct site URL.
 
 **Import:** github.com/ambientkit/plugin/middleware/redirecttourl
 

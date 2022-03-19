@@ -8,7 +8,7 @@ Package prism is an Ambient plugin that provides syntax highlighting using Prism
 
 ## Plugin Type
 
-The plugin can be used as the follow core types:
+The plugin can be used as the following core types:
 
 - **Logger:** false
 - **Storage System:** false
@@ -108,6 +108,7 @@ import (
 	"log"
 
 	"github.com/ambientkit/ambient"
+	"github.com/ambientkit/ambient/pkg/ambientapp"
 	"github.com/ambientkit/plugin/logger/zaplogger"
 	"github.com/ambientkit/plugin/pkg/docgen/testdata/prism"
 	"github.com/ambientkit/plugin/storage/memorystorage"
@@ -140,3 +141,7 @@ func main() {
 	}
 }
 ```
+
+---
+
+Docgen by [Ambient](https://ambientkit.github.io)
