@@ -29,7 +29,7 @@ type Doc struct {
 	Settings           []ambient.Setting
 	FuncMap            func(r *http.Request) template.FuncMap
 	Assets             []ambient.Asset
-	EmbeddedFS         *embed.FS
+	EmbeddedFS         ambient.FileSystemReader
 	Routes             []routerecorder.Route
 	Middleware         []func(next http.Handler) http.Handler
 	Example            string
