@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go/storage v1.19.0
 	github.com/Azure/azure-storage-blob-go v0.14.0
 	github.com/alexedwards/scs/v2 v2.5.0
-	github.com/ambientkit/ambient v0.0.0-20220312051619-fd075fdea73c
+	github.com/ambientkit/ambient v0.0.0-20220322045838-af0f8984704f
 	github.com/ambientkit/away v0.0.0-20220312051345-3985971e46d6
 	github.com/aws/aws-sdk-go-v2 v1.13.0
 	github.com/aws/aws-sdk-go-v2/config v1.13.1
@@ -21,6 +21,8 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gorilla/sessions v1.2.1
+	github.com/hashicorp/go-hclog v1.2.0
+	github.com/hashicorp/go-plugin v1.4.3
 	github.com/josephspurrier/rove v0.0.0-20190513125012-6843a2df19ca
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/mattn/go-colorable v0.1.12
@@ -38,12 +40,16 @@ require (
 )
 
 require (
+	github.com/fatih/color v1.7.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
+	github.com/hashicorp/yamux v0.0.0-20180604194846-3520598351bb // indirect
 	github.com/jessevdk/go-flags v1.5.0 // indirect
 	github.com/jmoiron/sqlx v1.3.4 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
+	github.com/mitchellh/go-testing-interface v0.0.0-20171004221916-a61a99592b77 // indirect
+	github.com/oklog/run v1.0.0 // indirect
 	github.com/vburenin/ifacemaker v1.1.0 // indirect
 	golang.org/x/image v0.0.0-20191009234506-e7c1f5e7dbb8 // indirect
 	golang.org/x/mod v0.5.1 // indirect

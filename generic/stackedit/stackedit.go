@@ -41,7 +41,7 @@ func (p *Plugin) GrantRequests() []ambient.GrantRequest {
 }
 
 // Assets returns a list of assets and an embedded filesystem.
-func (p *Plugin) Assets() ([]ambient.Asset, *embed.FS) {
+func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
 	return []ambient.Asset{
 		{
 			Path:     "https://unpkg.com/stackedit-js@1.0.7/docs/lib/stackedit.min.js",

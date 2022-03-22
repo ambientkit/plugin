@@ -158,7 +158,7 @@ func (p *Plugin) Routes() {
 }
 
 // Assets returns a list of assets and an embedded filesystem.
-func (p *Plugin) Assets() ([]ambient.Asset, *embed.FS) {
+func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
 	arr := make([]ambient.Asset, 0)
 
 	siteTitle, err := p.Site.Title()

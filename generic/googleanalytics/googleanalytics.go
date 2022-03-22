@@ -55,7 +55,7 @@ func (p *Plugin) Settings() []ambient.Setting {
 }
 
 // Assets returns a list of assets and an embedded filesystem.
-func (p *Plugin) Assets() ([]ambient.Asset, *embed.FS) {
+func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
 	// Get the tracking ID.
 	trackingID, err := p.Site.PluginSettingString(TrackingID)
 	if err != nil || len(trackingID) == 0 {

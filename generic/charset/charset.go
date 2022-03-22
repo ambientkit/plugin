@@ -2,8 +2,6 @@
 package charset
 
 import (
-	"embed"
-
 	"github.com/ambientkit/ambient"
 )
 
@@ -53,7 +51,7 @@ func (p *Plugin) Settings() []ambient.Setting {
 }
 
 // Assets returns a list of assets and an embedded filesystem.
-func (p *Plugin) Assets() ([]ambient.Asset, *embed.FS) {
+func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
 	cs, err := p.Site.PluginSettingString(Charset)
 	if err != nil || len(cs) == 0 {
 		// Otherwise don't set the assets.

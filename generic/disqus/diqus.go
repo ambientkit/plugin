@@ -61,7 +61,7 @@ func (p *Plugin) Settings() []ambient.Setting {
 }
 
 // Assets returns a list of assets and an embedded filesystem.
-func (p *Plugin) Assets() ([]ambient.Asset, *embed.FS) {
+func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
 	// Get the Disqus ID.
 	disqusID, err := p.Site.PluginSettingString(DisqusID)
 	if err != nil || len(disqusID) == 0 {

@@ -1,7 +1,6 @@
 package htmlengine
 
 import (
-	"embed"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -28,7 +27,7 @@ func NewTemplateEngine(logger ambient.Logger, assetInjector ambient.AssetInjecto
 }
 
 // Page renders using the page layout.
-func (te *Engine) Page(w http.ResponseWriter, r *http.Request, assets embed.FS, partialTemplate string, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (err error) {
+func (te *Engine) Page(w http.ResponseWriter, r *http.Request, assets ambient.FileSystemReader, partialTemplate string, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (err error) {
 	return te.pluginPartial(w, r, "layout/page", ambient.LayoutPage, assets, partialTemplate, http.StatusOK, fm, vars)
 }
 
@@ -38,7 +37,7 @@ func (te *Engine) PageContent(w http.ResponseWriter, r *http.Request, content st
 }
 
 // Post renders using the post layout.
-func (te *Engine) Post(w http.ResponseWriter, r *http.Request, assets embed.FS, partialTemplate string, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (err error) {
+func (te *Engine) Post(w http.ResponseWriter, r *http.Request, assets ambient.FileSystemReader, partialTemplate string, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (err error) {
 	return te.pluginPartial(w, r, "layout/page", ambient.LayoutPost, assets, partialTemplate, http.StatusOK, fm, vars)
 }
 
@@ -53,7 +52,7 @@ func (te *Engine) Error(w http.ResponseWriter, r *http.Request, content string, 
 	return te.pluginContent(w, r, "layout/page", ambient.LayoutPage, content, statusCode, fm, vars)
 }
 
-func (te *Engine) pluginPartial(w http.ResponseWriter, r *http.Request, mainTemplate string, layoutType ambient.LayoutType, assets embed.FS, partialTemplate string, statusCode int, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (err error) {
+func (te *Engine) pluginPartial(w http.ResponseWriter, r *http.Request, mainTemplate string, layoutType ambient.LayoutType, assets ambient.FileSystemReader, partialTemplate string, statusCode int, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (err error) {
 	// Parse the main template with the functions.
 	t, err := te.generateTemplate(r, mainTemplate, layoutType, vars)
 	if err != nil {
