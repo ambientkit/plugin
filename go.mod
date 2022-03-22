@@ -21,8 +21,6 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gorilla/sessions v1.2.1
-	github.com/hashicorp/go-hclog v1.2.0
-	github.com/hashicorp/go-plugin v1.4.3
 	github.com/josephspurrier/rove v0.0.0-20190513125012-6843a2df19ca
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/mattn/go-colorable v0.1.12
@@ -44,6 +42,8 @@ require (
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
+	github.com/hashicorp/go-hclog v1.2.0 // indirect
+	github.com/hashicorp/go-plugin v1.4.3 // indirect
 	github.com/hashicorp/yamux v0.0.0-20180604194846-3520598351bb // indirect
 	github.com/jessevdk/go-flags v1.5.0 // indirect
 	github.com/jmoiron/sqlx v1.3.4 // indirect
