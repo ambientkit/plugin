@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"io"
-	"io/ioutil"
 	"time"
 
 	"cloud.google.com/go/storage"
@@ -44,12 +43,13 @@ func (s *GCPStorage) Load() ([]byte, error) {
 	}
 	defer rc.Close()
 
-	data, err := ioutil.ReadAll(rc)
+	data := bytes.NewBuffer(nil)
+	_, err = io.Copy(data, rc)
 	if err != nil {
 		return nil, err
 	}
 
-	return data, nil
+	return data.Bytes(), nil
 }
 
 // Save uploads an object to a bucket and returns an error if it cannot be
