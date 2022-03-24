@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go/storage v1.19.0
 	github.com/Azure/azure-storage-blob-go v0.14.0
 	github.com/alexedwards/scs/v2 v2.5.0
-	github.com/ambientkit/ambient v0.0.0-20220322045838-af0f8984704f
+	github.com/ambientkit/ambient v0.0.0-20220323235908-c5a8b9a385d6
 	github.com/ambientkit/away v0.0.0-20220312051345-3985971e46d6
 	github.com/aws/aws-sdk-go-v2 v1.13.0
 	github.com/aws/aws-sdk-go-v2/config v1.13.1
@@ -31,28 +31,28 @@ require (
 	github.com/sirupsen/logrus v1.8.1
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/stretchr/testify v1.7.0
-	go.uber.org/zap v1.20.0
+	go.uber.org/zap v1.21.0
 	golang.org/x/crypto v0.0.0-20220128200615-198e4374d7ed
-	golang.org/x/tools v0.1.9
+	golang.org/x/tools v0.1.10
 	jaytaylor.com/html2text v0.0.0-20211105163654-bc68cce691ba
 )
 
 require (
-	github.com/fatih/color v1.7.0 // indirect
+	github.com/fatih/color v1.13.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/hashicorp/go-hclog v1.2.0 // indirect
 	github.com/hashicorp/go-plugin v1.4.3 // indirect
-	github.com/hashicorp/yamux v0.0.0-20180604194846-3520598351bb // indirect
+	github.com/hashicorp/yamux v0.0.0-20211028200310-0bc27b27de87 // indirect
 	github.com/jessevdk/go-flags v1.5.0 // indirect
 	github.com/jmoiron/sqlx v1.3.4 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
-	github.com/mitchellh/go-testing-interface v0.0.0-20171004221916-a61a99592b77 // indirect
-	github.com/oklog/run v1.0.0 // indirect
+	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
+	github.com/oklog/run v1.1.0 // indirect
 	github.com/vburenin/ifacemaker v1.1.0 // indirect
 	golang.org/x/image v0.0.0-20191009234506-e7c1f5e7dbb8 // indirect
-	golang.org/x/mod v0.5.1 // indirect
+	golang.org/x/mod v0.6.0-dev.0.20220106191415-9b9b3d81d5e3 // indirect
 )
 
 require (
@@ -90,16 +90,16 @@ require (
 	github.com/ssor/bom v0.0.0-20170718123548-6386211fdfcf // indirect
 	go.opencensus.io v0.23.0 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
-	go.uber.org/multierr v1.7.0 // indirect
-	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd // indirect
+	go.uber.org/multierr v1.8.0 // indirect
+	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8 // indirect
-	golang.org/x/sys v0.0.0-20220310020820-b874c991c1a5 // indirect
+	golang.org/x/sys v0.0.0-20220319134239-a9b59b0215f8 // indirect
 	golang.org/x/text v0.3.7
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/api v0.66.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/genproto v0.0.0-20220126215142-9970aeb2e350 // indirect
-	google.golang.org/grpc v1.44.0 // indirect
+	google.golang.org/genproto v0.0.0-20220322021311-435b647f9ef2 // indirect
+	google.golang.org/grpc v1.45.0 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
