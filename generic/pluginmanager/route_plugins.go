@@ -8,12 +8,12 @@ import (
 )
 
 type pluginWithSettings struct {
-	Name string
-	ambient.PluginData
-	Settings []ambient.Setting
-	Grants   []ambient.GrantRequest
-	Trusted  bool
-	Routes   []ambient.Route
+	PluginData ambient.PluginData     `json:"plugindata"`
+	Name       string                 `json:"name"`
+	Settings   []ambient.Setting      `json:"settings"`
+	Grants     []ambient.GrantRequest `json:"grants"`
+	Trusted    bool                   `json:"trusted"`
+	Routes     []ambient.Route        `json:"routes"`
 }
 
 func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {

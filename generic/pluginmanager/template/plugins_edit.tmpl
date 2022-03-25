@@ -4,15 +4,15 @@
         {{if .plugins }}
             {{range $p := .plugins}}
             <p>
-                <h3>{{.Name}} {{.PluginData.Version}}</h3>
-                <label for="id_{{.Name}}">Enable:</label>
-                <input type="checkbox" name="{{.Name}}" id="id_{{.Name}}" {{if .Enabled}}checked{{end}} {{if .Trusted}}disabled{{end}}>
+                <h3>{{.name}} {{.plugindata.version}}</h3>
+                <label for="id_{{.name}}">Enable:</label>
+                <input type="checkbox" name="{{.name}}" id="id_{{.name}}" {{if .plugindata.enabled}}checked{{end}} {{if .trusted}}disabled{{end}}>
                 <span class="helptext">
-                {{if .Grants}}<a href="{{URLPrefix}}/dashboard/plugins/{{.Name}}/grants">Grants</a>{{end}}
-                {{if .Settings}}<a href="{{URLPrefix}}/dashboard/plugins/{{.Name}}/settings">Settings</a>{{end}}
-                {{if .Routes}}<a href="{{URLPrefix}}/dashboard/plugins/{{.Name}}/routes">Routes</a>{{end}}
-                <a href="{{URLPrefix}}/dashboard/plugins/{{.Name}}/delete">Reset</a>
-                {{if .Trusted}}[Trusted]{{end}}
+                {{if .grants}}<a href="{{URLPrefix}}/dashboard/plugins/{{.name}}/grants">Grants</a>{{end}}
+                {{if .settings}}<a href="{{URLPrefix}}/dashboard/plugins/{{.name}}/settings">Settings</a>{{end}}
+                {{if .toutes}}<a href="{{URLPrefix}}/dashboard/plugins/{{.name}}/routes">Routes</a>{{end}}
+                <a href="{{URLPrefix}}/dashboard/plugins/{{.name}}/delete">Reset</a>
+                {{if .trusted}}[Trusted]{{end}}
                 </span>
             </p>
             {{end}}
