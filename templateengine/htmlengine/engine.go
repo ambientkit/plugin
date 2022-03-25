@@ -62,7 +62,7 @@ func (te *Engine) pluginPartial(w http.ResponseWriter, r *http.Request, mainTemp
 	// Parse the plugin template separately for security.
 	content, err := templatebuffer.ParseTemplateFS(assets, fmt.Sprintf("%v.tmpl", partialTemplate), fm(r), vars)
 	if err != nil {
-		return ambient.StatusError{Code: http.StatusInternalServerError, Err: err}
+		return ambient.StatusError{Code: http.StatusInternalServerError, Err: fmt.Errorf("cannot parseTemplateFS: %v", err.Error())}
 	}
 
 	// Output debug information.
