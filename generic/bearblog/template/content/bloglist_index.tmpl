@@ -11,12 +11,12 @@
             <li>
                 <span>
                     <i>
-                        <time datetime="{{.Timestamp | bearblog_Stamp}}" pubdate>
-                            {{.Timestamp | bearblog_StampFriendly}}
+                        <time datetime="{{.timestamp | bearblog_Stamp}}" pubdate>
+                            {{.timestamp | bearblog_StampFriendly}}
                         </time>
                     </i>
                 </span>
-                <a href="{{URLPrefix}}/{{.URL}}">{{.Title}}</a>
+                <a href="{{URLPrefix}}/{{.URL}}">{{.title}}</a>
             </li>
             {{end}}
         {{else}}

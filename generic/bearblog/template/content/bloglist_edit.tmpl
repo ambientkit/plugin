@@ -5,13 +5,13 @@
     <li>
         <span>
             <i>
-                <time datetime="{{.Timestamp | bearblog_Stamp}}" pubdate>
-                    {{.Timestamp | bearblog_Stamp}}
+                <time datetime="{{.timestamp | bearblog_Stamp}}" pubdate>
+                    {{.timestamp | bearblog_Stamp}}
                 </time>
             </i>
         </span>
-        <a href="{{URLPrefix}}/dashboard/posts/{{.ID}}">{{if .Page}}[Page] {{end}}{{.Title}}</a>
-        {{if not .Published}}
+        <a href="{{URLPrefix}}/dashboard/posts/{{.id}}">{{if .page}}[Page] {{end}}{{.title}}</a>
+        {{if not .published}}
         <small>(not published)</small>
         {{end}}
     </li>

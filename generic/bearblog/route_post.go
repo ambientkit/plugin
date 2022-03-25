@@ -48,7 +48,6 @@ func (p *Plugin) postIndex(w http.ResponseWriter, r *http.Request) (err error) {
 
 		vars["posts"] = posts
 	} else {
-
 		pubPosts, err := p.Site.PublishedPosts()
 		if err != nil {
 			return p.Site.Error(err)
