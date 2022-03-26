@@ -1,7 +1,6 @@
 package simplelogin
 
 import (
-	"html/template"
 	"net/http"
 	"strings"
 
@@ -129,7 +128,7 @@ func (p *Plugin) reload(w http.ResponseWriter, r *http.Request) (err error) {
 }
 
 // sanitized returns a sanitized content block or an error is one occurs.
-func (p *Plugin) sanitized(content string) template.HTML {
+func (p *Plugin) sanitized(content string) string {
 	b := []byte(content)
 	// Ensure unit line endings are used when pulling out of JSON.
 	markdownWithUnixLineEndings := strings.Replace(string(b), "\r\n", "\n", -1)
@@ -146,5 +145,5 @@ func (p *Plugin) sanitized(content string) template.HTML {
 		htmlCode = bluemonday.UGCPolicy().SanitizeBytes(htmlCode)
 	}
 
-	return template.HTML(htmlCode)
+	return string(htmlCode)
 }
