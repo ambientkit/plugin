@@ -18,7 +18,7 @@ The plugin can be used as the following core types:
 
 ## Grants
 
-The plugin request the following grants (18):
+The plugin request the following grants (19):
 
 - **Name**: user.authenticated:read
   - **Description**: Show different menus to authenticated vs unauthenticated users.
@@ -56,6 +56,8 @@ The plugin request the following grants (18):
   - **Description**: Access to create global FuncMaps for templates.
 - **Name**: router.route:write
   - **Description**: Access to create routes for editing the blog posts.
+- **Name**: router.middleware:write
+  - **Description**: Access to create global middleware to protect /dashboard/* routes from anonymous users.
 
 ## Settings
 
@@ -117,7 +119,7 @@ The plugin has the following routes (17):
 
 ## Middleware
 
-The plugin does not have any middleware.
+The plugin has middleware (1).
 
 ## FuncMap
 

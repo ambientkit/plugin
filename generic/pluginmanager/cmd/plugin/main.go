@@ -1,25 +1,29 @@
 package main
 
 import (
-	"os"
+	"log"
 
 	"github.com/ambientkit/ambient/pkg/grpcp"
+	"github.com/ambientkit/ambient/pkg/hclogadapter"
 	"github.com/ambientkit/plugin/generic/pluginmanager"
-	"github.com/hashicorp/go-hclog"
+	"github.com/ambientkit/plugin/logger/zaplogger"
 	"github.com/hashicorp/go-plugin"
 )
 
 func main() {
+	p := pluginmanager.New()
+
+	zlog, err := zaplogger.New().Logger(p.PluginName(), p.PluginVersion(), nil)
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+
 	plugin.Serve(&plugin.ServeConfig{
 		HandshakeConfig: grpcp.Handshake,
 		Plugins: map[string]plugin.Plugin{
-			"pluginmanager": &grpcp.GenericPlugin{Impl: pluginmanager.New()},
+			p.PluginName(): &grpcp.GenericPlugin{Impl: p},
 		},
-		Logger: hclog.New(&hclog.LoggerOptions{
-			Level:      hclog.Debug,
-			Output:     os.Stderr,
-			JSONFormat: true,
-		}),
+		Logger:     hclogadapter.New(p.PluginName(), zlog),
 		GRPCServer: plugin.DefaultGRPCServer,
 	})
 }
