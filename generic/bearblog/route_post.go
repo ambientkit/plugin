@@ -1,7 +1,6 @@
 package bearblog
 
 import (
-	"html/template"
 	"net/http"
 	"strings"
 
@@ -111,8 +110,9 @@ func plaintextBlurb(s string) string {
 	return plaintext
 }
 
-// sanitized returns a sanitized content block or an error is one occurs.
-func (p *Plugin) sanitized(content string) template.HTML {
+// sanitized returns a sanitized content block or an error is one occurs. You
+// will still need to use {{.content | TrustHTML}} when rendering to a template.
+func (p *Plugin) sanitized(content string) string {
 	b := []byte(content)
 	// Ensure unit line endings are used when pulling out of JSON.
 	markdownWithUnixLineEndings := strings.Replace(string(b), "\r\n", "\n", -1)
@@ -129,5 +129,5 @@ func (p *Plugin) sanitized(content string) template.HTML {
 		htmlCode = bluemonday.UGCPolicy().SanitizeBytes(htmlCode)
 	}
 
-	return template.HTML(htmlCode)
+	return string(htmlCode)
 }

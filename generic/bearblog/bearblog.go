@@ -4,6 +4,8 @@ package bearblog
 import (
 	"embed"
 	"fmt"
+	"net/http"
+	"strings"
 
 	"github.com/ambientkit/ambient"
 )
@@ -58,6 +60,7 @@ func (p *Plugin) GrantRequests() []ambient.GrantRequest {
 		{Grant: ambient.GrantSiteAssetWrite, Description: "Access to write blog meta tags to the header and add a nav and footer."},
 		{Grant: ambient.GrantSiteFuncMapWrite, Description: "Access to create global FuncMaps for templates."},
 		{Grant: ambient.GrantRouterRouteWrite, Description: "Access to create routes for editing the blog posts."},
+		{Grant: ambient.GrantRouterMiddlewareWrite, Description: "Access to create global middleware to protect /dashboard/* routes from anonymous users."},
 	}
 }
 
@@ -244,4 +247,28 @@ func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
 	})
 
 	return arr, &assets
+}
+
+// Middleware returns router middleware.
+func (p *Plugin) Middleware() []func(next http.Handler) http.Handler {
+	return []func(next http.Handler) http.Handler{
+		p.DisallowAnon,
+	}
+}
+
+// DisallowAnon does not allow anonymous users to access the page.
+func (p *Plugin) DisallowAnon(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Don't allow anon users to access the dashboard.
+		if strings.HasPrefix(r.URL.Path, p.Path("/dashboard")) {
+			// If user is not authenticated, don't allow them to access the page.
+			_, err := p.Site.AuthenticatedUser(r)
+			if err != nil {
+				p.Redirect(w, r, "/", http.StatusFound)
+				return
+			}
+		}
+
+		h.ServeHTTP(w, r)
+	})
 }
