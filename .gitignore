@@ -27,3 +27,4 @@ thumbs.db
 /deploy/azure/ambient/tmp
 /**/cmd/plugin/ambplugin*
 /teststorage
+/pluginmain
