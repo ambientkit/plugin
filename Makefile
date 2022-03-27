@@ -59,7 +59,12 @@ build-plugins:
 start: build-plugins
 	go run pkg/grpctestutil/testingdata/cmd/server/main.go
 
-# Start the test process for grpc.
+# Test the gRPC code.
 .PHONY: test
 test: build-plugins
-	go test pkg/grpctestutil/*.go
+	go test -race pkg/grpctestutil/grpcp_test.go
+
+# Test all the code.
+.PHONY: test-all
+test-all: build-plugins
+	go test -race ./...
