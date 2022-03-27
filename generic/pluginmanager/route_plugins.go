@@ -72,7 +72,7 @@ func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {
 
 	vars["plugins"] = arr
 
-	return p.Render.Page(w, r, assets, "template/plugins_edit", p.FuncMap(), vars)
+	return p.Render.Page(w, r, assets, "template/plugins_edit.tmpl", p.FuncMap(), vars)
 }
 
 func (p *Plugin) update(w http.ResponseWriter, r *http.Request) (err error) {

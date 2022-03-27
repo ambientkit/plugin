@@ -49,7 +49,7 @@ func (p *Plugin) settingsEdit(w http.ResponseWriter, r *http.Request) (err error
 
 	vars["settings"] = arr
 
-	return p.Render.Page(w, r, assets, "template/settings_edit", p.FuncMap(), vars)
+	return p.Render.Page(w, r, assets, "template/settings_edit.tmpl", p.FuncMap(), vars)
 }
 
 func (p *Plugin) settingsUpdate(w http.ResponseWriter, r *http.Request) (err error) {

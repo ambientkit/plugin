@@ -10,6 +10,8 @@ import (
 
 func (p *Plugin) postAdminIndex(w http.ResponseWriter, r *http.Request) (err error) {
 	vars := make(map[string]interface{})
+	vars["pagetitle"] = ""
+	vars["canonical"] = ""
 	vars["title"] = "Posts"
 
 	postsAndPages, err := p.Site.PostsAndPages(false)
@@ -19,15 +21,17 @@ func (p *Plugin) postAdminIndex(w http.ResponseWriter, r *http.Request) (err err
 
 	vars["posts"] = postsAndPages
 
-	return p.Render.Page(w, r, assets, "template/content/bloglist_edit", p.FuncMap(), vars)
+	return p.Render.Page(w, r, assets, "template/content/bloglist_edit.tmpl", p.FuncMap(), vars)
 }
 
 func (p *Plugin) postAdminCreate(w http.ResponseWriter, r *http.Request) (err error) {
 	vars := make(map[string]interface{})
+	vars["pagetitle"] = ""
+	vars["canonical"] = ""
 	vars["title"] = "New post"
 	vars["token"] = p.Site.SetCSRF(r)
 
-	return p.Render.Page(w, r, assets, "template/content/post_create", p.FuncMap(), vars)
+	return p.Render.Page(w, r, assets, "template/content/post_create.tmpl", p.FuncMap(), vars)
 }
 
 func (p *Plugin) postAdminStore(w http.ResponseWriter, r *http.Request) (err error) {
@@ -78,6 +82,7 @@ func (p *Plugin) postAdminStore(w http.ResponseWriter, r *http.Request) (err err
 
 func (p *Plugin) postAdminEdit(w http.ResponseWriter, r *http.Request) (err error) {
 	vars := make(map[string]interface{})
+	vars["pagetitle"] = "Edit post"
 	vars["title"] = "Edit post"
 	vars["token"] = p.Site.SetCSRF(r)
 
@@ -98,7 +103,7 @@ func (p *Plugin) postAdminEdit(w http.ResponseWriter, r *http.Request) (err erro
 	vars["page"] = post.Page
 	vars["published"] = post.Published
 
-	return p.Render.Page(w, r, assets, "template/content/post_edit", p.FuncMap(), vars)
+	return p.Render.Page(w, r, assets, "template/content/post_edit.tmpl", p.FuncMap(), vars)
 }
 
 func (p *Plugin) postAdminUpdate(w http.ResponseWriter, r *http.Request) (err error) {

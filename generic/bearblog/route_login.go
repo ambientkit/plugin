@@ -24,7 +24,7 @@ func (p *Plugin) login(w http.ResponseWriter, r *http.Request) (err error) {
 	vars["title"] = "Login"
 	vars["token"] = p.Site.SetCSRF(r)
 
-	return p.Render.Page(w, r, assets, "template/content/login", p.FuncMap(), vars)
+	return p.Render.Page(w, r, assets, "template/content/login.tmpl", p.FuncMap(), vars)
 }
 
 func (p *Plugin) loginPost(w http.ResponseWriter, r *http.Request) (err error) {
@@ -96,16 +96,16 @@ func (p *Plugin) loginPost(w http.ResponseWriter, r *http.Request) (err error) {
 
 	// If the username and password don't match, then just redirect.
 	if username != allowedUsername || !passMatch || !mfaSuccess {
-		p.Log.Info("login attempt failed. Username: %v (expected: %v) | Password match: %v | MFA success: %v", username, allowedUsername, passMatch, mfaSuccess)
+		p.Log.Info("bearblog: login attempt failed. Username: %v (expected: %v) | Password match: %v | MFA success: %v", username, allowedUsername, passMatch, mfaSuccess)
 		p.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 
 	err = p.Site.UserLogin(r, username)
 	if err != nil {
-		p.Log.Info("login attempt failed for '%v': %v", username, err.Error())
+		p.Log.Info("bearblog: login attempt failed for '%v': %v", username, err.Error())
 	} else {
-		p.Log.Info("login attempt successful for user: %v", username)
+		p.Log.Info("bearblog: login attempt successful for user: %v", username)
 	}
 	if remember == "on" {
 		err = p.Site.UserPersist(r, true)
@@ -114,7 +114,7 @@ func (p *Plugin) loginPost(w http.ResponseWriter, r *http.Request) (err error) {
 	}
 
 	if err != nil {
-		p.Log.Info("login persist failed for user '%v': %v", username, err.Error())
+		p.Log.Info("bearblog: login persist failed for user '%v': %v", username, err.Error())
 	}
 
 	p.Redirect(w, r, "/dashboard", http.StatusFound)
@@ -124,7 +124,7 @@ func (p *Plugin) loginPost(w http.ResponseWriter, r *http.Request) (err error) {
 func (p *Plugin) logout(w http.ResponseWriter, r *http.Request) (err error) {
 	err = p.Site.UserLogout(r)
 	if err != nil {
-		p.Log.Info("logout failed: %v", err.Error())
+		p.Log.Info("bearblog: logout failed: %v", err.Error())
 	}
 
 	p.Redirect(w, r, "/", http.StatusFound)

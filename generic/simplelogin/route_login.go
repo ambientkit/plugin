@@ -15,7 +15,7 @@ func (p *Plugin) login(w http.ResponseWriter, r *http.Request) (err error) {
 	vars["title"] = "Login"
 	vars["token"] = p.Site.SetCSRF(r)
 
-	return p.Render.Page(w, r, assets, "template/content/login", p.FuncMap(), vars)
+	return p.Render.Page(w, r, assets, "template/content/login.tmpl", p.FuncMap(), vars)
 }
 
 func (p *Plugin) loginPost(w http.ResponseWriter, r *http.Request) (err error) {

@@ -3,6 +3,7 @@
 package templatebuffer
 
 import (
+	"fmt"
 	"html/template"
 	"io/fs"
 	"net/http"
@@ -27,6 +28,11 @@ func ParseTemplate(body string, fm template.FuncMap, data map[string]interface{}
 		return "", err
 	}
 
+	// Apply a template option if set.
+	if v, ok := data["amb.option"]; ok {
+		tmpl = tmpl.Option(fmt.Sprint(v))
+	}
+
 	// Execute the template.
 	err = tmpl.Execute(buf, data)
 	if err != nil {
@@ -48,6 +54,11 @@ func ParseTemplateFS(assets fs.FS, templatePath string, fm template.FuncMap, dat
 		return "", err
 	}
 
+	// Apply a template option if set.
+	if v, ok := data["amb.option"]; ok {
+		tmpl = tmpl.Option(fmt.Sprint(v))
+	}
+
 	// Execute the template.
 	err = tmpl.Execute(buf, data)
 	if err != nil {
@@ -62,6 +73,11 @@ func ParseExistingTemplateWithResponse(w http.ResponseWriter, r *http.Request, t
 	// Write temporarily to a buffer pool.
 	buf := bufpool.Get()
 	defer bufpool.Put(buf)
+
+	// Apply a template option if set.
+	if v, ok := data["amb.option"]; ok {
+		tmpl = tmpl.Option(fmt.Sprint(v))
+	}
 
 	// Execute the template.
 	err := tmpl.Execute(buf, data)

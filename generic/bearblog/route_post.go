@@ -12,6 +12,9 @@ import (
 
 func (p *Plugin) postIndex(w http.ResponseWriter, r *http.Request) (err error) {
 	vars := make(map[string]interface{})
+	vars["pagetitle"] = ""
+	vars["canonical"] = ""
+	vars["query"] = ""
 
 	tags, err := p.Site.Tags(true)
 	if err != nil {
@@ -55,7 +58,7 @@ func (p *Plugin) postIndex(w http.ResponseWriter, r *http.Request) (err error) {
 		vars["posts"] = pubPosts
 	}
 
-	return p.Render.Page(w, r, assets, "template/content/bloglist_index", p.FuncMap(), vars)
+	return p.Render.Page(w, r, assets, "template/content/bloglist_index.tmpl", p.FuncMap(), vars)
 }
 
 func (p *Plugin) postShow(w http.ResponseWriter, r *http.Request) (err error) {
@@ -92,7 +95,7 @@ func (p *Plugin) postShow(w http.ResponseWriter, r *http.Request) (err error) {
 	vars["pagedescription"] = plaintextBlurb(post.Content)
 	vars["postcontent"] = p.sanitized(post.Content)
 
-	return p.Render.Post(w, r, assets, "template/content/post", p.FuncMap(), vars)
+	return p.Render.Post(w, r, assets, "template/content/post.tmpl", p.FuncMap(), vars)
 }
 
 // plaintextBlurb returns a plaintext blurb from markdown content.

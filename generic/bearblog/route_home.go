@@ -15,8 +15,12 @@ func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (err error) {
 	}
 
 	vars := make(map[string]interface{})
+	vars["pagetitle"] = ""
+	vars["canonical"] = ""
+	vars["title"] = ""
+	vars["tags"] = ""
 	vars["postcontent"] = p.sanitized(content)
-	return p.Render.Page(w, r, assets, "template/content/home", p.FuncMap(), vars)
+	return p.Render.Page(w, r, assets, "template/content/home.tmpl", p.FuncMap(), vars)
 }
 
 func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {
@@ -56,6 +60,8 @@ func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {
 	}
 
 	vars := make(map[string]interface{})
+	vars["pagetitle"] = ""
+	vars["canonical"] = ""
 	vars["title"] = "Edit site"
 	vars["homeContent"] = siteContent
 	vars["ptitle"] = siteTitle
@@ -73,7 +79,7 @@ func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {
 	vars["loginurl"] = loginURL
 	vars["footer"] = footer
 
-	return p.Render.Page(w, r, assets, "template/content/home_edit", p.FuncMap(), vars)
+	return p.Render.Page(w, r, assets, "template/content/home_edit.tmpl", p.FuncMap(), vars)
 }
 
 func (p *Plugin) update(w http.ResponseWriter, r *http.Request) (err error) {

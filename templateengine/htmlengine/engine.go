@@ -28,28 +28,28 @@ func NewTemplateEngine(logger ambient.Logger, assetInjector ambient.AssetInjecto
 
 // Page renders using the page layout.
 func (te *Engine) Page(w http.ResponseWriter, r *http.Request, assets ambient.FileSystemReader, partialTemplate string, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (err error) {
-	return te.pluginPartial(w, r, "layout/page", ambient.LayoutPage, assets, partialTemplate, http.StatusOK, fm, vars)
+	return te.pluginPartial(w, r, "layout/page.tmpl", ambient.LayoutPage, assets, partialTemplate, http.StatusOK, fm, vars)
 }
 
 // PageContent renders using the page content.
 func (te *Engine) PageContent(w http.ResponseWriter, r *http.Request, content string, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (err error) {
-	return te.pluginContent(w, r, "layout/page", ambient.LayoutPage, content, http.StatusOK, fm, vars)
+	return te.pluginContent(w, r, "layout/page.tmpl", ambient.LayoutPage, content, http.StatusOK, fm, vars)
 }
 
 // Post renders using the post layout.
 func (te *Engine) Post(w http.ResponseWriter, r *http.Request, assets ambient.FileSystemReader, partialTemplate string, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (err error) {
-	return te.pluginPartial(w, r, "layout/page", ambient.LayoutPost, assets, partialTemplate, http.StatusOK, fm, vars)
+	return te.pluginPartial(w, r, "layout/page.tmpl", ambient.LayoutPost, assets, partialTemplate, http.StatusOK, fm, vars)
 }
 
 // PostContent renders using the post content.
 func (te *Engine) PostContent(w http.ResponseWriter, r *http.Request, content string, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (err error) {
-	return te.pluginContent(w, r, "layout/page", ambient.LayoutPost, content, http.StatusOK, fm, vars)
+	return te.pluginContent(w, r, "layout/page.tmpl", ambient.LayoutPost, content, http.StatusOK, fm, vars)
 }
 
 // Error renders HTML to a response writer and returns a 404 status code
 // and an error if one occurs.
 func (te *Engine) Error(w http.ResponseWriter, r *http.Request, content string, statusCode int, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (err error) {
-	return te.pluginContent(w, r, "layout/page", ambient.LayoutPage, content, statusCode, fm, vars)
+	return te.pluginContent(w, r, "layout/page.tmpl", ambient.LayoutPage, content, statusCode, fm, vars)
 }
 
 func (te *Engine) pluginPartial(w http.ResponseWriter, r *http.Request, mainTemplate string, layoutType ambient.LayoutType, assets ambient.FileSystemReader, partialTemplate string, statusCode int, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (err error) {
@@ -60,7 +60,7 @@ func (te *Engine) pluginPartial(w http.ResponseWriter, r *http.Request, mainTemp
 	}
 
 	// Parse the plugin template separately for security.
-	content, err := templatebuffer.ParseTemplateFS(assets, fmt.Sprintf("%v.tmpl", partialTemplate), fm(r), vars)
+	content, err := templatebuffer.ParseTemplateFS(assets, fmt.Sprintf("%v", partialTemplate), fm(r), vars)
 	if err != nil {
 		return ambient.StatusError{Code: http.StatusInternalServerError, Err: fmt.Errorf("cannot parseTemplateFS: %v", err.Error())}
 	}
@@ -134,7 +134,7 @@ func (te *Engine) pluginContent(w http.ResponseWriter, r *http.Request, mainTemp
 
 func (te *Engine) generateTemplate(r *http.Request, mainTemplate string, layoutType ambient.LayoutType, vars map[string]interface{}) (*template.Template, error) {
 	// Generate list of templates.
-	baseTemplate := fmt.Sprintf("%v.tmpl", mainTemplate)
+	baseTemplate := fmt.Sprintf("%v", mainTemplate)
 	templates := []string{
 		baseTemplate,
 	}
@@ -143,6 +143,11 @@ func (te *Engine) generateTemplate(r *http.Request, mainTemplate string, layoutT
 	t, err := template.New(path.Base(baseTemplate)).ParseFS(assets, templates...)
 	if err != nil {
 		return nil, err
+	}
+
+	// Apply a template option if set.
+	if v, ok := vars["amb.option"]; ok {
+		t = t.Option(fmt.Sprint(v))
 	}
 
 	// Inject the plugins.

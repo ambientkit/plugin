@@ -15,5 +15,5 @@ func (p *Plugin) showEnv(w http.ResponseWriter, r *http.Request) (err error) {
 	sort.Strings(arr)
 	vars["envs"] = arr
 
-	return p.Render.Page(w, r, assets, "template/show_env", nil, vars)
+	return p.Render.Page(w, r, assets, "template/show_env.tmpl", nil, vars)
 }
