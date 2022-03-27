@@ -65,6 +65,9 @@ func Setup(trust bool) (*ambientapp.App, error) {
 			Storage: memorystorage.New(),
 		},
 		plugins)
+
+	// app.SetLogLevel(ambient.LogLevelDebug)
+
 	return app, err
 }
 

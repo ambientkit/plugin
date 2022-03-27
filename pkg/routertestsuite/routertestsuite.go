@@ -312,7 +312,7 @@ func (ts *TestSuite) Test500WithError(t *testing.T, mux ambient.AppRouter) {
 
 	assert.Equal(t, true, called)
 	assert.Equal(t, http.StatusInternalServerError, w.Code)
-	assert.Equal(t, w.Body.String(), specificError.Error()+"\n")
+	assert.Equal(t, specificError.Error()+"\n", w.Body.String())
 }
 
 // Test400 .
