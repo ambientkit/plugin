@@ -13,11 +13,19 @@ import (
 func (p *Plugin) FuncMap() func(r *http.Request) template.FuncMap {
 	return func(r *http.Request) template.FuncMap {
 		fm := make(template.FuncMap)
-		fm["bearblog_Stamp"] = func(t time.Time) string {
-			return t.Format("2006-01-02")
+		fm["bearblog_Stamp"] = func(t string) string {
+			tt, err := time.Parse(time.RFC3339, t)
+			if err != nil {
+				return t
+			}
+			return tt.Format("2006-01-02")
 		}
-		fm["bearblog_StampFriendly"] = func(t time.Time) string {
-			return t.Format("02 Jan, 2006")
+		fm["bearblog_StampFriendly"] = func(t string) string {
+			tt, err := time.Parse(time.RFC3339, t)
+			if err != nil {
+				return t
+			}
+			return tt.Format("02 Jan, 2006")
 		}
 		fm["bearblog_PublishedPages"] = func() []ambient.Post {
 			arr, err := p.Site.PublishedPages()
