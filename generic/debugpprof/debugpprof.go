@@ -4,6 +4,7 @@ package debugpprof
 import (
 	"net/http"
 	"net/http/pprof"
+	"strings"
 
 	"github.com/ambientkit/ambient"
 )
@@ -45,6 +46,11 @@ func (p *Plugin) Routes() {
 
 // Index shows the profile index.
 func (p *Plugin) index(w http.ResponseWriter, r *http.Request) {
+	// pprof requires a trailing slash to work properly.
+	if !strings.HasSuffix(r.URL.Path, "/") {
+		p.Redirect(w, r, "/debug/pprof/", http.StatusFound)
+		return
+	}
 	pprof.Index(w, r)
 }
 
@@ -60,6 +66,6 @@ func (p *Plugin) profile(w http.ResponseWriter, r *http.Request) {
 	case "trace":
 		pprof.Trace(w, r)
 	default:
-		p.index(w, r)
+		pprof.Index(w, r)
 	}
 }

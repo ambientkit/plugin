@@ -7,6 +7,7 @@ import (
 	"github.com/ambientkit/ambient"
 	"github.com/ambientkit/ambient/pkg/ambientapp"
 	"github.com/ambientkit/plugin/generic/bearblog"
+	"github.com/ambientkit/plugin/generic/debugpprof"
 	"github.com/ambientkit/plugin/logger/zaplogger"
 	"github.com/ambientkit/plugin/pkg/grpctestutil/testingdata/plugin/neighbor"
 	trustPlugin "github.com/ambientkit/plugin/pkg/grpctestutil/testingdata/plugin/trust"
@@ -94,6 +95,7 @@ func Setup2(trust bool) (*ambientapp.App, error) {
 		trusted["bearblog"] = true
 		trusted["bearcss"] = true
 		trusted["pluginmanager"] = true
+		//trusted["debugpprof"] = true
 	}
 
 	sessPlugin := scssession.New("5ba3ad678ee1fd9c4fddcef0d45454904422479ed762b3b0ddc990e743cb65e0")
@@ -111,6 +113,7 @@ func Setup2(trust bool) (*ambientapp.App, error) {
 			//bearblog.New(os.Getenv("AMB_PASSWORD_HASH")),
 			ambient.NewGRPCPlugin("bearcss", "./generic/bearcss/cmd/plugin/ambplugin"),
 			ambient.NewGRPCPlugin("pluginmanager", "./generic/pluginmanager/cmd/plugin/ambplugin"),
+			debugpprof.New(),
 			//bearcss.New(),
 		},
 		Middleware: []ambient.MiddlewarePlugin{
