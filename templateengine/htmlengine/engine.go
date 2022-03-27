@@ -148,6 +148,8 @@ func (te *Engine) generateTemplate(r *http.Request, mainTemplate string, layoutT
 	// Apply a template option if set.
 	if v, ok := vars["amb.option"]; ok {
 		t = t.Option(fmt.Sprint(v))
+	} else {
+		t = t.Option("missingkey=error")
 	}
 
 	// Inject the plugins.

@@ -29,9 +29,11 @@ func ParseTemplate(body string, fm template.FuncMap, data map[string]interface{}
 	}
 
 	// Apply a template option if set.
-	if v, ok := data["amb.option"]; ok {
-		tmpl = tmpl.Option(fmt.Sprint(v))
-	}
+	// if v, ok := data["amb.option"]; ok {
+	// 	tmpl = tmpl.Option(fmt.Sprint(v))
+	// } else {
+	// 	tmpl = tmpl.Option("missingkey=error")
+	// }
 
 	// Execute the template.
 	err = tmpl.Execute(buf, data)
@@ -57,6 +59,8 @@ func ParseTemplateFS(assets fs.FS, templatePath string, fm template.FuncMap, dat
 	// Apply a template option if set.
 	if v, ok := data["amb.option"]; ok {
 		tmpl = tmpl.Option(fmt.Sprint(v))
+	} else {
+		tmpl = tmpl.Option("missingkey=error")
 	}
 
 	// Execute the template.
@@ -77,6 +81,8 @@ func ParseExistingTemplateWithResponse(w http.ResponseWriter, r *http.Request, t
 	// Apply a template option if set.
 	if v, ok := data["amb.option"]; ok {
 		tmpl = tmpl.Option(fmt.Sprint(v))
+	} else {
+		tmpl = tmpl.Option("missingkey=error")
 	}
 
 	// Execute the template.

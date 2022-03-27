@@ -10,8 +10,6 @@ import (
 
 func (p *Plugin) postAdminIndex(w http.ResponseWriter, r *http.Request) (err error) {
 	vars := make(map[string]interface{})
-	vars["pagetitle"] = ""
-	vars["canonical"] = ""
 	vars["title"] = "Posts"
 
 	postsAndPages, err := p.Site.PostsAndPages(false)
@@ -26,8 +24,6 @@ func (p *Plugin) postAdminIndex(w http.ResponseWriter, r *http.Request) (err err
 
 func (p *Plugin) postAdminCreate(w http.ResponseWriter, r *http.Request) (err error) {
 	vars := make(map[string]interface{})
-	vars["pagetitle"] = ""
-	vars["canonical"] = ""
 	vars["title"] = "New post"
 	vars["token"] = p.Site.SetCSRF(r)
 

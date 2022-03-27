@@ -15,8 +15,6 @@ func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (err error) {
 	}
 
 	vars := make(map[string]interface{})
-	vars["pagetitle"] = ""
-	vars["canonical"] = ""
 	vars["title"] = ""
 	vars["tags"] = ""
 	vars["postcontent"] = p.sanitized(content)
@@ -60,8 +58,6 @@ func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {
 	}
 
 	vars := make(map[string]interface{})
-	vars["pagetitle"] = ""
-	vars["canonical"] = ""
 	vars["title"] = "Edit site"
 	vars["homeContent"] = siteContent
 	vars["ptitle"] = siteTitle
