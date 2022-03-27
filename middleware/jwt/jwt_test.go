@@ -25,7 +25,7 @@ func ExampleNew() {
 		TrustedPlugins: map[string]bool{},
 		Plugins:        []ambient.Plugin{},
 		Middleware: []ambient.MiddlewarePlugin{
-			// Middleware - executes bottom to top.
+			// Middleware - executes top to bottom.
 			jwt.New([]byte(uuid.EncodedString(32)), time.Hour*1, []string{}),
 		},
 	}

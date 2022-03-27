@@ -74,7 +74,7 @@ func Plugins() *ambient.PluginLoader {
 			New(),
 		},
 		Middleware: []ambient.MiddlewarePlugin{
-			// Middleware - executes bottom to top.
+			// Middleware - executes top to bottom.
 			sessionManager, // Session manager middleware.
 		},
 	}

@@ -68,7 +68,7 @@ func LighweightAppSetup(appName string, p ambient.Plugin, trust bool) *App {
 		TrustedPlugins: trusted,
 		Plugins:        pluginList,
 		Middleware: []ambient.MiddlewarePlugin{
-			// Middleware - executes bottom to top.
+			// Middleware - executes top to bottom.
 			middleware, // Session manager middleware.
 		},
 	}

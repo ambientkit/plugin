@@ -26,7 +26,7 @@ func ExampleNew() {
 			rove.New(nil),
 		},
 		Middleware: []ambient.MiddlewarePlugin{
-			// Middleware - executes bottom to top.
+			// Middleware - executes top to bottom.
 		},
 	}
 	_, _, err := ambientapp.NewApp("myapp", "1.0",

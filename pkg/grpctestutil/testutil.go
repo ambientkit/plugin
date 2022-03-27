@@ -2,9 +2,11 @@ package grpctestutil
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/ambientkit/ambient"
 	"github.com/ambientkit/ambient/pkg/ambientapp"
+	"github.com/ambientkit/plugin/generic/bearblog"
 	"github.com/ambientkit/plugin/generic/debugpprof"
 	"github.com/ambientkit/plugin/logger/zaplogger"
 	"github.com/ambientkit/plugin/pkg/grpctestutil/testingdata/plugin/neighbor"
@@ -54,9 +56,9 @@ func Setup(trust bool) (*ambientapp.App, error) {
 			trustPlugin.New(),
 		},
 		Middleware: []ambient.MiddlewarePlugin{
-			// Middleware - executes bottom to top.
-			ambient.NewGRPCPlugin("hello", "./pkg/grpctestutil/testingdata/plugin/hello/cmd/plugin/ambplugin"),
+			// Middleware - executes top to bottom.
 			sessPlugin,
+			ambient.NewGRPCPlugin("hello", "./pkg/grpctestutil/testingdata/plugin/hello/cmd/plugin/ambplugin"),
 		},
 	}
 	app, _, err := ambientapp.NewApp("myapp", "1.0",
@@ -115,11 +117,11 @@ func Setup2(trust bool) (*ambientapp.App, error) {
 			//bearcss.New(),
 		},
 		Middleware: []ambient.MiddlewarePlugin{
-			// Middleware - executes bottom to top.
-			//ambient.NewGRPCPlugin("hello", "./pkg/grpcp/testingdata/plugin/hello/cmd/plugin/hello"),
-			//bearblog.New(os.Getenv("AMB_PASSWORD_HASH")),
-			ambient.NewGRPCPlugin("bearblog", "./generic/bearblog/cmd/plugin/ambplugin"),
+			// Middleware - executes top to bottom.
 			sessPlugin,
+			//ambient.NewGRPCPlugin("hello", "./pkg/grpcp/testingdata/plugin/hello/cmd/plugin/hello"),
+			bearblog.New(os.Getenv("AMB_PASSWORD_HASH")),
+			//ambient.NewGRPCPlugin("bearblog", "./generic/bearblog/cmd/plugin/ambplugin"),
 		},
 	}
 	app, _, err := ambientapp.NewApp("myapp", "1.0",

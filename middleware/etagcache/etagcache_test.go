@@ -23,7 +23,7 @@ func ExampleNew() {
 		TrustedPlugins: map[string]bool{},
 		Plugins:        []ambient.Plugin{},
 		Middleware: []ambient.MiddlewarePlugin{
-			// Middleware - executes bottom to top.
+			// Middleware - executes top to bottom.
 			etagcache.New(),
 		},
 	}
