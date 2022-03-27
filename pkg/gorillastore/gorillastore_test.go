@@ -3,7 +3,6 @@ package gorillastore
 import (
 	"encoding/base64"
 	"io/ioutil"
-	"net/http"
 	"net/http/httptest"
 	"os"
 	"testing"
@@ -34,10 +33,7 @@ func TestGH8FilesystemStore(t *testing.T) {
 
 	originalPath := "/"
 	store.Options.Path = originalPath
-	req, err := http.NewRequest("GET", "http://www.example.com", nil)
-	if err != nil {
-		t.Fatal("failed to create request", err)
-	}
+	req := httptest.NewRequest("GET", "http://www.example.com", nil)
 
 	session, err := store.New(req, "hello")
 	if err != nil {
@@ -68,10 +64,7 @@ func TestGH2MaxLength(t *testing.T) {
 	store := NewGenericStore(jsonstore, []byte("some key"))
 
 	//store := NewGenericStore("", []byte("some key"))
-	req, err := http.NewRequest("GET", "http://www.example.com", nil)
-	if err != nil {
-		t.Fatal("failed to create request", err)
-	}
+	req := httptest.NewRequest("GET", "http://www.example.com", nil)
 	w := httptest.NewRecorder()
 
 	session, err := store.New(req, "my session")
@@ -110,10 +103,7 @@ func TestGH8FilesystemStoreDelete(t *testing.T) {
 	store := NewGenericStore(jsonstore, []byte("some key"))
 
 	//store := NewGenericStore("", []byte("some key"))
-	req, err := http.NewRequest("GET", "http://www.example.com", nil)
-	if err != nil {
-		t.Fatal("failed to create request", err)
-	}
+	req := httptest.NewRequest("GET", "http://www.example.com", nil)
 	w := httptest.NewRecorder()
 
 	session, err := store.New(req, "hello")
@@ -150,10 +140,7 @@ func TestGH8FilesystemStoreDelete2(t *testing.T) {
 
 	store := NewGenericStore(jsonstore, []byte("some key"))
 
-	req, err := http.NewRequest("GET", "http://www.example.com", nil)
-	if err != nil {
-		t.Fatal("failed to create request", err)
-	}
+	req := httptest.NewRequest("GET", "http://www.example.com", nil)
 	w := httptest.NewRecorder()
 
 	session, err := store.New(req, "hello")

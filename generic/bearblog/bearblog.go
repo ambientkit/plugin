@@ -262,8 +262,8 @@ func (p *Plugin) DisallowAnon(h http.Handler) http.Handler {
 		// Don't allow anon users to access the dashboard.
 		if strings.HasPrefix(r.URL.Path, p.Path("/dashboard")) {
 			// If user is not authenticated, don't allow them to access the page.
-			_, err := p.Site.AuthenticatedUser(r)
-			if err != nil {
+			username, err := p.Site.AuthenticatedUser(r)
+			if err != nil || len(username) == 0 {
 				p.Redirect(w, r, "/", http.StatusFound)
 				return
 			}

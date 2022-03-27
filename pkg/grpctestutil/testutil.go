@@ -2,9 +2,11 @@ package grpctestutil
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/ambientkit/ambient"
 	"github.com/ambientkit/ambient/pkg/ambientapp"
+	"github.com/ambientkit/plugin/generic/bearblog"
 	"github.com/ambientkit/plugin/logger/zaplogger"
 	"github.com/ambientkit/plugin/pkg/grpctestutil/testingdata/plugin/neighbor"
 	trustPlugin "github.com/ambientkit/plugin/pkg/grpctestutil/testingdata/plugin/trust"
@@ -69,21 +71,21 @@ func Setup(trust bool) (*ambientapp.App, error) {
 
 // Setup2 sets up a test gRPC server.
 func Setup2(trust bool) (*ambientapp.App, error) {
-	h := func(log ambient.Logger, renderer ambient.Renderer, w http.ResponseWriter, r *http.Request, err error) {
-		if err != nil {
-			switch e := err.(type) {
-			case ambient.Error:
-				errText := e.Error()
-				if len(errText) == 0 {
-					errText = http.StatusText(e.Status())
-				}
-				http.Error(w, errText, e.Status())
-			default:
-				http.Error(w, http.StatusText(http.StatusInternalServerError),
-					http.StatusInternalServerError)
-			}
-		}
-	}
+	// h := func(log ambient.Logger, renderer ambient.Renderer, w http.ResponseWriter, r *http.Request, err error) {
+	// 	if err != nil {
+	// 		switch e := err.(type) {
+	// 		case ambient.Error:
+	// 			errText := e.Error()
+	// 			if len(errText) == 0 {
+	// 				errText = http.StatusText(e.Status())
+	// 			}
+	// 			http.Error(w, errText, e.Status())
+	// 		default:
+	// 			http.Error(w, http.StatusText(http.StatusInternalServerError),
+	// 				http.StatusInternalServerError)
+	// 		}
+	// 	}
+	// }
 
 	trusted := make(map[string]bool)
 	//trusted["trust"] = true
@@ -97,7 +99,7 @@ func Setup2(trust bool) (*ambientapp.App, error) {
 	sessPlugin := scssession.New("5ba3ad678ee1fd9c4fddcef0d45454904422479ed762b3b0ddc990e743cb65e0")
 	plugins := &ambient.PluginLoader{
 		// Core plugins are implicitly trusted.
-		Router:         awayrouter.New(h),
+		Router:         awayrouter.New(nil),
 		TemplateEngine: htmlengine.New(),
 		SessionManager: sessPlugin,
 		// Trusted plugins are those that are typically needed to boot so they
@@ -107,7 +109,6 @@ func Setup2(trust bool) (*ambientapp.App, error) {
 			//neighbor.New(),
 			//trustPlugin.New(),
 			//bearblog.New(os.Getenv("AMB_PASSWORD_HASH")),
-			ambient.NewGRPCPlugin("bearblog", "./generic/bearblog/cmd/plugin/ambplugin"),
 			ambient.NewGRPCPlugin("bearcss", "./generic/bearcss/cmd/plugin/ambplugin"),
 			ambient.NewGRPCPlugin("pluginmanager", "./generic/pluginmanager/cmd/plugin/ambplugin"),
 			//bearcss.New(),
@@ -115,6 +116,8 @@ func Setup2(trust bool) (*ambientapp.App, error) {
 		Middleware: []ambient.MiddlewarePlugin{
 			// Middleware - executes bottom to top.
 			//ambient.NewGRPCPlugin("hello", "./pkg/grpcp/testingdata/plugin/hello/cmd/plugin/hello"),
+			//ambient.NewGRPCPlugin("bearblog", "./generic/bearblog/cmd/plugin/ambplugin"),
+			bearblog.New(os.Getenv("AMB_PASSWORD_HASH")),
 			sessPlugin,
 		},
 	}
@@ -125,5 +128,8 @@ func Setup2(trust bool) (*ambientapp.App, error) {
 			Storage: localstorage.New("teststorage/site.json", "teststorage/session.bin"),
 		},
 		plugins)
+
+	//app.SetLogLevel(ambient.LogLevelDebug)
+
 	return app, err
 }

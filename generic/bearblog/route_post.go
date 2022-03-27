@@ -66,7 +66,7 @@ func (p *Plugin) postShow(w http.ResponseWriter, r *http.Request) (err error) {
 
 	post, err := p.Site.PostBySlug(slug)
 	if err != nil {
-		return p.Site.Error(err)
+		return p.Mux.StatusError(http.StatusNotFound, nil)
 	}
 
 	// Determine if in preview mode.

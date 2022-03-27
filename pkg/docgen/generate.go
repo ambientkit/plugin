@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"net/http/httptest"
 	"os"
 	"path"
 	"sort"
@@ -102,10 +103,7 @@ func (d *Doc) funcMap() template.FuncMap {
 	fm["FuncMap"] = func() string {
 		out := ""
 		fmr := d.FuncMap
-		req, err := http.NewRequest(http.MethodGet, "/", nil)
-		if err != nil {
-			return fmt.Sprintf("Error generating request: %v\n", err.Error())
-		}
+		req := httptest.NewRequest(http.MethodGet, "/", nil)
 		if fmr == nil {
 			out += "The plugin does not have a FuncMap.\n"
 		} else {
