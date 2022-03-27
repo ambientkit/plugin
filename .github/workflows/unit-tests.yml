@@ -24,6 +24,9 @@ jobs:
       # Checkout the code.
       - name: Checkout code
         uses: actions/checkout@v2
+      # Build the plugins.
+      - name: Build plugin
+        run: make build-plugins
       # Run all the unit tests.
       - name: Run all unit tests
         run: go test -race -covermode atomic -coverprofile=covprofile ./...

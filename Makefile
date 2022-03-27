@@ -41,3 +41,25 @@ update-ambient:
 update-children:
 	cd ../ambient-template && go get github.com/ambientkit/plugin@$(shell git rev-parse HEAD) && go mod tidy -compat=1.17
 	cd ../amb && go get github.com/ambientkit/plugin@$(shell git rev-parse HEAD) && go mod tidy -compat=1.17
+
+################################################################################
+# gRPC
+################################################################################
+
+# Build the plugins.
+.PHONY: build-plugins
+build-plugins:
+	@cd ./pkg/grpctestutil/testingdata/plugin/hello/cmd/plugin && go build -o ambplugin
+	@cd ./generic/bearblog/cmd/plugin && go build -o ambplugin
+	@cd ./generic/bearcss/cmd/plugin && go build -o ambplugin
+	@cd ./generic/pluginmanager/cmd/plugin && go build -o ambplugin
+
+# Start the build and run process for grpc.
+.PHONY: start
+start: build-plugins
+	go run pkg/grpctestutil/testingdata/cmd/server/main.go
+
+# Start the test process for grpc.
+.PHONY: test
+test: build-plugins
+	go test pkg/grpctestutil/*.go
