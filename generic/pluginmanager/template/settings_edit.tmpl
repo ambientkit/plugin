@@ -15,10 +15,10 @@
                 {{else}}
                 <input type="input" name="field{{.Index}}" id="id_field{{.Index}}" value="{{.Value}}">
                 {{end}}
-                {{if .Description.Text}}
+                {{if .Description.text}}
                 <span class="helptext">
-                    {{ if .Description.URL}}
-                    <a href='{{.Description.URL}}' target='_blank'>{{.Description.Text}}</a>
+                    {{ if .Description.url}}
+                    <a href='{{.Description.url}}' target='_blank'>{{.Description.text}}</a>
                     {{else}}
                     {{.Description.Text}}
                     {{end}}
