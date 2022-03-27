@@ -54,6 +54,12 @@ func (te *Engine) Error(w http.ResponseWriter, r *http.Request, content string, 
 }
 
 func (te *Engine) pluginPartial(w http.ResponseWriter, r *http.Request, mainTemplate string, layoutType ambient.LayoutType, assets ambient.FileSystemReader, partialTemplate string, statusCode int, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (err error) {
+	if r == nil {
+		return ambient.StatusError{Code: http.StatusInternalServerError, Err: fmt.Errorf("htmlengine: http.Request cannot be nil")}
+	} else if w == nil {
+		return ambient.StatusError{Code: http.StatusInternalServerError, Err: fmt.Errorf("htmlengine: http.ResponseWriter cannot be nil: %v", r.RequestURI)}
+	}
+
 	// Run marshal/unmarshal to remove inconsistencies between regular plugins and gRPC plugins.
 	b, err := json.Marshal(vars)
 	if err != nil {
@@ -101,6 +107,12 @@ func (te *Engine) pluginPartial(w http.ResponseWriter, r *http.Request, mainTemp
 // pluginContent converts a site post from markdown to HTML and then outputs to response
 // writer. Returns a HTTP status code and an error if one occurs.
 func (te *Engine) pluginContent(w http.ResponseWriter, r *http.Request, mainTemplate string, layoutType ambient.LayoutType, postContent string, statusCode int, fm func(r *http.Request) template.FuncMap, vars map[string]interface{}) (err error) {
+	if r == nil {
+		return ambient.StatusError{Code: http.StatusInternalServerError, Err: fmt.Errorf("htmlengine: http.Request cannot be nil")}
+	} else if w == nil {
+		return ambient.StatusError{Code: http.StatusInternalServerError, Err: fmt.Errorf("htmlengine: http.ResponseWriter cannot be nil: %v", r.RequestURI)}
+	}
+
 	// Run marshal/unmarshal to remove inconsistencies between regular plugins and gRPC plugins.
 	b, err := json.Marshal(vars)
 	if err != nil {

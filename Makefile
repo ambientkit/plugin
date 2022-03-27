@@ -50,10 +50,10 @@ update-children:
 .PHONY: build-plugins
 build-plugins:
 	go build -o pluginmain pkg/grpctestutil/testingdata/cmd/server/main.go
-	@cd ./pkg/grpctestutil/testingdata/plugin/hello/cmd/plugin && go build -o ambplugin
-	@cd ./generic/bearblog/cmd/plugin && go build -o ambplugin
-	@cd ./generic/bearcss/cmd/plugin && go build -o ambplugin
-	@cd ./generic/pluginmanager/cmd/plugin && go build -o ambplugin
+	cd ./pkg/grpctestutil/testingdata/plugin/hello/cmd/plugin && go build -o ambplugin
+	cd ./generic/bearblog/cmd/plugin && go build -o ambplugin
+	cd ./generic/bearcss/cmd/plugin && go build -o ambplugin
+	cd ./generic/pluginmanager/cmd/plugin && go build -o ambplugin
 
 # Start the build and run process for grpc.
 .PHONY: start
