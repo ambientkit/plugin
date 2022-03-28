@@ -7,6 +7,7 @@ import (
 	"github.com/ambientkit/ambient/pkg/ambientapp"
 	"github.com/ambientkit/plugin/generic/debugpprof"
 	"github.com/ambientkit/plugin/logger/zaplogger"
+	"github.com/ambientkit/plugin/pkg/grpctestutil/testingdata/plugin/hello"
 	"github.com/ambientkit/plugin/pkg/grpctestutil/testingdata/plugin/neighbor"
 	trustPlugin "github.com/ambientkit/plugin/pkg/grpctestutil/testingdata/plugin/trust"
 	"github.com/ambientkit/plugin/router/awayrouter"
@@ -16,24 +17,25 @@ import (
 	"github.com/ambientkit/plugin/templateengine/htmlengine"
 )
 
-// Setup sets up a test gRPC server.
-func Setup(trust bool) (*ambientapp.App, error) {
-	h := func(log ambient.Logger, renderer ambient.Renderer, w http.ResponseWriter, r *http.Request, err error) {
-		if err != nil {
-			switch e := err.(type) {
-			case ambient.Error:
-				errText := e.Error()
-				if len(errText) == 0 {
-					errText = http.StatusText(e.Status())
-				}
-				http.Error(w, errText, e.Status())
-			default:
-				http.Error(w, http.StatusText(http.StatusInternalServerError),
-					http.StatusInternalServerError)
+func routeHandler(log ambient.Logger, renderer ambient.Renderer, w http.ResponseWriter, r *http.Request, err error) {
+	if err != nil {
+		switch e := err.(type) {
+		case ambient.Error:
+			errText := e.Error()
+			if len(errText) == 0 {
+				errText = http.StatusText(e.Status())
 			}
+			http.Error(w, errText, e.Status())
+		default:
+			http.Error(w, http.StatusText(http.StatusInternalServerError),
+				http.StatusInternalServerError)
 		}
+		//log.Error("Stack: %v", string(debug.Stack()))
 	}
+}
 
+// GRPCSetup sets up a test gRPC server.
+func GRPCSetup(trust bool) (*ambientapp.App, error) {
 	trusted := make(map[string]bool)
 	trusted["trust"] = true
 	if trust {
@@ -43,7 +45,7 @@ func Setup(trust bool) (*ambientapp.App, error) {
 	sessPlugin := scssession.New("5ba3ad678ee1fd9c4fddcef0d45454904422479ed762b3b0ddc990e743cb65e0")
 	plugins := &ambient.PluginLoader{
 		// Core plugins are implicitly trusted.
-		Router:         awayrouter.New(h),
+		Router:         awayrouter.New(routeHandler),
 		TemplateEngine: htmlengine.New(),
 		SessionManager: sessPlugin,
 		// Trusted plugins are those that are typically needed to boot so they
@@ -57,6 +59,45 @@ func Setup(trust bool) (*ambientapp.App, error) {
 			// Middleware - executes top to bottom.
 			sessPlugin,
 			ambient.NewGRPCPlugin("hello", "./pkg/grpctestutil/testingdata/plugin/hello/cmd/plugin/ambplugin"),
+		},
+	}
+	app, _, err := ambientapp.NewApp("myapp", "1.0",
+		zaplogger.New(),
+		ambient.StoragePluginGroup{
+			Storage: memorystorage.New(),
+		},
+		plugins)
+
+	// app.SetLogLevel(ambient.LogLevelDebug)
+
+	return app, err
+}
+
+// StandardSetup sets up a test server without gRPC.
+func StandardSetup(trust bool) (*ambientapp.App, error) {
+	trusted := make(map[string]bool)
+	trusted["trust"] = true
+	if trust {
+		trusted["hello"] = true
+	}
+
+	sessPlugin := scssession.New("5ba3ad678ee1fd9c4fddcef0d45454904422479ed762b3b0ddc990e743cb65e0")
+	plugins := &ambient.PluginLoader{
+		// Core plugins are implicitly trusted.
+		Router:         awayrouter.New(routeHandler),
+		TemplateEngine: htmlengine.New(),
+		SessionManager: sessPlugin,
+		// Trusted plugins are those that are typically needed to boot so they
+		// will be enabled and given full access.
+		TrustedPlugins: trusted,
+		Plugins: []ambient.Plugin{
+			neighbor.New(),
+			trustPlugin.New(),
+		},
+		Middleware: []ambient.MiddlewarePlugin{
+			// Middleware - executes top to bottom.
+			sessPlugin,
+			hello.New(),
 		},
 	}
 	app, _, err := ambientapp.NewApp("myapp", "1.0",

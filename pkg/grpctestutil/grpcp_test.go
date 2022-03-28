@@ -16,6 +16,22 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestGRPC(t *testing.T) {
+	// Setup gRPC server.
+	app := grpcSetup(t)
+	// Stop plugins when done.
+	defer app.StopGRPCClients()
+
+	tests(t, app)
+}
+
+func TestStandard(t *testing.T) {
+	// Setup standard server.
+	app := standardSetup(t)
+
+	tests(t, app)
+}
+
 func grpcSetup(t *testing.T) *ambientapp.App {
 	// Set the test relative to the project directory since the plugin path
 	// is relative to that.
@@ -26,7 +42,25 @@ func grpcSetup(t *testing.T) *ambientapp.App {
 	}
 
 	// Set up the application.
-	app, err := grpctestutil.Setup(false)
+	app, err := grpctestutil.GRPCSetup(false)
+	if err != nil {
+		assert.FailNow(t, err.Error())
+	}
+
+	return app
+}
+
+func standardSetup(t *testing.T) *ambientapp.App {
+	// Set the test relative to the project directory since the plugin path
+	// is relative to that.
+	path, _ := os.Getwd()
+	basePath := strings.TrimSuffix(path, "/pkg/grpctestutil")
+	if err := os.Chdir(basePath); err != nil {
+		assert.FailNow(t, err.Error())
+	}
+
+	// Set up the application.
+	app, err := grpctestutil.StandardSetup(false)
 	if err != nil {
 		assert.FailNow(t, err.Error())
 	}
@@ -43,12 +77,7 @@ func doRequest(t *testing.T, mux http.Handler, r *http.Request) (*http.Response,
 	return resp, string(body)
 }
 
-func TestMain(t *testing.T) {
-	// Setup gRPC server.
-	app := grpcSetup(t)
-	// Stop plugins when done.
-	defer app.StopGRPCClients()
-
+func tests(t *testing.T, app *ambientapp.App) {
 	ps := app.PluginSystem()
 	assert.NoError(t, ps.SetEnabled("hello", true))
 	assert.NoError(t, ps.SetGrant("hello", ambient.GrantRouterRouteWrite))
