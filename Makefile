@@ -1,46 +1,41 @@
 # This Makefile is an easy way to run common operations.
 # Execute commands like this:
 # * make
+# * make update
+# * make test
 
 # Load the environment variables.
 -include .env
 
 .PHONY: default
-default: amb
+default: start
 
 ################################################################################
 # Dependency management
 ################################################################################
 
-# Update Go dependencies.
+# Update Ambient dependencies.
 .PHONY: update
-update:
+update: update-ambient tidy
+
+# Update Ambient dependency. Requires the repo to be local and in the same folder.
+.PHONY: update-ambient
+update-ambient:
+	go get -u github.com/ambientkit/ambient@$(shell cd ../ambient && git rev-parse HEAD)
+
+# Update all Go dependencies.
+.PHONY: update-all
+update-all: update-all-go tidy
+
+# Update all Go dependencies.
+.PHONY: update-all-go
+update-all-go:
 	go get -u -f -d ./...
-	go mod tidy -compat=1.17
 
 # Run go mod tidy.
 .PHONY: tidy
 tidy:
 	go mod tidy -compat=1.17
-
-# Pass in ARGS.
-# https://stackoverflow.com/a/14061796
-ifeq (update-ambient,$(firstword $(MAKECMDGOALS)))
-  ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
-  $(eval $(ARGS):;@:)
-endif
-
-# Update Ambient dependency.
-.PHONY: update-ambient
-update-ambient:
-	go get -u github.com/ambientkit/ambient@${ARGS}
-	go mod tidy -compat=1.17
-
-# Update dependencies of other repos using this repo.
-.PHONY: update-children
-update-children:
-	cd ../ambient-template && go get github.com/ambientkit/plugin@$(shell git rev-parse HEAD) && go mod tidy -compat=1.17
-	cd ../amb && go get github.com/ambientkit/plugin@$(shell git rev-parse HEAD) && go mod tidy -compat=1.17
 
 ################################################################################
 # gRPC
