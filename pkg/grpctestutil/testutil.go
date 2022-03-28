@@ -113,22 +113,6 @@ func StandardSetup(trust bool) (*ambientapp.App, error) {
 
 // Setup2 sets up a test gRPC server.
 func Setup2(trust bool) (*ambientapp.App, error) {
-	// h := func(log ambient.Logger, renderer ambient.Renderer, w http.ResponseWriter, r *http.Request, err error) {
-	// 	if err != nil {
-	// 		switch e := err.(type) {
-	// 		case ambient.Error:
-	// 			errText := e.Error()
-	// 			if len(errText) == 0 {
-	// 				errText = http.StatusText(e.Status())
-	// 			}
-	// 			http.Error(w, errText, e.Status())
-	// 		default:
-	// 			http.Error(w, http.StatusText(http.StatusInternalServerError),
-	// 				http.StatusInternalServerError)
-	// 		}
-	// 	}
-	// }
-
 	trusted := make(map[string]bool)
 	//trusted["trust"] = true
 	if trust {
