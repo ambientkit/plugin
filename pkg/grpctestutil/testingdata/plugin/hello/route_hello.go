@@ -108,7 +108,7 @@ func (p *Plugin) neighborPluginGrantList(w http.ResponseWriter, r *http.Request)
 func (p *Plugin) neighborPluginGrantListBad(w http.ResponseWriter, r *http.Request) error {
 	s, err := p.Site.NeighborPluginGrantList("neighborbad")
 	if err != nil {
-		return err
+		return p.Mux.StatusError(http.StatusNotFound, err)
 	}
 	fmt.Fprintf(w, "Grants: %v", len(s))
 	return nil

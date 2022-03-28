@@ -192,7 +192,7 @@ func tests(t *testing.T, app *ambientapp.App) {
 	assert.Equal(t, "Grants: 18", string(body))
 
 	resp, body = doRequest(t, mux, httptest.NewRequest("GET", "/neighborPluginGrantListBad", nil))
-	assert.Equal(t, http.StatusInternalServerError, resp.StatusCode)
+	assert.Equal(t, http.StatusNotFound, resp.StatusCode)
 	assert.Equal(t, "item was not found\n", string(body))
 
 	resp, body = doRequest(t, mux, httptest.NewRequest("GET", "/neighborPluginGrants", nil))
@@ -427,7 +427,7 @@ func tests(t *testing.T, app *ambientapp.App) {
 	assert.True(t, strings.Contains(body, "FuncMap: hello: Foo"))
 
 	resp, body = doRequest(t, mux, httptest.NewRequest("GET", "/assetsError", nil))
-	assert.Equal(t, http.StatusInternalServerError, resp.StatusCode)
+	assert.Equal(t, http.StatusOK, resp.StatusCode)
 	assert.True(t, strings.Contains(body, "this is an error"))
 
 	resp, body = doRequest(t, mux, httptest.NewRequest("GET", "/pageHello", nil))

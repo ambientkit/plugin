@@ -30,7 +30,6 @@ func routeHandler(log ambient.Logger, renderer ambient.Renderer, w http.Response
 			http.Error(w, http.StatusText(http.StatusInternalServerError),
 				http.StatusInternalServerError)
 		}
-		//log.Error("Stack: %v", string(debug.Stack()))
 	}
 }
 
