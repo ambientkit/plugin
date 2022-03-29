@@ -1,6 +1,7 @@
 package zaplogger
 
 import (
+	"fmt"
 	"io"
 
 	"github.com/ambientkit/ambient"
@@ -12,10 +13,11 @@ import (
 // Logger represents a logger.
 type Logger struct {
 	log      *zap.SugaredLogger
-	loglevel zap.AtomicLevel
+	loglevel *zap.AtomicLevel
 
-	appName    string
-	appVersion string
+	appName     string
+	appVersion  string
+	serviceName string
 }
 
 // NewLogger returns a new logger with a default log level of error.
@@ -44,7 +46,7 @@ func NewLogger(appName string, appVersion string, optionalWriter io.Writer) *Log
 
 	return &Logger{
 		log:      sugar,
-		loglevel: loglevel,
+		loglevel: &loglevel,
 
 		appName:    appName,
 		appVersion: appVersion,
@@ -105,9 +107,21 @@ func (l *Logger) Log(level ambient.LogLevel, format string, v ...interface{}) {
 	}
 }
 
+func (l *Logger) service(format string, v ...interface{}) (string, []interface{}) {
+	if len(l.serviceName) == 0 {
+		return format, v
+	}
+
+	if len(format) == 0 {
+		return format, append([]interface{}{l.serviceName}, v...)
+	}
+	return fmt.Sprintf("%v: %v", l.serviceName, format), v
+}
+
 // Debug is equivalent to log.Printf() + "\n" if format is not empty.
 // It's equivalent to Println() if format is empty.
 func (l *Logger) Debug(format string, v ...interface{}) {
+	format, v = l.service(format, v...)
 	if len(format) == 0 {
 		l.logentry().Debug(v...)
 	} else {
@@ -118,6 +132,7 @@ func (l *Logger) Debug(format string, v ...interface{}) {
 // Info is equivalent to log.Printf() + "\n" if format is not empty.
 // It's equivalent to Println() if format is empty.
 func (l *Logger) Info(format string, v ...interface{}) {
+	format, v = l.service(format, v...)
 	if len(format) == 0 {
 		l.logentry().Info(v...)
 	} else {
@@ -128,6 +143,7 @@ func (l *Logger) Info(format string, v ...interface{}) {
 // Warn is equivalent to log.Printf() + "\n" if format is not empty.
 // It's equivalent to Println() if format is empty.
 func (l *Logger) Warn(format string, v ...interface{}) {
+	format, v = l.service(format, v...)
 	if len(format) == 0 {
 		l.logentry().Warn(v...)
 	} else {
@@ -138,6 +154,7 @@ func (l *Logger) Warn(format string, v ...interface{}) {
 // Error is equivalent to log.Printf() + "\n" if format is not empty.
 // It's equivalent to Println() if format is empty.
 func (l *Logger) Error(format string, v ...interface{}) {
+	format, v = l.service(format, v...)
 	if len(format) == 0 {
 		l.logentry().Error(v...)
 	} else {
@@ -149,9 +166,27 @@ func (l *Logger) Error(format string, v ...interface{}) {
 // It's equivalent to Println() if format is empty. It's followed by a call
 // to os.Exit(1).
 func (l *Logger) Fatal(format string, v ...interface{}) {
+	format, v = l.service(format, v...)
 	if len(format) == 0 {
 		l.logentry().Fatal(v...)
 	} else {
 		l.logentry().Fatalf(format, v...)
+	}
+}
+
+// Name returns the name of the logger.
+func (l *Logger) Name() string {
+	return l.appName
+}
+
+// Named returns a new logger with the appended name, linked to the existing
+// logger.
+func (l *Logger) Named(serviceName string) ambient.AppLogger {
+	return &Logger{
+		appName:     l.appName,
+		appVersion:  l.appVersion,
+		serviceName: serviceName,
+		log:         l.log,
+		loglevel:    l.loglevel,
 	}
 }

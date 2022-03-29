@@ -11,8 +11,9 @@ import (
 type Logger struct {
 	log *logrus.Logger
 
-	appName    string
-	appVersion string
+	appName     string
+	appVersion  string
+	serviceName string
 }
 
 // NewLogger returns a new logger with a default log level of error.
@@ -36,6 +37,10 @@ func (l *Logger) logentry() *logrus.Entry {
 	standardFields := logrus.Fields{
 		"app":     l.appName,
 		"version": l.appVersion,
+	}
+
+	if len(l.serviceName) > 0 {
+		standardFields["service"] = l.serviceName
 	}
 
 	return l.log.WithFields(standardFields)
@@ -138,5 +143,21 @@ func (l *Logger) Fatal(format string, v ...interface{}) {
 		l.logentry().Fatalln(v...)
 	} else {
 		l.logentry().Fatalf(format, v...)
+	}
+}
+
+// Name returns the name of the logger.
+func (l *Logger) Name() string {
+	return l.appName
+}
+
+// Named returns a new logger with the appended name, linked to the existing
+// logger.
+func (l *Logger) Named(serviceName string) ambient.AppLogger {
+	return &Logger{
+		appName:     l.appName,
+		appVersion:  l.appVersion,
+		serviceName: serviceName,
+		log:         l.log,
 	}
 }
