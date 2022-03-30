@@ -55,12 +55,18 @@ build-plugins:
 start: build-plugins
 	./pluginmain
 
-# Test the gRPC code.
+# Test the all the code for short (no response time testing).
 .PHONY: test
 test: build-plugins
+	go test -race -short ./...
+
+# Test the gRPC code.
+.PHONY: test-grpc
+test-grpc: build-plugins
 	go test -race pkg/grpctestutil/grpcp_test.go
 
-# Test all the code.
-.PHONY: test-all
-test-all: build-plugins
-	go test -race ./...
+# Test the response times.
+.PHONY: test-response
+test-response: #build-plugins
+	-go clean -testcache && go test -v -run ^TestKPIStandard github.com/ambientkit/plugin/pkg/grpctestutil
+	-go clean -testcache && go test -v -run ^TestKPIGRPC github.com/ambientkit/plugin/pkg/grpctestutil

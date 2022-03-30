@@ -22,17 +22,17 @@ func TestGRPC(t *testing.T) {
 	// Stop plugins when done.
 	defer app.StopGRPCClients()
 
-	tests(t, app)
+	tests(t, app, setGrants(t, app))
 }
 
 func TestStandard(t *testing.T) {
 	// Setup standard server.
 	app := standardSetup(t)
 
-	tests(t, app)
+	tests(t, app, setGrants(t, app))
 }
 
-func grpcSetup(t *testing.T) *ambientapp.App {
+func grpcSetup(t assert.TestingT) *ambientapp.App {
 	// Set the test relative to the project directory since the plugin path
 	// is relative to that.
 	path, _ := os.Getwd()
@@ -50,7 +50,7 @@ func grpcSetup(t *testing.T) *ambientapp.App {
 	return app
 }
 
-func standardSetup(t *testing.T) *ambientapp.App {
+func standardSetup(t assert.TestingT) *ambientapp.App {
 	// Set the test relative to the project directory since the plugin path
 	// is relative to that.
 	path, _ := os.Getwd()
@@ -68,7 +68,7 @@ func standardSetup(t *testing.T) *ambientapp.App {
 	return app
 }
 
-func doRequest(t *testing.T, mux http.Handler, r *http.Request) (*http.Response, string) {
+func doRequest(t assert.TestingT, mux http.Handler, r *http.Request) (*http.Response, string) {
 	w := httptest.NewRecorder()
 	mux.ServeHTTP(w, r)
 	resp := w.Result()
@@ -77,7 +77,7 @@ func doRequest(t *testing.T, mux http.Handler, r *http.Request) (*http.Response,
 	return resp, string(body)
 }
 
-func tests(t *testing.T, app *ambientapp.App) {
+func setGrants(t assert.TestingT, app *ambientapp.App) http.Handler {
 	ps := app.PluginSystem()
 	assert.NoError(t, ps.SetEnabled("hello", true))
 	assert.NoError(t, ps.SetGrant("hello", ambient.GrantRouterRouteWrite))
@@ -115,9 +115,13 @@ func tests(t *testing.T, app *ambientapp.App) {
 
 	mux, err := app.Handler()
 	if err != nil {
-		t.Fatal(err.Error())
+		t.Errorf("could not create handler: %v", err.Error())
 	}
 
+	return mux
+}
+
+func tests(t *testing.T, app *ambientapp.App, mux http.Handler) {
 	resp, body := doRequest(t, mux, httptest.NewRequest("GET", "/", nil))
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 	assert.Equal(t, "hello world", string(body))
