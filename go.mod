@@ -33,7 +33,7 @@ require (
 	github.com/rwcarlsen/goexif v0.0.0-20190401172101-9e8deecbddbd
 	github.com/sirupsen/logrus v1.8.1
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.7.1
 	go.uber.org/zap v1.21.0
 	golang.org/x/crypto v0.0.0-20220128200615-198e4374d7ed
 	golang.org/x/tools v0.1.10
@@ -42,6 +42,8 @@ require (
 
 require (
 	github.com/fatih/color v1.13.0 // indirect
+	github.com/go-logr/logr v1.2.3 // indirect
+	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
@@ -52,6 +54,10 @@ require (
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
 	github.com/oklog/run v1.1.0 // indirect
 	github.com/vburenin/ifacemaker v1.1.0 // indirect
+	go.opentelemetry.io/otel v1.6.1 // indirect
+	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.6.1 // indirect
+	go.opentelemetry.io/otel/sdk v1.6.1 // indirect
+	go.opentelemetry.io/otel/trace v1.6.1 // indirect
 	golang.org/x/image v0.0.0-20191009234506-e7c1f5e7dbb8 // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220106191415-9b9b3d81d5e3 // indirect
 )

@@ -60,7 +60,7 @@ func standardSetup(t assert.TestingT) *ambientapp.App {
 	}
 
 	// Set up the application.
-	app, err := grpctestutil.StandardSetup(false)
+	app, _, err := grpctestutil.StandardSetup(false)
 	if err != nil {
 		assert.FailNow(t, err.Error())
 	}

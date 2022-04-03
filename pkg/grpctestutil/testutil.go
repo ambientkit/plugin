@@ -73,7 +73,7 @@ func GRPCSetup(trust bool) (*ambientapp.App, error) {
 }
 
 // StandardSetup sets up a test server without gRPC.
-func StandardSetup(trust bool) (*ambientapp.App, error) {
+func StandardSetup(trust bool) (*ambientapp.App, ambient.AppLogger, error) {
 	trusted := make(map[string]bool)
 	trusted["trust"] = true
 	if trust {
@@ -99,7 +99,7 @@ func StandardSetup(trust bool) (*ambientapp.App, error) {
 			hello.New(),
 		},
 	}
-	app, _, err := ambientapp.NewApp("myapp", "1.0",
+	app, logger, err := ambientapp.NewApp("myapp", "1.0",
 		zaplogger.New(),
 		ambient.StoragePluginGroup{
 			Storage: memorystorage.New(),
@@ -108,7 +108,7 @@ func StandardSetup(trust bool) (*ambientapp.App, error) {
 
 	// app.SetLogLevel(ambient.LogLevelDebug)
 
-	return app, err
+	return app, logger, err
 }
 
 // Setup2 sets up a test gRPC server.
