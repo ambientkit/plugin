@@ -33,17 +33,10 @@ func main() {
 		stdlog.Fatalln(err.Error())
 	}
 
-	// c := newOT(log)
-	// defer c()
-
-	// c := newOT2(log)
-	// defer c.Close(context.Background())
-
-	tp, f, err := newOT3(log, "http://localhost:14268/api/traces", "ambient", "dev", 123)
+	tp, f, err := tracerProvider(log, "http://localhost:14268/api/traces", "ambient", "dev", 123)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-
 	defer f(ctx)
 
 	app.PluginSystem().SetGrant("hello", ambient.GrantPluginNeighborGrantRead)
@@ -69,49 +62,11 @@ func main() {
 	log.Fatal("%v", app.ListenAndServe(h))
 }
 
-// func newOT(log ambient.AppLogger) func() {
-// 	exp, err := newExporter(&LogWriter{log})
-// 	if err != nil {
-// 		log.Fatal(err.Error())
-// 	}
-
-// 	tp := trace.NewTracerProvider(
-// 		trace.WithBatcher(exp),
-// 		trace.WithResource(newResource()),
-// 	)
-// 	otel.SetTracerProvider(tp)
-// 	return func() {
-// 		log.Error("Hit shutdown")
-// 		if err := tp.Shutdown(context.Background()); err != nil {
-// 			log.Fatal(err.Error())
-// 		}
-// 	}
-// }
-
-// func newOT2(log ambient.AppLogger) trace.Provider {
-// 	//ctx := context.Background()
-
-// 	// Bootstrap tracer.
-// 	prv, err := trace.NewProvider(trace.ProviderConfig{
-// 		JaegerEndpoint: "http://localhost:14268/api/traces",
-// 		ServiceName:    "client",
-// 		ServiceVersion: "1.0.0",
-// 		Environment:    "dev",
-// 		Disabled:       false,
-// 	})
-// 	if err != nil {
-// 		log.Fatal(err.Error())
-// 	}
-// 	//defer prv.Close(ctx)
-
-// 	return prv
-// }
-
 // tracerProvider returns an OpenTelemetry TracerProvider configured to use
 // the Jaeger exporter that will send spans to the provided url. The returned
 // TracerProvider will also use a Resource configured with all the information
 // about the application.
-func newOT3(log ambient.AppLogger, url string, service string, environment string, id int64) (*trace.TracerProvider, func(ctx context.Context), error) {
+func tracerProvider(log ambient.AppLogger, url string, service string, environment string, id int64) (*trace.TracerProvider, func(ctx context.Context), error) {
 	// Create the Jaeger exporter
 	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(url)))
 	if err != nil {
@@ -145,39 +100,3 @@ func newOT3(log ambient.AppLogger, url string, service string, environment strin
 
 	return tp, f, nil
 }
-
-// // newResource returns a resource describing this application.
-// func newResource() *resource.Resource {
-// 	r, _ := resource.Merge(
-// 		resource.Default(),
-// 		resource.NewWithAttributes(
-// 			semconv.SchemaURL,
-// 			semconv.ServiceNameKey.String("fib"),
-// 			semconv.ServiceVersionKey.String("v0.1.0"),
-// 			attribute.String("environment", "demo"),
-// 		),
-// 	)
-// 	return r
-// }
-
-// // LogWriter .
-// type LogWriter struct {
-// 	ambient.AppLogger
-// }
-
-// // Write .
-// func (l *LogWriter) Write(p []byte) (n int, err error) {
-// 	l.Error(string(p))
-// 	return len(p), nil
-// }
-
-// // newExporter returns a console exporter.
-// func newExporter(w io.Writer) (trace.SpanExporter, error) {
-// 	return stdouttrace.New(
-// 		stdouttrace.WithWriter(w),
-// 		// Use human-readable output.
-// 		//stdouttrace.WithPrettyPrint(),
-// 		// Do not print timestamps for the demo.
-// 		stdouttrace.WithoutTimestamps(),
-// 	)
-// }
