@@ -25,6 +25,7 @@ func main() {
 		//GRPCServer: plugin.DefaultGRPCServer,
 		GRPCServer: func(opts []grpc.ServerOption) *grpc.Server {
 			opts = append(opts, grpc.UnaryInterceptor(otelgrpc.UnaryServerInterceptor()))
+			opts = append(opts, grpc.StreamInterceptor(otelgrpc.StreamServerInterceptor()))
 			return grpc.NewServer(opts...)
 		},
 	})
