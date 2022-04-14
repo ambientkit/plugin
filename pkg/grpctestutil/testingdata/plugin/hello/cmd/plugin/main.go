@@ -7,6 +7,8 @@ import (
 	"github.com/ambientkit/plugin/pkg/grpctestutil/testingdata/plugin/hello"
 	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/go-plugin"
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
+	"google.golang.org/grpc"
 )
 
 func main() {
@@ -20,6 +22,10 @@ func main() {
 			Output:     os.Stderr,
 			JSONFormat: true,
 		}),
-		GRPCServer: plugin.DefaultGRPCServer,
+		//GRPCServer: plugin.DefaultGRPCServer,
+		GRPCServer: func(opts []grpc.ServerOption) *grpc.Server {
+			opts = append(opts, grpc.UnaryInterceptor(otelgrpc.UnaryServerInterceptor()))
+			return grpc.NewServer(opts...)
+		},
 	})
 }

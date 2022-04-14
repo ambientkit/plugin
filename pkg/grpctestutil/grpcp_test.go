@@ -42,7 +42,7 @@ func grpcSetup(t assert.TestingT) *ambientapp.App {
 	}
 
 	// Set up the application.
-	app, err := grpctestutil.GRPCSetup(false)
+	app, _, err := grpctestutil.GRPCSetup(false)
 	if err != nil {
 		assert.FailNow(t, err.Error())
 	}

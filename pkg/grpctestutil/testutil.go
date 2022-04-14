@@ -15,9 +15,13 @@ import (
 	"github.com/ambientkit/plugin/storage/localstorage"
 	"github.com/ambientkit/plugin/storage/memorystorage"
 	"github.com/ambientkit/plugin/templateengine/htmlengine"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
 )
 
 func routeHandler(log ambient.Logger, renderer ambient.Renderer, w http.ResponseWriter, r *http.Request, err error) {
+	_, span := log.Trace(r.Context(), "router: error handler")
+	defer span.End()
 	if err != nil {
 		switch e := err.(type) {
 		case ambient.Error:
@@ -25,16 +29,24 @@ func routeHandler(log ambient.Logger, renderer ambient.Renderer, w http.Response
 			if len(errText) == 0 {
 				errText = http.StatusText(e.Status())
 			}
+
+			span.SetStatus(codes.Error, errText)
+			span.SetAttributes(attribute.Int("http.status.code", e.Status()))
+			span.SetAttributes(attribute.String("http.status.message", errText))
 			http.Error(w, errText, e.Status())
 		default:
+			span.SetStatus(codes.Error, http.StatusText(http.StatusInternalServerError))
+			span.SetAttributes(attribute.Int("http.status.code", http.StatusInternalServerError))
+			span.SetAttributes(attribute.String("http.status.message", http.StatusText(http.StatusInternalServerError)))
 			http.Error(w, http.StatusText(http.StatusInternalServerError),
 				http.StatusInternalServerError)
 		}
 	}
+	span.SetStatus(codes.Ok, "OK")
 }
 
 // GRPCSetup sets up a test gRPC server.
-func GRPCSetup(trust bool) (*ambientapp.App, error) {
+func GRPCSetup(trust bool) (*ambientapp.App, ambient.AppLogger, error) {
 	trusted := make(map[string]bool)
 	trusted["trust"] = true
 	if trust {
@@ -60,7 +72,7 @@ func GRPCSetup(trust bool) (*ambientapp.App, error) {
 			ambient.NewGRPCPlugin("hello", "./pkg/grpctestutil/testingdata/plugin/hello/cmd/plugin/ambplugin"),
 		},
 	}
-	app, _, err := ambientapp.NewApp("myapp", "1.0",
+	app, logger, err := ambientapp.NewApp("myapp", "1.0",
 		zaplogger.New(),
 		ambient.StoragePluginGroup{
 			Storage: memorystorage.New(),
@@ -69,7 +81,7 @@ func GRPCSetup(trust bool) (*ambientapp.App, error) {
 
 	// app.SetLogLevel(ambient.LogLevelDebug)
 
-	return app, err
+	return app, logger, err
 }
 
 // StandardSetup sets up a test server without gRPC.

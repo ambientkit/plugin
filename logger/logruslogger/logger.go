@@ -1,10 +1,13 @@
 package logruslogger
 
 import (
+	"context"
 	"io"
 
 	"github.com/ambientkit/ambient"
 	"github.com/sirupsen/logrus"
+	sdktrace "go.opentelemetry.io/otel/sdk/trace"
+	"go.opentelemetry.io/otel/trace"
 )
 
 // Logger represents a logger.
@@ -14,6 +17,9 @@ type Logger struct {
 	appName     string
 	appVersion  string
 	serviceName string
+
+	tracerProvider *sdktrace.TracerProvider
+	span           trace.Span
 }
 
 // NewLogger returns a new logger with a default log level of error.
@@ -154,10 +160,52 @@ func (l *Logger) Name() string {
 // Named returns a new logger with the appended name, linked to the existing
 // logger.
 func (l *Logger) Named(serviceName string) ambient.AppLogger {
-	return &Logger{
-		appName:     l.appName,
-		appVersion:  l.appVersion,
-		serviceName: serviceName,
-		log:         l.log,
+	out := l.clone()
+	out.serviceName = serviceName
+	return out
+}
+
+// clone returns a copy of the logger.
+func (l *Logger) clone() *Logger {
+	out := &Logger{
+		appName:        l.appName,
+		appVersion:     l.appVersion,
+		serviceName:    l.serviceName,
+		log:            l.log,
+		tracerProvider: l.tracerProvider,
 	}
+
+	return out
+}
+
+// For returns a context-aware logger to support OpenTracing.
+func (l *Logger) For(ctx context.Context) ambient.Logger {
+
+	if span := trace.SpanFromContext(ctx); span != nil {
+		logger := l.clone()
+		logger.span = span
+
+		//sc := span.SpanContext()
+		//span.SetAttributes()
+
+		// if jaegerCtx, ok := sc.(jaeger.SpanContext); ok {
+		// 	logger.spanFields = []zapcore.Field{
+		// 		zap.String("trace_id", jaegerCtx.TraceID().String()),
+		// 		zap.String("span_id", jaegerCtx.SpanID().String()),
+		// 	}
+		// }
+
+		return logger
+	}
+	return l
+}
+
+// SetTracerProvider sets the tracer provider.
+func (l *Logger) SetTracerProvider(tp *sdktrace.TracerProvider) {
+	l.tracerProvider = tp
+}
+
+// Trace returns a context and an OpenTelemetry span.
+func (l *Logger) Trace(ctx context.Context, spanName string) (context.Context, trace.Span) {
+	return l.tracerProvider.Tracer(l.appName).Start(ctx, spanName)
 }

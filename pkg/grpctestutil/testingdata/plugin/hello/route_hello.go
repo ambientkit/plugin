@@ -9,10 +9,17 @@ import (
 
 	"github.com/ambientkit/ambient"
 	"github.com/ambientkit/ambient/pkg/amberror"
+	"go.opentelemetry.io/otel/attribute"
 )
 
 func (p *Plugin) index(w http.ResponseWriter, r *http.Request) error {
+	_, span := p.Log.Trace(r.Context(), "hello world")
+	span.SetAttributes(attribute.String("message", "this is first"))
+	defer span.End()
+
 	fmt.Fprint(w, "hello world")
+	p.Log.For(r.Context()).Info("This is second")
+	p.Log.Info("This is third.")
 	return nil
 }
 
