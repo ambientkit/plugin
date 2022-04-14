@@ -2,6 +2,7 @@
 package proxyrequest
 
 import (
+	"context"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -30,7 +31,7 @@ func New(urlForProxy *url.URL, prefixForAPI string) *Plugin {
 }
 
 // PluginName returns the plugin name.
-func (p *Plugin) PluginName() string {
+func (p *Plugin) PluginName(context.Context) string {
 	return "proxyrequest"
 }
 

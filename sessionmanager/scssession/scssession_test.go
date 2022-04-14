@@ -1,6 +1,7 @@
 package scssession_test
 
 import (
+	"context"
 	"log"
 	"testing"
 
@@ -30,7 +31,7 @@ func ExampleNew() {
 			sessionManager,
 		},
 	}
-	_, _, err := ambientapp.NewApp("myapp", "1.0",
+	_, _, err := ambientapp.NewApp(context.Background(), "myapp", "1.0",
 		zaplogger.New(),
 		ambient.StoragePluginGroup{
 			Storage: memorystorage.New(),

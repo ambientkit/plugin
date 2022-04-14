@@ -2,6 +2,7 @@
 package rove
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/ambientkit/ambient"
@@ -50,7 +51,7 @@ func New(dbinfo *DBInfo) *Plugin {
 }
 
 // PluginName returns the plugin name.
-func (p *Plugin) PluginName() string {
+func (p *Plugin) PluginName(context.Context) string {
 	return "rove"
 }
 

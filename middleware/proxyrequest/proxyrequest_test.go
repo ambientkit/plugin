@@ -1,6 +1,7 @@
 package proxyrequest_test
 
 import (
+	"context"
 	"log"
 	"net/url"
 	"testing"
@@ -33,7 +34,7 @@ func ExampleNew() {
 			proxyrequest.New(URL, "/api"),
 		},
 	}
-	_, _, err = ambientapp.NewApp("myapp", "1.0",
+	_, _, err = ambientapp.NewApp(context.Background(), "myapp", "1.0",
 		zaplogger.New(),
 		ambient.StoragePluginGroup{
 			Storage: memorystorage.New(),

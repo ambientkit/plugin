@@ -1,7 +1,11 @@
 // Package sitemap is an Ambient plugin that provides a sitemap.
 package sitemap
 
-import "github.com/ambientkit/ambient"
+import (
+	"context"
+
+	"github.com/ambientkit/ambient"
+)
 
 // Plugin represents an Ambient plugin.
 type Plugin struct {
@@ -16,7 +20,7 @@ func New() *Plugin {
 }
 
 // PluginName returns the plugin name.
-func (p *Plugin) PluginName() string {
+func (p *Plugin) PluginName(context.Context) string {
 	return "sitemap"
 }
 

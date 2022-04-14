@@ -2,6 +2,7 @@
 package logruslogger
 
 import (
+	"context"
 	"io"
 
 	"github.com/ambientkit/ambient"
@@ -18,7 +19,7 @@ func New() *Plugin {
 }
 
 // PluginName returns the plugin name.
-func (p *Plugin) PluginName() string {
+func (p *Plugin) PluginName(context.Context) string {
 	return "logruslogger"
 }
 

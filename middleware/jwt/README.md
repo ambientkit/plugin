@@ -79,7 +79,7 @@ func main() {
 			jwt.New([]byte(uuid.EncodedString(32)), time.Hour*1, []string{}),
 		},
 	}
-	_, _, err := ambientapp.NewApp("myapp", "1.0",
+	_, _, err := ambientapp.NewApp(context.Background(), "myapp", "1.0",
 		zaplogger.New(),
 		ambient.StoragePluginGroup{
 			Storage: memorystorage.New(),

@@ -2,6 +2,7 @@ package docgen
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"go/ast"
 	"go/doc"
@@ -19,6 +20,8 @@ import (
 
 // Generate will generate the README.md file for the plugin.
 func Generate(t *testing.T, p interface{}, outputFile string) {
+	ctx := context.Background()
+
 	if len(outputFile) == 0 {
 		outputFile = "README.md"
 	}
@@ -76,9 +79,9 @@ func Generate(t *testing.T, p interface{}, outputFile string) {
 	pluginCore, isPluginCore := p.(ambient.PluginCore)
 	if isPluginCore {
 		docInfo.PackageVersion = pluginCore.PluginVersion()
-		docInfo.PackageName = pluginCore.PluginName()
+		docInfo.PackageName = pluginCore.PluginName(ctx)
 
-		if pluginCore.PluginName() != p2.Name {
+		if docInfo.PackageName != p2.Name {
 			t.Error(fmt.Errorf("package names do not match"))
 		}
 	}
@@ -87,7 +90,7 @@ func Generate(t *testing.T, p interface{}, outputFile string) {
 	plugin, isPlugin := p.(ambient.Plugin)
 	if isPlugin {
 		os.Setenv("AMB_LOGLEVEL", "FATAL")
-		app := LighweightAppSetup("docgen", plugin, true)
+		app := LighweightAppSetup(ctx, "docgen", plugin, true)
 
 		docInfo.GrantRequests = plugin.GrantRequests()
 		docInfo.Settings = plugin.Settings()

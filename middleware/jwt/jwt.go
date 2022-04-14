@@ -2,6 +2,7 @@
 package jwt
 
 import (
+	"context"
 	"net/http"
 	"time"
 
@@ -29,7 +30,7 @@ func New(secret []byte, sessionTimeout time.Duration, whitelist []string) *Plugi
 }
 
 // PluginName returns the plugin name.
-func (p *Plugin) PluginName() string {
+func (p *Plugin) PluginName(context.Context) string {
 	return "jwt"
 }
 

@@ -1,6 +1,7 @@
 package docgen
 
 import (
+	"context"
 	"log"
 	"net/http"
 
@@ -21,11 +22,11 @@ type App struct {
 }
 
 // LighweightAppSetup setups up a lighweight Ambient system.
-func LighweightAppSetup(appName string, p ambient.Plugin, trust bool) *App {
+func LighweightAppSetup(ctx context.Context, appName string, p ambient.Plugin, trust bool) *App {
 	trusted := map[string]bool{}
 	if trust {
 		// Automatically trust the plugin.
-		trusted[p.PluginName()] = true
+		trusted[p.PluginName(ctx)] = true
 	}
 
 	pluginList := []ambient.Plugin{
@@ -72,7 +73,7 @@ func LighweightAppSetup(appName string, p ambient.Plugin, trust bool) *App {
 			middleware, // Session manager middleware.
 		},
 	}
-	ambientApp, logger, err := ambientapp.NewApp(appName, "1.0",
+	ambientApp, logger, err := ambientapp.NewApp(ctx, appName, "1.0",
 		zaplogger.New(),
 		ambient.StoragePluginGroup{
 			Storage: memorystorage.New(),
@@ -83,7 +84,7 @@ func LighweightAppSetup(appName string, p ambient.Plugin, trust bool) *App {
 	}
 
 	// Load the plugins and return the handler.
-	handler, err := ambientApp.Handler()
+	handler, err := ambientApp.Handler(ctx)
 	if err != nil {
 		logger.Fatal(err.Error())
 	}

@@ -1,7 +1,11 @@
 // Package robots is an Ambient plugin that serves a robots.txt file.
 package robots
 
-import "github.com/ambientkit/ambient"
+import (
+	"context"
+
+	"github.com/ambientkit/ambient"
+)
 
 // Plugin represents an Ambient plugin.
 type Plugin struct {
@@ -16,7 +20,7 @@ func New() *Plugin {
 }
 
 // PluginName returns the plugin name.
-func (p *Plugin) PluginName() string {
+func (p *Plugin) PluginName(context.Context) string {
 	return "robots"
 }
 

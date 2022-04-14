@@ -1,6 +1,7 @@
 package localstorage_test
 
 import (
+	"context"
 	"log"
 	"testing"
 
@@ -32,7 +33,7 @@ func ExampleNew() {
 			// Middleware - executes top to bottom.
 		},
 	}
-	_, _, err := ambientapp.NewApp("myapp", "1.0",
+	_, _, err := ambientapp.NewApp(context.Background(), "myapp", "1.0",
 		zaplogger.New(),
 		ambient.StoragePluginGroup{
 			Storage: localstorage.New(StorageSitePath, StorageSessionPath),

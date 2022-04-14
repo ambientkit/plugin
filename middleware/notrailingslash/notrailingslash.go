@@ -2,6 +2,7 @@
 package notrailingslash
 
 import (
+	"context"
 	"net/http"
 	"strings"
 
@@ -21,7 +22,7 @@ func New() *Plugin {
 }
 
 // PluginName an Ambient plugin with middleware that removes trailing slashes from requests.
-func (p *Plugin) PluginName() string {
+func (p *Plugin) PluginName(context.Context) string {
 	return "notrailingslash"
 }
 

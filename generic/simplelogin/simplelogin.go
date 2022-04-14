@@ -2,6 +2,7 @@
 package simplelogin
 
 import (
+	"context"
 	"embed"
 	"fmt"
 
@@ -28,7 +29,7 @@ func New(passwordHash string) *Plugin {
 }
 
 // PluginName returns the plugin name.
-func (p *Plugin) PluginName() string {
+func (p *Plugin) PluginName(context.Context) string {
 	return "simplelogin"
 }
 

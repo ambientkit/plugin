@@ -2,6 +2,7 @@
 package gcpbucketstorage
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -24,7 +25,7 @@ func New(sitePath string, sessionPath string) *Plugin {
 }
 
 // PluginName returns the plugin name.
-func (p *Plugin) PluginName() string {
+func (p *Plugin) PluginName(context.Context) string {
 	return "gcpbucketstorage"
 }
 
