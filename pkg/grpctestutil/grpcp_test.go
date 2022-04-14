@@ -1,6 +1,7 @@
 package grpctestutil_test
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -22,14 +23,14 @@ func TestGRPC(t *testing.T) {
 	// Stop plugins when done.
 	defer app.StopGRPCClients()
 
-	tests(t, app, setGrants(t, app))
+	tests(t, app, setGrants(t, context.Background(), app))
 }
 
 func TestStandard(t *testing.T) {
 	// Setup standard server.
 	app := standardSetup(t)
 
-	tests(t, app, setGrants(t, app))
+	tests(t, app, setGrants(t, context.Background(), app))
 }
 
 func grpcSetup(t assert.TestingT) *ambientapp.App {
@@ -77,7 +78,7 @@ func doRequest(t assert.TestingT, mux http.Handler, r *http.Request) (*http.Resp
 	return resp, string(body)
 }
 
-func setGrants(t assert.TestingT, app *ambientapp.App) http.Handler {
+func setGrants(t assert.TestingT, ctx context.Context, app *ambientapp.App) http.Handler {
 	ps := app.PluginSystem()
 	assert.NoError(t, ps.SetEnabled("hello", true))
 	assert.NoError(t, ps.SetGrant("hello", ambient.GrantRouterRouteWrite))
@@ -113,7 +114,7 @@ func setGrants(t assert.TestingT, app *ambientapp.App) http.Handler {
 	assert.NoError(t, ps.SetGrant("hello", ambient.GrantSiteAssetWrite))
 	assert.NoError(t, ps.SetGrant("hello", ambient.GrantRouterMiddlewareWrite))
 
-	mux, err := app.Handler()
+	mux, err := app.Handler(ctx)
 	if err != nil {
 		t.Errorf("could not create handler: %v", err.Error())
 	}

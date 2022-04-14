@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	stdlog "log"
 
 	"github.com/ambientkit/ambient"
@@ -16,7 +17,7 @@ func main() {
 
 	app.PluginSystem().SetGrant("hello", ambient.GrantPluginNeighborGrantRead)
 
-	h, err := app.Handler()
+	h, err := app.Handler(context.Background())
 	if err != nil {
 		log.Fatal(err.Error())
 	}

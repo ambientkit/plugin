@@ -2,6 +2,8 @@
 package localstorage
 
 import (
+	"context"
+
 	"github.com/ambientkit/ambient"
 	"github.com/ambientkit/plugin/pkg/filestore"
 )
@@ -21,7 +23,7 @@ func New(sitePath string, sessionPath string) *Plugin {
 }
 
 // PluginName returns the plugin name.
-func (p *Plugin) PluginName() string {
+func (p *Plugin) PluginName(context.Context) string {
 	return "localstorage"
 }
 

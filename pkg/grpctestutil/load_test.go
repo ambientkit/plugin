@@ -1,6 +1,7 @@
 package grpctestutil_test
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -12,10 +13,11 @@ import (
 )
 
 func TestLoad(t *testing.T) {
+	ctx := context.Background()
 	// Load the ambient application.
 	app := standardSetup(t)
 	ps := app.PluginSystem()
-	mux, err := app.Handler()
+	mux, err := app.Handler(ctx)
 	if err != nil {
 		t.Fatal(err.Error())
 	}
@@ -30,7 +32,7 @@ func TestLoad(t *testing.T) {
 			return nil
 		})
 	}
-	ps.LoadPlugin(p, true, false)
+	ps.LoadPlugin(ctx, p, true, false)
 	ss.LoadSinglePluginPages(pluginName)
 	ps.SetEnabled(pluginName, true)
 	ps.SetGrant(pluginName, ambient.GrantRouterRouteWrite)

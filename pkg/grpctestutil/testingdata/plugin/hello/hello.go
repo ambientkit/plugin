@@ -2,6 +2,7 @@
 package hello
 
 import (
+	"context"
 	"embed"
 	"encoding/json"
 	"errors"
@@ -28,7 +29,7 @@ func New() *Plugin {
 }
 
 // PluginName returns the plugin name.
-func (p *Plugin) PluginName() string {
+func (p *Plugin) PluginName(context.Context) string {
 	return "hello"
 }
 

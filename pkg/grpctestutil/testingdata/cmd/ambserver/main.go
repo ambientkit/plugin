@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"os"
@@ -17,7 +18,8 @@ import (
 func main() {
 	// Create the ambient app.
 	plugins := Plugins()
-	ambientApp, logger, err := ambientapp.NewApp("myapp", "1.0",
+	ctx := context.Background()
+	ambientApp, logger, err := ambientapp.NewApp(ctx, "myapp", "1.0",
 		zaplogger.New(),
 		ambient.StoragePluginGroup{
 			Storage: memorystorage.New(),
@@ -28,7 +30,7 @@ func main() {
 	}
 
 	// Load the plugins and return the handler.
-	mux, err := ambientApp.Handler()
+	mux, err := ambientApp.Handler(ctx)
 	if err != nil {
 		logger.Fatal(err.Error())
 	}

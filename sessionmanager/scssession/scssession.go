@@ -2,6 +2,7 @@
 package scssession
 
 import (
+	"context"
 	"net/http"
 	"time"
 
@@ -31,7 +32,7 @@ func New(sessionKey string) *Plugin {
 }
 
 // PluginName returns the plugin name.
-func (p *Plugin) PluginName() string {
+func (p *Plugin) PluginName(context.Context) string {
 	return "scssession"
 }
 

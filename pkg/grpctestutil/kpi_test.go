@@ -1,6 +1,7 @@
 package grpctestutil_test
 
 import (
+	"context"
 	"net/http/httptest"
 	"os"
 	"sync"
@@ -58,7 +59,7 @@ func TestKPIGRPCConcurrent(t *testing.T) {
 }
 
 func responseTime(t *testing.T, app *ambientapp.App, totalTests int) {
-	mux := setGrants(t, app)
+	mux := setGrants(t, context.Background(), app)
 
 	arrTimes := make([]float64, 0)
 	var max int64 = 0
@@ -89,7 +90,7 @@ func responseTime(t *testing.T, app *ambientapp.App, totalTests int) {
 }
 
 func responseTimeConcurrent(t *testing.T, app *ambientapp.App, totalTests int, concurrent int) {
-	mux := setGrants(t, app)
+	mux := setGrants(t, context.Background(), app)
 
 	arrTimes := make([]float64, 0)
 	var max int64 = 0

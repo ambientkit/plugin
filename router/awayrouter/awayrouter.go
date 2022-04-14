@@ -2,6 +2,8 @@
 package awayrouter
 
 import (
+	"context"
+
 	"github.com/ambientkit/ambient"
 	"github.com/ambientkit/away/router"
 )
@@ -20,7 +22,7 @@ func New(serveHTTP ambient.CustomServeHTTP) *Plugin {
 }
 
 // PluginName returns the plugin name.
-func (p *Plugin) PluginName() string {
+func (p *Plugin) PluginName(context.Context) string {
 	return "awayrouter"
 }
 

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 
 	"github.com/ambientkit/ambient/pkg/grpcp"
@@ -12,8 +13,10 @@ import (
 
 func main() {
 	p := bearcss.New()
+	ctx := context.Background()
+	pluginName := p.PluginName(ctx)
 
-	zlog, err := zaplogger.New().Logger(p.PluginName(), p.PluginVersion(), nil)
+	zlog, err := zaplogger.New().Logger(pluginName, p.PluginVersion(), nil)
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
@@ -21,9 +24,9 @@ func main() {
 	plugin.Serve(&plugin.ServeConfig{
 		HandshakeConfig: grpcp.Handshake,
 		Plugins: map[string]plugin.Plugin{
-			p.PluginName(): &grpcp.GenericPlugin{Impl: p},
+			pluginName: &grpcp.GenericPlugin{Impl: p},
 		},
-		Logger:     hclogadapter.New(p.PluginName(), zlog),
+		Logger:     hclogadapter.New(pluginName, zlog),
 		GRPCServer: plugin.DefaultGRPCServer,
 	})
 }

@@ -186,7 +186,7 @@ func (te *Engine) generateTemplate(r *http.Request, mainTemplate string, layoutT
 	}
 
 	// Inject the plugins.
-	t, err = te.assetInjector.Inject(te, t, r, layoutType, vars)
+	t, err = te.assetInjector.Inject(r.Context(), te, t, r, layoutType, vars)
 	if err != nil {
 		return nil, err
 	}

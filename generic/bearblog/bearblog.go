@@ -2,6 +2,7 @@
 package bearblog
 
 import (
+	"context"
 	"embed"
 	"fmt"
 	"net/http"
@@ -30,7 +31,7 @@ func New(passwordHash string) *Plugin {
 }
 
 // PluginName returns the plugin name.
-func (p *Plugin) PluginName() string {
+func (p *Plugin) PluginName(context.Context) string {
 	return "bearblog"
 }
 

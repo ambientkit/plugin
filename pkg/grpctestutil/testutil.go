@@ -1,6 +1,7 @@
 package grpctestutil
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/ambientkit/ambient"
@@ -72,7 +73,7 @@ func GRPCSetup(trust bool) (*ambientapp.App, ambient.AppLogger, error) {
 			ambient.NewGRPCPlugin("hello", "./pkg/grpctestutil/testingdata/plugin/hello/cmd/plugin/ambplugin"),
 		},
 	}
-	app, logger, err := ambientapp.NewApp("myapp", "1.0",
+	app, logger, err := ambientapp.NewApp(context.Background(), "myapp", "1.0",
 		zaplogger.New(),
 		ambient.StoragePluginGroup{
 			Storage: memorystorage.New(),
@@ -111,7 +112,7 @@ func StandardSetup(trust bool) (*ambientapp.App, ambient.AppLogger, error) {
 			hello.New(),
 		},
 	}
-	app, logger, err := ambientapp.NewApp("myapp", "1.0",
+	app, logger, err := ambientapp.NewApp(context.Background(), "myapp", "1.0",
 		zaplogger.New(),
 		ambient.StoragePluginGroup{
 			Storage: memorystorage.New(),
@@ -161,7 +162,7 @@ func Setup2(trust bool) (*ambientapp.App, error) {
 			ambient.NewGRPCPlugin("bearblog", "./generic/bearblog/cmd/plugin/ambplugin"),
 		},
 	}
-	app, _, err := ambientapp.NewApp("myapp", "1.0",
+	app, _, err := ambientapp.NewApp(context.Background(), "myapp", "1.0",
 		zaplogger.New(),
 		ambient.StoragePluginGroup{
 			//Storage: memorystorage.New(),
