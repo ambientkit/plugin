@@ -36,7 +36,7 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // Routes returns list of routes.
-func (p *Plugin) Routes() []Route {
+func (p *Plugin) Routes(context.Context) []Route {
 	return p.routeList
 }
 

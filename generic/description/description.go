@@ -31,7 +31,7 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // GrantRequests returns a list of grants requested by the plugin.
-func (p *Plugin) GrantRequests() []ambient.GrantRequest {
+func (p *Plugin) GrantRequests(context.Context) []ambient.GrantRequest {
 	return []ambient.GrantRequest{
 		{Grant: ambient.GrantPluginSettingRead, Description: "Access to the description."},
 	}
@@ -43,7 +43,7 @@ const (
 )
 
 // Settings returns a list of user settable fields.
-func (p *Plugin) Settings() []ambient.Setting {
+func (p *Plugin) Settings(context.Context) []ambient.Setting {
 	return []ambient.Setting{
 		{
 			Name: Description,
@@ -52,8 +52,8 @@ func (p *Plugin) Settings() []ambient.Setting {
 }
 
 // Assets returns a list of assets and an embedded filesystem.
-func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
-	siteDescription, err := p.Site.PluginSettingString(Description)
+func (p *Plugin) Assets(ctx context.Context) ([]ambient.Asset, ambient.FileSystemReader) {
+	siteDescription, err := p.Site.PluginSettingString(ctx, Description)
 	if err != nil || len(siteDescription) == 0 {
 		// Otherwise don't set the assets.
 		return nil, nil

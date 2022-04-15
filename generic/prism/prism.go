@@ -36,7 +36,7 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // GrantRequests returns a list of grants requested by the plugin.
-func (p *Plugin) GrantRequests() []ambient.GrantRequest {
+func (p *Plugin) GrantRequests(context.Context) []ambient.GrantRequest {
 	return []ambient.GrantRequest{
 		{Grant: ambient.GrantSiteAssetWrite, Description: "Access to add stylesheets and javascript to each page."},
 		{Grant: ambient.GrantRouterRouteWrite, Description: "Access to create routes for accessing stylesheets."},
@@ -52,7 +52,7 @@ const (
 )
 
 // Settings returns a list of user settable fields.
-func (p *Plugin) Settings() []ambient.Setting {
+func (p *Plugin) Settings(context.Context) []ambient.Setting {
 	return []ambient.Setting{
 		{
 			Name:    Version,
@@ -74,8 +74,8 @@ func (p *Plugin) Settings() []ambient.Setting {
 }
 
 // Assets returns a list of assets and an embedded filesystem.
-func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
-	version, err := p.Site.PluginSettingString(Version)
+func (p *Plugin) Assets(ctx context.Context) ([]ambient.Asset, ambient.FileSystemReader) {
+	version, err := p.Site.PluginSettingString(ctx, Version)
 	if err != nil {
 		return nil, nil
 	}
@@ -100,7 +100,7 @@ func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
 		},
 	}
 
-	s, err := p.Site.PluginSettingString(Styles)
+	s, err := p.Site.PluginSettingString(ctx, Styles)
 	if err == nil && len(s) > 0 {
 		arr = append(arr, ambient.Asset{
 			Path:           "css/style.css",
@@ -114,14 +114,14 @@ func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
 }
 
 // Routes sets routes for the plugin.
-func (p *Plugin) Routes() {
-	p.Mux.Get(fmt.Sprintf("/plugins/%v/css/style.css", p.PluginName()), p.index)
+func (p *Plugin) Routes(ctx context.Context) {
+	p.Mux.Get(fmt.Sprintf("/plugins/%v/css/style.css", p.PluginName(ctx)), p.index)
 }
 
 // index returns CSS file.
 func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (err error) {
 	// Get the styles.
-	s, err := p.Site.PluginSetting(Styles)
+	s, err := p.Site.PluginSetting(r.Context(), Styles)
 	if err != nil {
 		return p.Site.Error(err)
 	}

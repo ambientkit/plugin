@@ -32,8 +32,8 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // Enable accepts the toolkit.
-func (p *Plugin) Enable(toolkit *ambient.Toolkit) error {
-	err := p.PluginBase.Enable(toolkit)
+func (p *Plugin) Enable(ctx context.Context, toolkit *ambient.Toolkit) error {
+	err := p.PluginBase.Enable(ctx, toolkit)
 	if err != nil {
 		return err
 	}
@@ -44,7 +44,7 @@ func (p *Plugin) Enable(toolkit *ambient.Toolkit) error {
 }
 
 // GrantRequests returns a list of grants requested by the plugin.
-func (p *Plugin) GrantRequests() []ambient.GrantRequest {
+func (p *Plugin) GrantRequests(context.Context) []ambient.GrantRequest {
 	return []ambient.GrantRequest{
 		{Grant: ambient.GrantUserAuthenticatedRead, Description: "Show different menus to authenticated vs unauthenticated users."},
 		{Grant: ambient.GrantUserAuthenticatedWrite, Description: "Access to login and logout the user."},
@@ -68,7 +68,7 @@ func (p *Plugin) GrantRequests() []ambient.GrantRequest {
 }
 
 // Routes sets routes for the plugin.
-func (p *Plugin) Routes() {
+func (p *Plugin) Routes(context.Context) {
 	p.Mux.Get("/", func(w http.ResponseWriter, r *http.Request) error {
 		fmt.Fprint(w, "hello world")
 		return nil
@@ -101,7 +101,7 @@ const (
 )
 
 // Settings returns a list of user settable fields.
-func (p *Plugin) Settings() []ambient.Setting {
+func (p *Plugin) Settings(context.Context) []ambient.Setting {
 	return []ambient.Setting{
 		{
 			Name:    Username,

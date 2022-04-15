@@ -61,8 +61,8 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // Enable accepts the toolkit.
-func (p *Plugin) Enable(toolkit *ambient.Toolkit) error {
-	err := p.PluginBase.Enable(toolkit)
+func (p *Plugin) Enable(ctx context.Context, toolkit *ambient.Toolkit) error {
+	err := p.PluginBase.Enable(ctx, toolkit)
 	if err != nil {
 		return err
 	}
@@ -106,7 +106,7 @@ func (p *Plugin) Enable(toolkit *ambient.Toolkit) error {
 }
 
 // Disable handles any plugin cleanup tasks.
-func (p *Plugin) Disable() error {
+func (p *Plugin) Disable(context.Context) error {
 	if p.dbconnection != nil {
 		return p.dbconnection.DB.Close()
 	}

@@ -35,13 +35,13 @@ func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {
 	arr := make([]pluginWithSettings, 0)
 	for _, pluginName := range pluginNames {
 		// Get the list of grants.
-		grantList, err := p.Site.NeighborPluginGrantList(pluginName)
+		grantList, err := p.Site.NeighborPluginGrantList(r.Context(), pluginName)
 		if err != nil {
 			return p.Site.Error(err)
 		}
 
 		// Get the list of settings.
-		settingsList, err := p.Site.PluginNeighborSettingsList(pluginName)
+		settingsList, err := p.Site.PluginNeighborSettingsList(r.Context(), pluginName)
 		if err != nil {
 			return p.Site.Error(err)
 		}
@@ -72,7 +72,7 @@ func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {
 
 	vars["plugins"] = arr
 
-	return p.Render.Page(w, r, assets, "template/plugins_edit.tmpl", p.FuncMap(), vars)
+	return p.Render.Page(w, r, assets, "template/plugins_edit.tmpl", p.FuncMap(r.Context()), vars)
 }
 
 func (p *Plugin) update(w http.ResponseWriter, r *http.Request) (err error) {
@@ -115,7 +115,7 @@ func (p *Plugin) update(w http.ResponseWriter, r *http.Request) (err error) {
 		// plugins can't be disabled.
 		if !enable && info.Enabled && !trusted {
 			// Disable the plugin.
-			err = p.Site.DisablePlugin(name, true)
+			err = p.Site.DisablePlugin(r.Context(), name, true)
 			if err != nil {
 				return p.Site.Error(err)
 			}
@@ -131,7 +131,7 @@ func (p *Plugin) update(w http.ResponseWriter, r *http.Request) (err error) {
 
 		enable := (r.FormValue(name) == "on")
 		if enable && !info.Enabled {
-			err = p.Site.EnablePlugin(name, true)
+			err = p.Site.EnablePlugin(r.Context(), name, true)
 			if err != nil {
 				return p.Site.Error(err)
 			}

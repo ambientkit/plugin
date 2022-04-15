@@ -55,12 +55,12 @@ func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (err error) {
 		return p.Site.Error(err)
 	}
 
-	description, err := p.Site.PluginSettingString(Description)
+	description, err := p.Site.PluginSettingString(r.Context(), Description)
 	if err != nil {
 		return p.Site.Error(err)
 	}
 
-	feedURL, err := p.Site.PluginSettingString(FeedURL)
+	feedURL, err := p.Site.PluginSettingString(r.Context(), FeedURL)
 	if err != nil {
 		return p.Site.Error(err)
 	}

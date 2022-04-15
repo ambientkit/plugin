@@ -15,7 +15,7 @@ func (p *Plugin) login(w http.ResponseWriter, r *http.Request) (err error) {
 	vars["title"] = "Login"
 	vars["token"] = p.Site.SetCSRF(r)
 
-	return p.Render.Page(w, r, assets, "template/content/login.tmpl", p.FuncMap(), vars)
+	return p.Render.Page(w, r, assets, "template/content/login.tmpl", p.FuncMap(r.Context()), vars)
 }
 
 func (p *Plugin) loginPost(w http.ResponseWriter, r *http.Request) (err error) {
@@ -33,19 +33,19 @@ func (p *Plugin) loginPost(w http.ResponseWriter, r *http.Request) (err error) {
 	mfa := r.FormValue("mfa")
 	remember := r.FormValue("remember")
 
-	allowedUsername, err := p.Site.PluginSettingString(Username)
+	allowedUsername, err := p.Site.PluginSettingString(r.Context(), Username)
 	if err != nil {
 		p.Site.Error(err)
 		return
 	}
 
-	allowedPassword, err := p.Site.PluginSettingString(Password)
+	allowedPassword, err := p.Site.PluginSettingString(r.Context(), Password)
 	if err != nil {
 		p.Site.Error(err)
 		return
 	}
 
-	mfakey, err := p.Site.PluginSettingString(MFAKey)
+	mfakey, err := p.Site.PluginSettingString(r.Context(), MFAKey)
 	if err != nil {
 		p.Site.Error(err)
 		return

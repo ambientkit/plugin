@@ -30,7 +30,7 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // GrantRequests returns a list of grants requested by the plugin.
-func (p *Plugin) GrantRequests() []ambient.GrantRequest {
+func (p *Plugin) GrantRequests(context.Context) []ambient.GrantRequest {
 	return []ambient.GrantRequest{
 		{Grant: ambient.GrantSiteURLRead, Description: "Access to read the site URL."},
 		{Grant: ambient.GrantSiteSchemeRead, Description: "Access to read the site scheme."},
@@ -40,6 +40,6 @@ func (p *Plugin) GrantRequests() []ambient.GrantRequest {
 }
 
 // Routes sets routes for the plugin.
-func (p *Plugin) Routes() {
+func (p *Plugin) Routes(context.Context) {
 	p.Mux.Get("/sitemap.xml", p.index)
 }

@@ -31,7 +31,7 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // GrantRequests returns a list of grants requested by the plugin.
-func (p *Plugin) GrantRequests() []ambient.GrantRequest {
+func (p *Plugin) GrantRequests(context.Context) []ambient.GrantRequest {
 	return []ambient.GrantRequest{
 		{Grant: ambient.GrantPluginSettingRead, Description: "Access to read the version setting."},
 		{Grant: ambient.GrantSiteAssetWrite, Description: "Access to add the Tailwind CSS JavaScript tag to every page."},
@@ -44,7 +44,7 @@ const (
 )
 
 // Settings returns a list of plugin settings.
-func (p *Plugin) Settings() []ambient.Setting {
+func (p *Plugin) Settings(context.Context) []ambient.Setting {
 	return []ambient.Setting{
 		{
 			Name: Version,
@@ -57,8 +57,8 @@ func (p *Plugin) Settings() []ambient.Setting {
 }
 
 // Assets returns a list of assets and an embedded filesystem.
-func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
-	version, err := p.Site.PluginSettingString(Version)
+func (p *Plugin) Assets(ctx context.Context) ([]ambient.Asset, ambient.FileSystemReader) {
+	version, err := p.Site.PluginSettingString(ctx, Version)
 	if err != nil {
 		// Otherwise don't set the assets.
 		return nil, nil

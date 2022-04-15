@@ -36,7 +36,7 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // GrantRequests returns a list of grants requested by the plugin.
-func (p *Plugin) GrantRequests() []ambient.GrantRequest {
+func (p *Plugin) GrantRequests(context.Context) []ambient.GrantRequest {
 	return []ambient.GrantRequest{
 		{Grant: ambient.GrantPluginSettingRead, Description: "Access to the Disqus ID."},
 		{Grant: ambient.GrantSiteURLRead, Description: "Access to read the site URL."},
@@ -53,7 +53,7 @@ const (
 )
 
 // Settings returns a list of user settable fields.
-func (p *Plugin) Settings() []ambient.Setting {
+func (p *Plugin) Settings(context.Context) []ambient.Setting {
 	return []ambient.Setting{
 		{
 			Name: DisqusID,
@@ -62,9 +62,9 @@ func (p *Plugin) Settings() []ambient.Setting {
 }
 
 // Assets returns a list of assets and an embedded filesystem.
-func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
+func (p *Plugin) Assets(ctx context.Context) ([]ambient.Asset, ambient.FileSystemReader) {
 	// Get the Disqus ID.
-	disqusID, err := p.Site.PluginSettingString(DisqusID)
+	disqusID, err := p.Site.PluginSettingString(ctx, DisqusID)
 	if err != nil || len(disqusID) == 0 {
 		// Otherwise don't set the assets.
 		return nil, nil
@@ -123,7 +123,7 @@ func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
 }
 
 // FuncMap returns a callable function that accepts a request.
-func (p *Plugin) FuncMap() func(r *http.Request) template.FuncMap {
+func (p *Plugin) FuncMap(context.Context) func(r *http.Request) template.FuncMap {
 	return func(r *http.Request) template.FuncMap {
 		fm := make(template.FuncMap)
 		fm["disqus_PageURL"] = func() string {

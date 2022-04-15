@@ -33,14 +33,14 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // GrantRequests returns a list of grants requested by the plugin.
-func (p *Plugin) GrantRequests() []ambient.GrantRequest {
+func (p *Plugin) GrantRequests(context.Context) []ambient.GrantRequest {
 	return []ambient.GrantRequest{
 		{Grant: ambient.GrantRouterRouteWrite, Description: "Access to create routes for accessing debug information."},
 	}
 }
 
 // Routes sets routes for the plugin.
-func (p *Plugin) Routes() {
+func (p *Plugin) Routes(context.Context) {
 	p.Mux.Get("/debug/pprof", p.Mux.Wrap(p.index))
 	p.Mux.Get("/debug/pprof/{pprof}", p.Mux.Wrap(p.profile))
 }

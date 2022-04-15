@@ -40,11 +40,11 @@ const (
 )
 
 // Storage returns data and session storage.
-func (p *Plugin) Storage(logger ambient.Logger) (ambient.DataStorer, ambient.SessionStorer, error) {
+func (p *Plugin) Storage(ctx context.Context, logger ambient.Logger) (ambient.DataStorer, ambient.SessionStorer, error) {
 	// Load the bucket from the environment variable.
 	bucket := os.Getenv(BucketEnv)
 	if len(bucket) == 0 {
-		return nil, nil, fmt.Errorf("%v: environment variable, %v, is missing", p.PluginName(), BucketEnv)
+		return nil, nil, fmt.Errorf("%v: environment variable, %v, is missing", p.PluginName(ctx), BucketEnv)
 	}
 
 	ds := store.NewGCPStorage(bucket, p.sitePath)

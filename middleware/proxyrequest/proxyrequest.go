@@ -41,15 +41,15 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // GrantRequests returns a list of grants requested by the plugin.
-func (p *Plugin) GrantRequests() []ambient.GrantRequest {
+func (p *Plugin) GrantRequests(context.Context) []ambient.GrantRequest {
 	return []ambient.GrantRequest{
 		{Grant: ambient.GrantRouterMiddlewareWrite, Description: "Access to proxy requests based on request URL."},
 	}
 }
 
 // Enable accepts the toolkit.
-func (p *Plugin) Enable(toolkit *ambient.Toolkit) error {
-	err := p.PluginBase.Enable(toolkit)
+func (p *Plugin) Enable(ctx context.Context, toolkit *ambient.Toolkit) error {
+	err := p.PluginBase.Enable(ctx, toolkit)
 	if err != nil {
 		return err
 	}
@@ -64,7 +64,7 @@ func (p *Plugin) Enable(toolkit *ambient.Toolkit) error {
 }
 
 // Middleware returns router middleware.
-func (p *Plugin) Middleware() []func(next http.Handler) http.Handler {
+func (p *Plugin) Middleware(context.Context) []func(next http.Handler) http.Handler {
 	return []func(next http.Handler) http.Handler{
 		p.ProxyRequest,
 	}

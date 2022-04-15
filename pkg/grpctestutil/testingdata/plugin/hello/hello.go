@@ -39,8 +39,8 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // Enable accepts the toolkit.
-func (p *Plugin) Enable(toolkit *ambient.Toolkit) error {
-	err := p.PluginBase.Enable(toolkit)
+func (p *Plugin) Enable(ctx context.Context, toolkit *ambient.Toolkit) error {
+	err := p.PluginBase.Enable(ctx, toolkit)
 	if err != nil {
 		return err
 	}
@@ -51,7 +51,7 @@ func (p *Plugin) Enable(toolkit *ambient.Toolkit) error {
 }
 
 // GrantRequests returns a list of grants requested by the plugin.
-func (p *Plugin) GrantRequests() []ambient.GrantRequest {
+func (p *Plugin) GrantRequests(context.Context) []ambient.GrantRequest {
 	return []ambient.GrantRequest{
 		{Grant: ambient.GrantUserAuthenticatedRead, Description: "Show different menus to authenticated vs unauthenticated users."},
 		{Grant: ambient.GrantUserAuthenticatedWrite, Description: "Access to login and logout the user."},
@@ -76,7 +76,7 @@ func (p *Plugin) GrantRequests() []ambient.GrantRequest {
 }
 
 // Routes sets routes for the plugin.
-func (p *Plugin) Routes() {
+func (p *Plugin) Routes(context.Context) {
 	//p.Log.Error("plugin: routes called")
 	p.Mux.Get("/", p.index)
 	p.Mux.Get("/another", p.another)
@@ -151,7 +151,7 @@ const (
 )
 
 // Settings returns a list of user settable fields.
-func (p *Plugin) Settings() []ambient.Setting {
+func (p *Plugin) Settings(context.Context) []ambient.Setting {
 	return []ambient.Setting{
 		{
 			Name:    Username,
@@ -165,7 +165,7 @@ func (p *Plugin) Settings() []ambient.Setting {
 }
 
 // Assets returns a list of assets and an embedded filesystem.
-func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
+func (p *Plugin) Assets(context.Context) ([]ambient.Asset, ambient.FileSystemReader) {
 	arr := make([]ambient.Asset, 0)
 
 	siteTitle, err := p.Site.Title()
@@ -215,7 +215,7 @@ func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
 }
 
 // FuncMap returns a callable function that accepts a request.
-func (p *Plugin) FuncMap() func(r *http.Request) template.FuncMap {
+func (p *Plugin) FuncMap(context.Context) func(r *http.Request) template.FuncMap {
 	return func(r *http.Request) template.FuncMap {
 		fm := make(template.FuncMap)
 		fm["hello_Cool"] = func() string {
@@ -233,7 +233,7 @@ func (p *Plugin) FuncMap() func(r *http.Request) template.FuncMap {
 }
 
 // Middleware returns router middleware.
-func (p *Plugin) Middleware() []func(next http.Handler) http.Handler {
+func (p *Plugin) Middleware(context.Context) []func(next http.Handler) http.Handler {
 	return []func(next http.Handler) http.Handler{
 		func(h http.Handler) http.Handler {
 			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

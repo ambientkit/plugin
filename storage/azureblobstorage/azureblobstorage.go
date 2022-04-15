@@ -40,11 +40,11 @@ const (
 )
 
 // Storage returns data and session storage.
-func (p *Plugin) Storage(logger ambient.Logger) (ambient.DataStorer, ambient.SessionStorer, error) {
+func (p *Plugin) Storage(ctx context.Context, logger ambient.Logger) (ambient.DataStorer, ambient.SessionStorer, error) {
 	// Load the container from the environment variable.
 	container := os.Getenv(ContainerEnv)
 	if len(container) == 0 {
-		return nil, nil, fmt.Errorf("%v: environment variable, %v, is missing", p.PluginName(), ContainerEnv)
+		return nil, nil, fmt.Errorf("%v: environment variable, %v, is missing", p.PluginName(ctx), ContainerEnv)
 	}
 
 	ds := store.NewAzureBlobStorage(container, p.sitePath)

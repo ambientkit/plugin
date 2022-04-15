@@ -18,5 +18,5 @@ func (p *Plugin) routesView(w http.ResponseWriter, r *http.Request) (err error) 
 
 	vars["routes"] = routes
 
-	return p.Render.Page(w, r, assets, "template/routes_view.tmpl", p.FuncMap(), vars)
+	return p.Render.Page(w, r, assets, "template/routes_view.tmpl", p.FuncMap(r.Context()), vars)
 }

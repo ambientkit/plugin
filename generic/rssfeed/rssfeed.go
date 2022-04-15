@@ -30,7 +30,7 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // GrantRequests returns a list of grants requested by the plugin.
-func (p *Plugin) GrantRequests() []ambient.GrantRequest {
+func (p *Plugin) GrantRequests(context.Context) []ambient.GrantRequest {
 	return []ambient.GrantRequest{
 		{Grant: ambient.GrantSiteTitleRead, Description: "Access to read the site title."},
 		{Grant: ambient.GrantSiteSchemeRead, Description: "Access to read the site scheme."},
@@ -49,7 +49,7 @@ const (
 )
 
 // Settings returns a list of user settable fields.
-func (p *Plugin) Settings() []ambient.Setting {
+func (p *Plugin) Settings(context.Context) []ambient.Setting {
 	return []ambient.Setting{
 		{
 			Name:    FeedURL,
@@ -66,13 +66,13 @@ func (p *Plugin) Settings() []ambient.Setting {
 }
 
 // Assets returns a list of assets and an embedded filesystem.
-func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
+func (p *Plugin) Assets(ctx context.Context) ([]ambient.Asset, ambient.FileSystemReader) {
 	siteTitle, err := p.Site.Title()
 	if err != nil {
 		return nil, nil
 	}
 
-	feedURL, err := p.Site.PluginSettingString(FeedURL)
+	feedURL, err := p.Site.PluginSettingString(ctx, FeedURL)
 	if err != nil {
 		return nil, nil
 	}
@@ -106,9 +106,9 @@ func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
 }
 
 // Routes sets routes for the plugin.
-func (p *Plugin) Routes() {
+func (p *Plugin) Routes(ctx context.Context) {
 	// FIXME: This can't be changed dynamically.
-	feedURL, err := p.Site.PluginSettingString(FeedURL)
+	feedURL, err := p.Site.PluginSettingString(ctx, FeedURL)
 	if err != nil {
 		return
 	}

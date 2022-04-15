@@ -104,7 +104,7 @@ func (p *Plugin) errorsFunc(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (p *Plugin) neighborPluginGrantList(w http.ResponseWriter, r *http.Request) error {
-	s, err := p.Site.NeighborPluginGrantList("neighbor")
+	s, err := p.Site.NeighborPluginGrantList(r.Context(), "neighbor")
 	if err != nil {
 		return err
 	}
@@ -113,7 +113,7 @@ func (p *Plugin) neighborPluginGrantList(w http.ResponseWriter, r *http.Request)
 }
 
 func (p *Plugin) neighborPluginGrantListBad(w http.ResponseWriter, r *http.Request) error {
-	s, err := p.Site.NeighborPluginGrantList("neighborbad")
+	s, err := p.Site.NeighborPluginGrantList(r.Context(), "neighborbad")
 	if err != nil {
 		return p.Mux.StatusError(http.StatusNotFound, err)
 	}
@@ -122,7 +122,7 @@ func (p *Plugin) neighborPluginGrantListBad(w http.ResponseWriter, r *http.Reque
 }
 
 func (p *Plugin) neighborPluginGrants(w http.ResponseWriter, r *http.Request) error {
-	s, err := p.Site.NeighborPluginGrants("neighbor")
+	s, err := p.Site.NeighborPluginGrants(r.Context(), "neighbor")
 	if err != nil {
 		return err
 	}
@@ -149,7 +149,7 @@ func (p *Plugin) neighborPluginGrantedBad(w http.ResponseWriter, r *http.Request
 }
 
 func (p *Plugin) setNeighborPluginGrantFalse(w http.ResponseWriter, r *http.Request) error {
-	err := p.Site.SetNeighborPluginGrant("neighbor", ambient.GrantRouterRouteWrite, false)
+	err := p.Site.SetNeighborPluginGrant(r.Context(), "neighbor", ambient.GrantRouterRouteWrite, false)
 	if err != nil {
 		return err
 	}
@@ -163,7 +163,7 @@ func (p *Plugin) setNeighborPluginGrantFalse(w http.ResponseWriter, r *http.Requ
 }
 
 func (p *Plugin) setNeighborPluginGrantTrue(w http.ResponseWriter, r *http.Request) error {
-	err := p.Site.SetNeighborPluginGrant("neighbor", ambient.GrantRouterRouteWrite, true)
+	err := p.Site.SetNeighborPluginGrant(r.Context(), "neighbor", ambient.GrantRouterRouteWrite, true)
 	if err != nil {
 		return err
 	}
@@ -176,7 +176,7 @@ func (p *Plugin) setNeighborPluginGrantTrue(w http.ResponseWriter, r *http.Reque
 }
 
 func (p *Plugin) neighborPluginRequestedGrant(w http.ResponseWriter, r *http.Request) error {
-	s, err := p.Site.NeighborPluginRequestedGrant("neighbor", ambient.GrantRouterRouteWrite)
+	s, err := p.Site.NeighborPluginRequestedGrant(r.Context(), "neighbor", ambient.GrantRouterRouteWrite)
 	if err != nil {
 		return err
 	}
@@ -185,7 +185,7 @@ func (p *Plugin) neighborPluginRequestedGrant(w http.ResponseWriter, r *http.Req
 }
 
 func (p *Plugin) neighborPluginRequestedGrantBad(w http.ResponseWriter, r *http.Request) error {
-	s, err := p.Site.NeighborPluginRequestedGrant("neighbor", ambient.GrantPluginNeighborGrantRead)
+	s, err := p.Site.NeighborPluginRequestedGrant(r.Context(), "neighbor", ambient.GrantPluginNeighborGrantRead)
 	if err != nil {
 		return err
 	}
@@ -224,25 +224,25 @@ func (p *Plugin) deletePluginBad(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (p *Plugin) enablePlugin(w http.ResponseWriter, r *http.Request) error {
-	err := p.Site.EnablePlugin("neighbor", true)
+	err := p.Site.EnablePlugin(r.Context(), "neighbor", true)
 	fmt.Fprintf(w, "Enable plugin: %v", err)
 	return nil
 }
 
 func (p *Plugin) enablePluginBad(w http.ResponseWriter, r *http.Request) error {
-	err := p.Site.EnablePlugin("neighborBad", true)
+	err := p.Site.EnablePlugin(r.Context(), "neighborBad", true)
 	fmt.Fprintf(w, "Enable plugin: %v", err)
 	return nil
 }
 
 func (p *Plugin) disablePlugin(w http.ResponseWriter, r *http.Request) error {
-	err := p.Site.DisablePlugin("neighbor", true)
+	err := p.Site.DisablePlugin(r.Context(), "neighbor", true)
 	fmt.Fprintf(w, "Disable plugin: %v", err)
 	return nil
 }
 
 func (p *Plugin) disablePluginBad(w http.ResponseWriter, r *http.Request) error {
-	err := p.Site.DisablePlugin("neighborBad", true)
+	err := p.Site.DisablePlugin(r.Context(), "neighborBad", true)
 	fmt.Fprintf(w, "Disable plugin: %v", err)
 	return nil
 }
@@ -513,7 +513,7 @@ func (p *Plugin) userPersistFalse(w http.ResponseWriter, r *http.Request) error 
 }
 
 func (p *Plugin) grantRequests(w http.ResponseWriter, r *http.Request) error {
-	requests := p.GrantRequests()
+	requests := p.GrantRequests(r.Context())
 	fmt.Fprintf(w, "Grant requests: %v", len(requests))
 	return nil
 }
@@ -597,7 +597,7 @@ func (p *Plugin) sessionValue(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (p *Plugin) pluginNeighborSettingsList(w http.ResponseWriter, r *http.Request) error {
-	settings, err := p.Site.PluginNeighborSettingsList("neighbor")
+	settings, err := p.Site.PluginNeighborSettingsList(r.Context(), "neighbor")
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
@@ -615,7 +615,7 @@ func (p *Plugin) setPluginSetting(w http.ResponseWriter, r *http.Request) error 
 	}
 
 	// Get string setting.
-	val, err := p.Site.PluginSettingString(Username)
+	val, err := p.Site.PluginSettingString(r.Context(), Username)
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
@@ -624,7 +624,7 @@ func (p *Plugin) setPluginSetting(w http.ResponseWriter, r *http.Request) error 
 	}
 
 	// Get bool setting.
-	b, err := p.Site.PluginSettingBool(SafeMode)
+	b, err := p.Site.PluginSettingBool(r.Context(), SafeMode)
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
@@ -639,7 +639,7 @@ func (p *Plugin) setPluginSetting(w http.ResponseWriter, r *http.Request) error 
 	}
 
 	// Get bool setting.
-	b, err = p.Site.PluginSettingBool(SafeMode)
+	b, err = p.Site.PluginSettingBool(r.Context(), SafeMode)
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
@@ -647,7 +647,7 @@ func (p *Plugin) setPluginSetting(w http.ResponseWriter, r *http.Request) error 
 		return p.Mux.StatusError(http.StatusInternalServerError, errors.New("missing bool true value"))
 	}
 
-	ival, err := p.Site.PluginSetting(SafeMode)
+	ival, err := p.Site.PluginSetting(r.Context(), SafeMode)
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
@@ -662,13 +662,13 @@ func (p *Plugin) setPluginSetting(w http.ResponseWriter, r *http.Request) error 
 
 func (p *Plugin) setNeighborPluginSetting(w http.ResponseWriter, r *http.Request) error {
 	// Set setting value.
-	err := p.Site.SetNeighborPluginSetting("neighbor", Username, "foo")
+	err := p.Site.SetNeighborPluginSetting(r.Context(), "neighbor", Username, "foo")
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
 
 	// Get string setting.
-	val, err := p.Site.NeighborPluginSettingString("neighbor", Username)
+	val, err := p.Site.NeighborPluginSettingString(r.Context(), "neighbor", Username)
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
@@ -677,12 +677,12 @@ func (p *Plugin) setNeighborPluginSetting(w http.ResponseWriter, r *http.Request
 	}
 
 	// Set setting value.
-	err = p.Site.SetNeighborPluginSetting("neighbor", SafeMode, "false")
+	err = p.Site.SetNeighborPluginSetting(r.Context(), "neighbor", SafeMode, "false")
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
 
-	ival, err := p.Site.NeighborPluginSetting("neighbor", SafeMode)
+	ival, err := p.Site.NeighborPluginSetting(r.Context(), "neighbor", SafeMode)
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
@@ -808,7 +808,7 @@ func (p *Plugin) tags(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (p *Plugin) assets(w http.ResponseWriter, r *http.Request) error {
-	assets, _ := p.Assets()
+	assets, _ := p.Assets(r.Context())
 
 	fmt.Fprintf(w, "Site assets: %#v", assets)
 
@@ -828,15 +828,15 @@ func (p *Plugin) assetsHello(w http.ResponseWriter, r *http.Request) error {
 	vars := make(map[string]interface{})
 	vars["postcontent"] = content
 	//return p.Render.Page(w, r, assets, "template/content/home.tmpl", p.FuncMap(), vars)
-	return p.Render.PageContent(w, r, `Content: {{.postcontent}} | FuncMap: {{hello_Foo "Foo"}}`, p.FuncMap(), vars)
+	return p.Render.PageContent(w, r, `Content: {{.postcontent}} | FuncMap: {{hello_Foo "Foo"}}`, p.FuncMap(r.Context()), vars)
 }
 
 func (p *Plugin) assetsError(w http.ResponseWriter, r *http.Request) error {
-	return p.Render.PageContent(w, r, `FuncMap: {{hello_Error "Foo"}}`, p.FuncMap(), nil)
+	return p.Render.PageContent(w, r, `FuncMap: {{hello_Error "Foo"}}`, p.FuncMap(r.Context()), nil)
 }
 
 func (p *Plugin) pageHello(w http.ResponseWriter, r *http.Request) error {
-	return p.Render.Page(w, r, assets, "template/content/hello.tmpl", p.FuncMap(), nil)
+	return p.Render.Page(w, r, assets, "template/content/hello.tmpl", p.FuncMap(r.Context()), nil)
 }
 
 func (p *Plugin) context(w http.ResponseWriter, r *http.Request) error {

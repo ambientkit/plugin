@@ -34,13 +34,13 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // GrantRequests returns a list of grants requested by the plugin.
-func (p *Plugin) GrantRequests() []ambient.GrantRequest {
+func (p *Plugin) GrantRequests(context.Context) []ambient.GrantRequest {
 	return []ambient.GrantRequest{
 		{Grant: ambient.GrantRouterRouteWrite, Description: "Access to make env variable page available at: /dashboard/env"},
 	}
 }
 
 // Routes sets routes for the plugin.
-func (p *Plugin) Routes() {
+func (p *Plugin) Routes(context.Context) {
 	p.Mux.Get("/dashboard/env", p.showEnv)
 }

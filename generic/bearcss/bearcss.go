@@ -34,7 +34,7 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // GrantRequests returns a list of grants requested by the plugin.
-func (p *Plugin) GrantRequests() []ambient.GrantRequest {
+func (p *Plugin) GrantRequests(context.Context) []ambient.GrantRequest {
 	return []ambient.GrantRequest{
 		{Grant: ambient.GrantSiteAssetWrite, Description: "Access to add a stylesheet to the header."},
 		{Grant: ambient.GrantRouterRouteWrite, Description: "Access to create routes for a stylesheet."},
@@ -42,7 +42,7 @@ func (p *Plugin) GrantRequests() []ambient.GrantRequest {
 }
 
 // Assets returns a list of assets and an embedded filesystem.
-func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
+func (p *Plugin) Assets(context.Context) ([]ambient.Asset, ambient.FileSystemReader) {
 	return []ambient.Asset{
 		{
 			Filetype: ambient.AssetStylesheet,

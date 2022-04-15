@@ -21,12 +21,12 @@ func (p *Plugin) grantsEdit(w http.ResponseWriter, r *http.Request) (err error) 
 	vars["title"] = "Edit grants for: " + pluginName
 	vars["token"] = p.Site.SetCSRF(r)
 
-	grantList, err := p.Site.NeighborPluginGrantList(pluginName)
+	grantList, err := p.Site.NeighborPluginGrantList(r.Context(), pluginName)
 	if err != nil {
 		return p.Site.Error(err)
 	}
 
-	grants, err := p.Site.NeighborPluginGrants(pluginName)
+	grants, err := p.Site.NeighborPluginGrants(r.Context(), pluginName)
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -49,7 +49,7 @@ func (p *Plugin) grantsEdit(w http.ResponseWriter, r *http.Request) (err error) 
 	vars["trusted"] = trusted
 	vars["grants"] = arr
 
-	return p.Render.Page(w, r, assets, "template/grants_edit.tmpl", p.FuncMap(), vars)
+	return p.Render.Page(w, r, assets, "template/grants_edit.tmpl", p.FuncMap(r.Context()), vars)
 }
 
 func (p *Plugin) grantsUpdate(w http.ResponseWriter, r *http.Request) (err error) {
@@ -62,7 +62,7 @@ func (p *Plugin) grantsUpdate(w http.ResponseWriter, r *http.Request) (err error
 		return p.Mux.StatusError(http.StatusBadRequest, nil)
 	}
 
-	grantList, err := p.Site.NeighborPluginGrantList(pluginName)
+	grantList, err := p.Site.NeighborPluginGrantList(r.Context(), pluginName)
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -70,7 +70,7 @@ func (p *Plugin) grantsUpdate(w http.ResponseWriter, r *http.Request) (err error
 	// Loop through each plugin to get the grants then save.
 	for index, request := range grantList {
 		val := r.FormValue(fmt.Sprintf("field%v", index))
-		err := p.Site.SetNeighborPluginGrant(pluginName, request.Grant, val == "true")
+		err := p.Site.SetNeighborPluginGrant(r.Context(), pluginName, request.Grant, val == "true")
 		if err != nil {
 			return p.Site.Error(err)
 		}

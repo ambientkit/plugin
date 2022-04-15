@@ -17,8 +17,8 @@ func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (err error) {
 	vars := make(map[string]interface{})
 	vars["title"] = ""
 	vars["tags"] = ""
-	vars["postcontent"] = p.sanitized(content)
-	return p.Render.Page(w, r, assets, "template/content/home.tmpl", p.FuncMap(), vars)
+	vars["postcontent"] = p.sanitized(r.Context(), content)
+	return p.Render.Page(w, r, assets, "template/content/home.tmpl", p.FuncMap(r.Context()), vars)
 }
 
 func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {
@@ -32,7 +32,7 @@ func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {
 		return p.Site.Error(err)
 	}
 
-	siteSubtitle, err := p.Site.PluginSetting(Subtitle)
+	siteSubtitle, err := p.Site.PluginSetting(r.Context(), Subtitle)
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -47,12 +47,12 @@ func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {
 		return p.Site.Error(err)
 	}
 
-	loginURL, err := p.Site.PluginSetting(LoginURL)
+	loginURL, err := p.Site.PluginSetting(r.Context(), LoginURL)
 	if err != nil {
 		return p.Site.Error(err)
 	}
 
-	footer, err := p.Site.PluginSetting(Footer)
+	footer, err := p.Site.PluginSetting(r.Context(), Footer)
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -75,7 +75,7 @@ func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {
 	vars["loginurl"] = loginURL
 	vars["footer"] = footer
 
-	return p.Render.Page(w, r, assets, "template/content/home_edit.tmpl", p.FuncMap(), vars)
+	return p.Render.Page(w, r, assets, "template/content/home_edit.tmpl", p.FuncMap(r.Context()), vars)
 }
 
 func (p *Plugin) update(w http.ResponseWriter, r *http.Request) (err error) {

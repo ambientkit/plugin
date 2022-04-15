@@ -29,7 +29,7 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // GrantRequests returns a list of grants requested by the plugin.
-func (p *Plugin) GrantRequests() []ambient.GrantRequest {
+func (p *Plugin) GrantRequests(context.Context) []ambient.GrantRequest {
 	return []ambient.GrantRequest{
 		{Grant: ambient.GrantUserAuthenticatedRead, Description: "Show different menus to authenticated vs unauthenticated users."},
 		{Grant: ambient.GrantUserAuthenticatedWrite, Description: "Access to login and logout the user."},
@@ -43,8 +43,8 @@ type Cool struct {
 }
 
 // Enable accepts the toolkit.
-func (p *Plugin) Enable(toolkit *ambient.Toolkit) error {
-	err := p.PluginBase.Enable(toolkit)
+func (p *Plugin) Enable(ctx context.Context, toolkit *ambient.Toolkit) error {
+	err := p.PluginBase.Enable(ctx, toolkit)
 	if err != nil {
 		return err
 	}
@@ -63,7 +63,7 @@ func (p *Plugin) Enable(toolkit *ambient.Toolkit) error {
 }
 
 // Routes sets routes for the plugin.
-func (p *Plugin) Routes() {
+func (p *Plugin) Routes(context.Context) {
 	//p.Log.Error("plugin: routes called")
 	p.Mux.Get("/", p.index)
 	p.Mux.Get("/another", p.another)

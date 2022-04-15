@@ -8,7 +8,7 @@ import (
 // index returns CSS file.
 func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (err error) {
 	// Get the styles.
-	s, err := p.Site.PluginSetting(Styles)
+	s, err := p.Site.PluginSetting(r.Context(), Styles)
 	if err != nil {
 		return p.Site.Error(err)
 	}

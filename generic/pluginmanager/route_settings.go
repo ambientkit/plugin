@@ -22,7 +22,7 @@ func (p *Plugin) settingsEdit(w http.ResponseWriter, r *http.Request) (err error
 	vars["title"] = "Edit settings for: " + pluginName
 	vars["token"] = p.Site.SetCSRF(r)
 
-	settings, err := p.Site.PluginNeighborSettingsList(pluginName)
+	settings, err := p.Site.PluginNeighborSettingsList(r.Context(), pluginName)
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -33,7 +33,7 @@ func (p *Plugin) settingsEdit(w http.ResponseWriter, r *http.Request) (err error
 			continue
 		}
 
-		curVal, err := p.Site.NeighborPluginSettingString(pluginName, setting.Name)
+		curVal, err := p.Site.NeighborPluginSettingString(r.Context(), pluginName, setting.Name)
 		if err != nil {
 			return p.Site.Error(err)
 		}
@@ -49,7 +49,7 @@ func (p *Plugin) settingsEdit(w http.ResponseWriter, r *http.Request) (err error
 
 	vars["settings"] = arr
 
-	return p.Render.Page(w, r, assets, "template/settings_edit.tmpl", p.FuncMap(), vars)
+	return p.Render.Page(w, r, assets, "template/settings_edit.tmpl", p.FuncMap(r.Context()), vars)
 }
 
 func (p *Plugin) settingsUpdate(w http.ResponseWriter, r *http.Request) (err error) {
@@ -62,7 +62,7 @@ func (p *Plugin) settingsUpdate(w http.ResponseWriter, r *http.Request) (err err
 		return p.Mux.StatusError(http.StatusBadRequest, nil)
 	}
 
-	settings, err := p.Site.PluginNeighborSettingsList(pluginName)
+	settings, err := p.Site.PluginNeighborSettingsList(r.Context(), pluginName)
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -74,20 +74,20 @@ func (p *Plugin) settingsUpdate(w http.ResponseWriter, r *http.Request) (err err
 		}
 
 		val := r.FormValue(fmt.Sprintf("field%v", index))
-		err := p.Site.SetNeighborPluginSetting(pluginName, setting.Name, val)
+		err := p.Site.SetNeighborPluginSetting(r.Context(), pluginName, setting.Name, val)
 		if err != nil {
 			return p.Site.Error(err)
 		}
 	}
 
 	// Disable the plugin.
-	err = p.Site.DisablePlugin(pluginName, true)
+	err = p.Site.DisablePlugin(r.Context(), pluginName, true)
 	if err != nil {
 		return p.Site.Error(err)
 	}
 
 	// Re-enable the plugin to get any change in routes.
-	err = p.Site.EnablePlugin(pluginName, true)
+	err = p.Site.EnablePlugin(r.Context(), pluginName, true)
 	if err != nil {
 		return p.Site.Error(err)
 	}

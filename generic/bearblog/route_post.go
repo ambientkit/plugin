@@ -1,6 +1,7 @@
 package bearblog
 
 import (
+	"context"
 	"net/http"
 	"strings"
 
@@ -58,7 +59,7 @@ func (p *Plugin) postIndex(w http.ResponseWriter, r *http.Request) (err error) {
 		vars["posts"] = pubPosts
 	}
 
-	return p.Render.Page(w, r, assets, "template/content/bloglist_index.tmpl", p.FuncMap(), vars)
+	return p.Render.Page(w, r, assets, "template/content/bloglist_index.tmpl", p.FuncMap(r.Context()), vars)
 }
 
 func (p *Plugin) postShow(w http.ResponseWriter, r *http.Request) (err error) {
@@ -93,9 +94,9 @@ func (p *Plugin) postShow(w http.ResponseWriter, r *http.Request) (err error) {
 	vars["posturl"] = post.URL
 	vars["pagetitle"] = post.Title
 	vars["pagedescription"] = plaintextBlurb(post.Content)
-	vars["postcontent"] = p.sanitized(post.Content)
+	vars["postcontent"] = p.sanitized(r.Context(), post.Content)
 
-	return p.Render.Post(w, r, assets, "template/content/post.tmpl", p.FuncMap(), vars)
+	return p.Render.Post(w, r, assets, "template/content/post.tmpl", p.FuncMap(r.Context()), vars)
 }
 
 // plaintextBlurb returns a plaintext blurb from markdown content.
@@ -115,14 +116,14 @@ func plaintextBlurb(s string) string {
 
 // sanitized returns a sanitized content block or an error is one occurs. You
 // will still need to use {{.content | TrustHTML}} when rendering to a template.
-func (p *Plugin) sanitized(content string) string {
+func (p *Plugin) sanitized(ctx context.Context, content string) string {
 	b := []byte(content)
 	// Ensure unit line endings are used when pulling out of JSON.
 	markdownWithUnixLineEndings := strings.Replace(string(b), "\r\n", "\n", -1)
 	htmlCode := blackfriday.Run([]byte(markdownWithUnixLineEndings))
 
 	// Determine if raw HTML is allowed.
-	allowed, err := p.Site.PluginSettingBool(AllowHTMLinMarkdown)
+	allowed, err := p.Site.PluginSettingBool(ctx, AllowHTMLinMarkdown)
 	if err != nil {
 		p.Log.Debug("plugins: error in sanitized() getting plugin field: %v", err)
 	}

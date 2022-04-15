@@ -41,7 +41,7 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // GrantRequests returns a list of grants requested by the plugin.
-func (p *Plugin) GrantRequests() []ambient.GrantRequest {
+func (p *Plugin) GrantRequests(context.Context) []ambient.GrantRequest {
 	return []ambient.GrantRequest{
 		{Grant: ambient.GrantUserAuthenticatedRead, Description: "Show different menus to authenticated vs unauthenticated users."},
 		{Grant: ambient.GrantUserAuthenticatedWrite, Description: "Access to login and logout the user."},
@@ -88,7 +88,7 @@ const (
 )
 
 // Settings returns a list of user settable fields.
-func (p *Plugin) Settings() []ambient.Setting {
+func (p *Plugin) Settings(context.Context) []ambient.Setting {
 	return []ambient.Setting{
 		{
 			Name:    Username,
@@ -137,7 +137,7 @@ func (p *Plugin) Settings() []ambient.Setting {
 }
 
 // Routes sets routes for the plugin.
-func (p *Plugin) Routes() {
+func (p *Plugin) Routes(context.Context) {
 	p.Mux.Get("/blog", p.postIndex)
 	p.Mux.Get("/{slug}", p.postShow)
 
@@ -162,7 +162,7 @@ func (p *Plugin) Routes() {
 }
 
 // Assets returns a list of assets and an embedded filesystem.
-func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
+func (p *Plugin) Assets(ctx context.Context) ([]ambient.Asset, ambient.FileSystemReader) {
 	arr := make([]ambient.Asset, 0)
 
 	siteTitle, err := p.Site.Title()
@@ -176,7 +176,7 @@ func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
 		})
 	}
 
-	siteDescription, err := p.Site.PluginSettingString(Description)
+	siteDescription, err := p.Site.PluginSettingString(ctx, Description)
 	if err == nil && len(siteDescription) > 0 {
 		arr = append(arr, ambient.Asset{
 			Filetype:   ambient.AssetGeneric,
@@ -213,7 +213,7 @@ func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
 		},
 	})
 
-	siteAuthor, err := p.Site.PluginSettingString(Author)
+	siteAuthor, err := p.Site.PluginSettingString(ctx, Author)
 	if err == nil && len(siteAuthor) > 0 {
 		arr = append(arr, ambient.Asset{
 			Filetype:   ambient.AssetGeneric,
@@ -251,7 +251,7 @@ func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
 }
 
 // Middleware returns router middleware.
-func (p *Plugin) Middleware() []func(next http.Handler) http.Handler {
+func (p *Plugin) Middleware(context.Context) []func(next http.Handler) http.Handler {
 	return []func(next http.Handler) http.Handler{
 		p.DisallowAnon,
 	}

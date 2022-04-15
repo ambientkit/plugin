@@ -33,7 +33,7 @@ func TestLoad(t *testing.T) {
 		})
 	}
 	ps.LoadPlugin(ctx, p, true, false)
-	ss.LoadSinglePluginPages(pluginName)
+	ss.LoadSinglePluginPages(ctx, pluginName)
 	ps.SetEnabled(pluginName, true)
 	ps.SetGrant(pluginName, ambient.GrantRouterRouteWrite)
 

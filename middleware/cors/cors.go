@@ -31,14 +31,14 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // GrantRequests returns a list of grants requested by the plugin.
-func (p *Plugin) GrantRequests() []ambient.GrantRequest {
+func (p *Plugin) GrantRequests(context.Context) []ambient.GrantRequest {
 	return []ambient.GrantRequest{
 		{Grant: ambient.GrantRouterMiddlewareWrite, Description: "Access to apply CORS headers on responses."},
 	}
 }
 
 // Middleware returns router middleware.
-func (p *Plugin) Middleware() []func(next http.Handler) http.Handler {
+func (p *Plugin) Middleware(context.Context) []func(next http.Handler) http.Handler {
 	return []func(next http.Handler) http.Handler{
 		CORS,
 	}

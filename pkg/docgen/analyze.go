@@ -92,19 +92,19 @@ func Generate(t *testing.T, p interface{}, outputFile string) {
 		os.Setenv("AMB_LOGLEVEL", "FATAL")
 		app := LighweightAppSetup(ctx, "docgen", plugin, true)
 
-		docInfo.GrantRequests = plugin.GrantRequests()
-		docInfo.Settings = plugin.Settings()
-		docInfo.FuncMap = plugin.FuncMap()
-		assets, embedfs := plugin.Assets()
+		docInfo.GrantRequests = plugin.GrantRequests(ctx)
+		docInfo.Settings = plugin.Settings(ctx)
+		docInfo.FuncMap = plugin.FuncMap(ctx)
+		assets, embedfs := plugin.Assets(ctx)
 		docInfo.Assets = assets
 		docInfo.EmbeddedFS = embedfs
-		docInfo.Routes = app.Mux.Routes()
+		docInfo.Routes = app.Mux.Routes(ctx)
 	}
 
 	// Determine if the plugin contains middleware.
 	mw, ok := p.(ambient.MiddlewarePlugin)
 	if ok {
-		docInfo.Middleware = mw.Middleware()
+		docInfo.Middleware = mw.Middleware(ctx)
 	}
 
 	// Determine if the plugin satisfies the logger interface.

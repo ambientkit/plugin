@@ -37,7 +37,7 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // GrantRequests returns a list of grants requested by the plugin.
-func (p *Plugin) GrantRequests() []ambient.GrantRequest {
+func (p *Plugin) GrantRequests(context.Context) []ambient.GrantRequest {
 	return []ambient.GrantRequest{
 		{Grant: ambient.GrantSitePluginRead, Description: "Access to read the plugins."},
 		{Grant: ambient.GrantSitePluginEnable, Description: "Access to enable plugins."},
@@ -55,7 +55,7 @@ func (p *Plugin) GrantRequests() []ambient.GrantRequest {
 }
 
 // Routes sets routes for the plugin.
-func (p *Plugin) Routes() {
+func (p *Plugin) Routes(context.Context) {
 	p.Mux.Get("/dashboard/plugins", p.edit)
 	p.Mux.Post("/dashboard/plugins", p.update)
 	p.Mux.Get("/dashboard/plugins/{id}/delete", p.destroy)
@@ -67,7 +67,7 @@ func (p *Plugin) Routes() {
 }
 
 // FuncMap returns a callable function that accepts a request.
-func (p *Plugin) FuncMap() func(r *http.Request) template.FuncMap {
+func (p *Plugin) FuncMap(context.Context) func(r *http.Request) template.FuncMap {
 	return func(r *http.Request) template.FuncMap {
 		fm := make(template.FuncMap)
 		fm["pluginmanager_URLHasParam"] = func(s string) bool {

@@ -30,7 +30,7 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // GrantRequests returns a list of grants requested by the plugin.
-func (p *Plugin) GrantRequests() []ambient.GrantRequest {
+func (p *Plugin) GrantRequests(context.Context) []ambient.GrantRequest {
 	return []ambient.GrantRequest{
 		{Grant: ambient.GrantPluginSettingRead, Description: "Access to read the plugin settings."},
 		{Grant: ambient.GrantSiteAssetWrite, Description: "Access to add favicon."},
@@ -46,7 +46,7 @@ const (
 )
 
 // Settings returns a list of user settable fields.
-func (p *Plugin) Settings() []ambient.Setting {
+func (p *Plugin) Settings(context.Context) []ambient.Setting {
 	return []ambient.Setting{
 		{
 			Name: Favicon,
@@ -67,10 +67,10 @@ func (p *Plugin) Settings() []ambient.Setting {
 }
 
 // Assets returns a list of assets and an embedded filesystem.
-func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
+func (p *Plugin) Assets(ctx context.Context) ([]ambient.Asset, ambient.FileSystemReader) {
 	arr := make([]ambient.Asset, 0)
 
-	favicon, err := p.Site.PluginSettingString(Favicon)
+	favicon, err := p.Site.PluginSettingString(ctx, Favicon)
 	if err == nil && len(favicon) > 0 {
 		arr = append(arr, ambient.Asset{
 			Filetype:   ambient.AssetGeneric,
@@ -90,7 +90,7 @@ func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
 		})
 	}
 
-	s, err := p.Site.PluginSettingString(Styles)
+	s, err := p.Site.PluginSettingString(ctx, Styles)
 	if err == nil && len(s) > 0 {
 		arr = append(arr, ambient.Asset{
 			Path:     "css/style.css",
@@ -103,6 +103,6 @@ func (p *Plugin) Assets() ([]ambient.Asset, ambient.FileSystemReader) {
 }
 
 // Routes sets routes for the plugin.
-func (p *Plugin) Routes() {
+func (p *Plugin) Routes(context.Context) {
 	p.Mux.Get("/plugins/styles/css/style.css", p.index)
 }

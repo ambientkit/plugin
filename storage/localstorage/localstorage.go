@@ -33,7 +33,7 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // Storage returns data and session storage.
-func (p *Plugin) Storage(logger ambient.Logger) (ambient.DataStorer, ambient.SessionStorer, error) {
+func (p *Plugin) Storage(_ context.Context, logger ambient.Logger) (ambient.DataStorer, ambient.SessionStorer, error) {
 	// Use local filesytem for site and session information.
 	ds := filestore.New(p.sitePath)
 	ss := filestore.New(p.sessionPath)

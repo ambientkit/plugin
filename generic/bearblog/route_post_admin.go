@@ -19,7 +19,7 @@ func (p *Plugin) postAdminIndex(w http.ResponseWriter, r *http.Request) (err err
 
 	vars["posts"] = postsAndPages
 
-	return p.Render.Page(w, r, assets, "template/content/bloglist_edit.tmpl", p.FuncMap(), vars)
+	return p.Render.Page(w, r, assets, "template/content/bloglist_edit.tmpl", p.FuncMap(r.Context()), vars)
 }
 
 func (p *Plugin) postAdminCreate(w http.ResponseWriter, r *http.Request) (err error) {
@@ -27,7 +27,7 @@ func (p *Plugin) postAdminCreate(w http.ResponseWriter, r *http.Request) (err er
 	vars["title"] = "New post"
 	vars["token"] = p.Site.SetCSRF(r)
 
-	return p.Render.Page(w, r, assets, "template/content/post_create.tmpl", p.FuncMap(), vars)
+	return p.Render.Page(w, r, assets, "template/content/post_create.tmpl", p.FuncMap(r.Context()), vars)
 }
 
 func (p *Plugin) postAdminStore(w http.ResponseWriter, r *http.Request) (err error) {
@@ -99,7 +99,7 @@ func (p *Plugin) postAdminEdit(w http.ResponseWriter, r *http.Request) (err erro
 	vars["page"] = post.Page
 	vars["published"] = post.Published
 
-	return p.Render.Page(w, r, assets, "template/content/post_edit.tmpl", p.FuncMap(), vars)
+	return p.Render.Page(w, r, assets, "template/content/post_edit.tmpl", p.FuncMap(r.Context()), vars)
 }
 
 func (p *Plugin) postAdminUpdate(w http.ResponseWriter, r *http.Request) (err error) {

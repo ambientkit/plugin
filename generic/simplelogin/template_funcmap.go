@@ -1,6 +1,7 @@
 package simplelogin
 
 import (
+	"context"
 	"html/template"
 	"net/http"
 	"path"
@@ -10,7 +11,7 @@ import (
 )
 
 // FuncMap returns a callable function that accepts a request.
-func (p *Plugin) FuncMap() func(r *http.Request) template.FuncMap {
+func (p *Plugin) FuncMap(context.Context) func(r *http.Request) template.FuncMap {
 	return func(r *http.Request) template.FuncMap {
 		fm := make(template.FuncMap)
 		fm["simplelogin_Stamp"] = func(t time.Time) string {
@@ -27,7 +28,7 @@ func (p *Plugin) FuncMap() func(r *http.Request) template.FuncMap {
 			return arr
 		}
 		fm["simplelogin_SiteSubtitle"] = func() string {
-			subtitle, err := p.Site.PluginSettingString(Subtitle)
+			subtitle, err := p.Site.PluginSettingString(r.Context(), Subtitle)
 			if err != nil {
 				p.Log.Warn("simplelogin: error getting subtitle: %v", err.Error())
 			}
@@ -39,7 +40,7 @@ func (p *Plugin) FuncMap() func(r *http.Request) template.FuncMap {
 			return err == nil
 		}
 		fm["simplelogin_SiteFooter"] = func() string {
-			f, err := p.Site.PluginSettingString(Footer)
+			f, err := p.Site.PluginSettingString(r.Context(), Footer)
 			if err != nil {
 				p.Log.Warn("simplelogin: error getting footer: %v", err.Error())
 			}
@@ -54,7 +55,7 @@ func (p *Plugin) FuncMap() func(r *http.Request) template.FuncMap {
 			return path.Join(siteURL, r.URL.Path)
 		}
 		fm["simplelogin_MFAEnabled"] = func() bool {
-			mfakey, err := p.Site.PluginSettingString(MFAKey)
+			mfakey, err := p.Site.PluginSettingString(r.Context(), MFAKey)
 			if err != nil {
 				p.Log.Warn("simplelogin: error getting MFA key: %v", err.Error())
 			}

@@ -1,6 +1,7 @@
 package simplelogin
 
 import (
+	"context"
 	"net/http"
 	"strings"
 
@@ -19,8 +20,8 @@ func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (err error) {
 	}
 
 	vars := make(map[string]interface{})
-	vars["postcontent"] = p.sanitized(content)
-	return p.Render.Page(w, r, assets, "template/content/home.tmpl", p.FuncMap(), vars)
+	vars["postcontent"] = p.sanitized(r.Context(), content)
+	return p.Render.Page(w, r, assets, "template/content/home.tmpl", p.FuncMap(r.Context()), vars)
 }
 
 func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {
@@ -34,7 +35,7 @@ func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {
 		return p.Site.Error(err)
 	}
 
-	siteSubtitle, err := p.Site.PluginSetting(Subtitle)
+	siteSubtitle, err := p.Site.PluginSetting(r.Context(), Subtitle)
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -49,7 +50,7 @@ func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {
 		return p.Site.Error(err)
 	}
 
-	footer, err := p.Site.PluginSetting(Footer)
+	footer, err := p.Site.PluginSetting(r.Context(), Footer)
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -71,7 +72,7 @@ func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {
 	vars["scheme"] = siteScheme
 	vars["footer"] = footer
 
-	return p.Render.Page(w, r, assets, "template/content/home_edit.tmpl", p.FuncMap(), vars)
+	return p.Render.Page(w, r, assets, "template/content/home_edit.tmpl", p.FuncMap(r.Context()), vars)
 }
 
 func (p *Plugin) update(w http.ResponseWriter, r *http.Request) (err error) {
@@ -128,14 +129,14 @@ func (p *Plugin) reload(w http.ResponseWriter, r *http.Request) (err error) {
 }
 
 // sanitized returns a sanitized content block or an error is one occurs.
-func (p *Plugin) sanitized(content string) string {
+func (p *Plugin) sanitized(ctx context.Context, content string) string {
 	b := []byte(content)
 	// Ensure unit line endings are used when pulling out of JSON.
 	markdownWithUnixLineEndings := strings.Replace(string(b), "\r\n", "\n", -1)
 	htmlCode := blackfriday.Run([]byte(markdownWithUnixLineEndings))
 
 	// Determine if raw HTML is allowed.
-	allowed, err := p.Site.PluginSettingBool(AllowHTMLinMarkdown)
+	allowed, err := p.Site.PluginSettingBool(ctx, AllowHTMLinMarkdown)
 	if err != nil {
 		p.Log.Debug("plugins: error in sanitized() getting plugin field: %v", err)
 	}

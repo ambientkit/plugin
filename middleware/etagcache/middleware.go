@@ -11,7 +11,7 @@ import (
 func (p *Plugin) Handler(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Get the MaxAge setting.
-		maxAge, err := p.Site.PluginSettingString(MaxAge)
+		maxAge, err := p.Site.PluginSettingString(r.Context(), MaxAge)
 		if err != nil || len(maxAge) == 0 {
 			// Bypass.
 			next.ServeHTTP(w, r)

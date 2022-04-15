@@ -30,6 +30,6 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // Routes sets routes for the plugin.
-func (p *Plugin) Routes() {
+func (p *Plugin) Routes(context.Context) {
 	p.Mux.Get("/robots.txt", p.index)
 }
