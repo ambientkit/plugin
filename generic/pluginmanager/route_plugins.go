@@ -21,12 +21,12 @@ func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {
 	vars["title"] = "Plugin Manager"
 	vars["token"] = p.Site.SetCSRF(r)
 
-	plugins, err := p.Site.Plugins()
+	plugins, err := p.Site.Plugins(r.Context())
 	if err != nil {
 		return p.Site.Error(err)
 	}
 
-	pluginNames, err := p.Site.PluginNames()
+	pluginNames, err := p.Site.PluginNames(r.Context())
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -46,7 +46,7 @@ func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {
 			return p.Site.Error(err)
 		}
 
-		trusted, err := p.Site.PluginTrusted(pluginName)
+		trusted, err := p.Site.PluginTrusted(r.Context(), pluginName)
 		if err != nil {
 			return p.Site.Error(err)
 		}
@@ -54,7 +54,7 @@ func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {
 		routes := make([]ambient.Route, 0)
 		// Only enabled plugins have routes.
 		if plugins[pluginName].Enabled {
-			routes, err = p.Site.PluginNeighborRoutesList(pluginName)
+			routes, err = p.Site.PluginNeighborRoutesList(r.Context(), pluginName)
 			if err != nil {
 				return p.Site.Error(err)
 			}
@@ -85,13 +85,13 @@ func (p *Plugin) update(w http.ResponseWriter, r *http.Request) (err error) {
 	}
 
 	// Get list of plugin names.
-	names, err := p.Site.PluginNames()
+	names, err := p.Site.PluginNames(r.Context())
 	if err != nil {
 		return p.Site.Error(err)
 	}
 
 	// Get list of plugins.
-	plugins, err := p.Site.Plugins()
+	plugins, err := p.Site.Plugins(r.Context())
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -105,7 +105,7 @@ func (p *Plugin) update(w http.ResponseWriter, r *http.Request) (err error) {
 			continue
 		}
 
-		trusted, err := p.Site.PluginTrusted(name)
+		trusted, err := p.Site.PluginTrusted(r.Context(), name)
 		if err != nil {
 			return p.Site.Error(err)
 		}
@@ -145,7 +145,7 @@ func (p *Plugin) update(w http.ResponseWriter, r *http.Request) (err error) {
 func (p *Plugin) destroy(w http.ResponseWriter, r *http.Request) (err error) {
 	ID := p.Mux.Param(r, "id")
 
-	plugins, err := p.Site.Plugins()
+	plugins, err := p.Site.Plugins(r.Context())
 	if err != nil {
 		return p.Site.Error(err)
 	}

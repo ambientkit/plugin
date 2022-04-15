@@ -5,7 +5,7 @@ import (
 )
 
 func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (err error) {
-	content, err := p.Site.Content()
+	content, err := p.Site.Content(r.Context())
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -22,12 +22,12 @@ func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (err error) {
 }
 
 func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {
-	siteContent, err := p.Site.Content()
+	siteContent, err := p.Site.Content(r.Context())
 	if err != nil {
 		return p.Site.Error(err)
 	}
 
-	siteTitle, err := p.Site.Title()
+	siteTitle, err := p.Site.Title(r.Context())
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -37,12 +37,12 @@ func (p *Plugin) edit(w http.ResponseWriter, r *http.Request) (err error) {
 		return p.Site.Error(err)
 	}
 
-	baseURL, err := p.Site.URL()
+	baseURL, err := p.Site.URL(r.Context())
 	if err != nil {
 		return p.Site.Error(err)
 	}
 
-	siteScheme, err := p.Site.Scheme()
+	siteScheme, err := p.Site.Scheme(r.Context())
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -87,37 +87,37 @@ func (p *Plugin) update(w http.ResponseWriter, r *http.Request) (err error) {
 		return p.Mux.StatusError(http.StatusBadRequest, nil)
 	}
 
-	err = p.Site.SetTitle(r.FormValue("title"))
+	err = p.Site.SetTitle(r.Context(), r.FormValue("title"))
 	if err != nil {
 		return p.Site.Error(err)
 	}
 
-	err = p.Site.SetContent(r.FormValue("content"))
+	err = p.Site.SetContent(r.Context(), r.FormValue("content"))
 	if err != nil {
 		return p.Site.Error(err)
 	}
 
-	err = p.Site.SetScheme(r.FormValue("scheme"))
+	err = p.Site.SetScheme(r.Context(), r.FormValue("scheme"))
 	if err != nil {
 		return p.Site.Error(err)
 	}
 
-	err = p.Site.SetURL(r.FormValue("domain"))
+	err = p.Site.SetURL(r.Context(), r.FormValue("domain"))
 	if err != nil {
 		return p.Site.Error(err)
 	}
 
-	err = p.Site.SetPluginSetting(Subtitle, r.FormValue("subtitle"))
+	err = p.Site.SetPluginSetting(r.Context(), Subtitle, r.FormValue("subtitle"))
 	if err != nil {
 		return p.Site.Error(err)
 	}
 
-	err = p.Site.SetPluginSetting(LoginURL, r.FormValue("loginurl"))
+	err = p.Site.SetPluginSetting(r.Context(), LoginURL, r.FormValue("loginurl"))
 	if err != nil {
 		return p.Site.Error(err)
 	}
 
-	err = p.Site.SetPluginSetting(Footer, r.FormValue("footer"))
+	err = p.Site.SetPluginSetting(r.Context(), Footer, r.FormValue("footer"))
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -127,7 +127,7 @@ func (p *Plugin) update(w http.ResponseWriter, r *http.Request) (err error) {
 }
 
 func (p *Plugin) reload(w http.ResponseWriter, r *http.Request) (err error) {
-	err = p.Site.Load()
+	err = p.Site.Load(r.Context())
 	if err != nil {
 		p.Site.Error(err)
 	}

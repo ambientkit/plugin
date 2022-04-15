@@ -49,7 +49,7 @@ func (p *Plugin) handleRoute(path string, method string) {
 }
 
 // Router returns a router.
-func (p *Plugin) Router(logger ambient.Logger, te ambient.Renderer) (ambient.AppRouter, error) {
+func (p *Plugin) Router(_ context.Context, logger ambient.Logger, te ambient.Renderer) (ambient.AppRouter, error) {
 	return p, nil
 }
 

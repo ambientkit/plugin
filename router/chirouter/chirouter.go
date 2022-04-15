@@ -32,7 +32,7 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // Router returns a router.
-func (p *Plugin) Router(logger ambient.Logger, te ambient.Renderer) (ambient.AppRouter, error) {
+func (p *Plugin) Router(_ context.Context, logger ambient.Logger, te ambient.Renderer) (ambient.AppRouter, error) {
 	// Set up the default router.
 	mux := router.New()
 

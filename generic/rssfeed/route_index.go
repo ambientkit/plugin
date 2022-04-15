@@ -45,12 +45,12 @@ func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (err error) {
 		Items         []Item   `xml:"channel>item"`
 	}
 
-	title, err := p.Site.Title()
+	title, err := p.Site.Title(r.Context())
 	if err != nil {
 		return p.Site.Error(err)
 	}
 
-	siteURL, err := p.Site.FullURL()
+	siteURL, err := p.Site.FullURL(r.Context())
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -81,7 +81,7 @@ func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (err error) {
 		},
 	}
 
-	postAndPages, err := p.Site.PostsAndPages(true)
+	postAndPages, err := p.Site.PostsAndPages(r.Context(), true)
 	if err != nil {
 		return p.Site.Error(err)
 	}

@@ -16,7 +16,7 @@ func main() {
 	ctx := context.Background()
 	pluginName := p.PluginName(ctx)
 
-	zlog, err := zaplogger.New().Logger(pluginName, p.PluginVersion(ctx), nil)
+	zlog, err := zaplogger.New().Logger(ctx, pluginName, p.PluginVersion(ctx), nil)
 	if err != nil {
 		log.Fatalln(err.Error())
 	}

@@ -30,7 +30,7 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // TemplateEngine returns a template engine.
-func (p *Plugin) TemplateEngine(logger ambient.Logger, injector ambient.AssetInjector) (ambient.Renderer, error) {
+func (p *Plugin) TemplateEngine(_ context.Context, logger ambient.Logger, injector ambient.AssetInjector) (ambient.Renderer, error) {
 	tmpl := NewTemplateEngine(logger, injector)
 	return tmpl, nil
 }

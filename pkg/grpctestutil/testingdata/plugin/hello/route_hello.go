@@ -131,7 +131,7 @@ func (p *Plugin) neighborPluginGrants(w http.ResponseWriter, r *http.Request) er
 }
 
 func (p *Plugin) neighborPluginGranted(w http.ResponseWriter, r *http.Request) error {
-	s, err := p.Site.NeighborPluginGranted("neighbor", ambient.GrantRouterRouteWrite)
+	s, err := p.Site.NeighborPluginGranted(r.Context(), "neighbor", ambient.GrantRouterRouteWrite)
 	if err != nil {
 		return err
 	}
@@ -140,7 +140,7 @@ func (p *Plugin) neighborPluginGranted(w http.ResponseWriter, r *http.Request) e
 }
 
 func (p *Plugin) neighborPluginGrantedBad(w http.ResponseWriter, r *http.Request) error {
-	s, err := p.Site.NeighborPluginGranted("neighbor", ambient.GrantPluginNeighborGrantRead)
+	s, err := p.Site.NeighborPluginGranted(r.Context(), "neighbor", ambient.GrantPluginNeighborGrantRead)
 	if err != nil {
 		return err
 	}
@@ -154,7 +154,7 @@ func (p *Plugin) setNeighborPluginGrantFalse(w http.ResponseWriter, r *http.Requ
 		return err
 	}
 
-	s, err := p.Site.NeighborPluginGranted("neighbor", ambient.GrantRouterRouteWrite)
+	s, err := p.Site.NeighborPluginGranted(r.Context(), "neighbor", ambient.GrantRouterRouteWrite)
 	if err != nil {
 		return err
 	}
@@ -167,7 +167,7 @@ func (p *Plugin) setNeighborPluginGrantTrue(w http.ResponseWriter, r *http.Reque
 	if err != nil {
 		return err
 	}
-	s, err := p.Site.NeighborPluginGranted("neighbor", ambient.GrantRouterRouteWrite)
+	s, err := p.Site.NeighborPluginGranted(r.Context(), "neighbor", ambient.GrantRouterRouteWrite)
 	if err != nil {
 		return err
 	}
@@ -194,7 +194,7 @@ func (p *Plugin) neighborPluginRequestedGrantBad(w http.ResponseWriter, r *http.
 }
 
 func (p *Plugin) plugins(w http.ResponseWriter, r *http.Request) error {
-	s, err := p.Site.Plugins()
+	s, err := p.Site.Plugins(r.Context())
 	if err != nil {
 		return err
 	}
@@ -203,7 +203,7 @@ func (p *Plugin) plugins(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (p *Plugin) pluginNames(w http.ResponseWriter, r *http.Request) error {
-	s, err := p.Site.PluginNames()
+	s, err := p.Site.PluginNames(r.Context())
 	if err != nil {
 		return err
 	}
@@ -263,12 +263,12 @@ func (p *Plugin) savePost(w http.ResponseWriter, r *http.Request) error {
 		},
 	}
 
-	err := p.Site.SavePost("abc", post)
+	err := p.Site.SavePost(r.Context(), "abc", post)
 	if err != nil {
 		return err
 	}
 
-	arr, err := p.Site.PostsAndPages(true)
+	arr, err := p.Site.PostsAndPages(r.Context(), true)
 	if err != nil {
 		return err
 	}
@@ -301,7 +301,7 @@ func (p *Plugin) publishedPosts(w http.ResponseWriter, r *http.Request) error {
 		},
 	}
 
-	arr, err := p.Site.PublishedPosts()
+	arr, err := p.Site.PublishedPosts(r.Context())
 	if err != nil {
 		return err
 	}
@@ -334,12 +334,12 @@ func (p *Plugin) publishedPages(w http.ResponseWriter, r *http.Request) error {
 		},
 	}
 
-	err := p.Site.SavePost("abc2", post)
+	err := p.Site.SavePost(r.Context(), "abc2", post)
 	if err != nil {
 		return err
 	}
 
-	arr, err := p.Site.PublishedPages()
+	arr, err := p.Site.PublishedPages(r.Context())
 	if err != nil {
 		return err
 	}
@@ -372,7 +372,7 @@ func (p *Plugin) postBySlug(w http.ResponseWriter, r *http.Request) error {
 		},
 	}
 
-	returnedPost, err := p.Site.PostBySlug("url")
+	returnedPost, err := p.Site.PostBySlug(r.Context(), "url")
 	if err != nil {
 		return err
 	}
@@ -389,7 +389,7 @@ func (p *Plugin) postBySlug(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (p *Plugin) postBySlugBad(w http.ResponseWriter, r *http.Request) error {
-	_, err := p.Site.PostBySlug("urlBad")
+	_, err := p.Site.PostBySlug(r.Context(), "urlBad")
 	if err != nil {
 		return p.Mux.StatusError(http.StatusNotFound, err)
 	}
@@ -413,7 +413,7 @@ func (p *Plugin) postByID(w http.ResponseWriter, r *http.Request) error {
 		},
 	}
 
-	returnedPost, err := p.Site.PostByID("abc")
+	returnedPost, err := p.Site.PostByID(r.Context(), "abc")
 	if err != nil {
 		return err
 	}
@@ -430,7 +430,7 @@ func (p *Plugin) postByID(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (p *Plugin) postByIDBad(w http.ResponseWriter, r *http.Request) error {
-	_, err := p.Site.PostBySlug("abcBad")
+	_, err := p.Site.PostBySlug(r.Context(), "abcBad")
 	if err != nil {
 		return p.Mux.StatusError(http.StatusNotFound, err)
 	}
@@ -439,12 +439,12 @@ func (p *Plugin) postByIDBad(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (p *Plugin) deletePostByID(w http.ResponseWriter, r *http.Request) error {
-	err := p.Site.DeletePostByID("abcBad")
+	err := p.Site.DeletePostByID(r.Context(), "abcBad")
 	if err != nil {
 		return p.Mux.StatusError(http.StatusNotFound, err)
 	}
 
-	returnedPost, err := p.Site.PostByID("abc")
+	returnedPost, err := p.Site.PostByID(r.Context(), "abc")
 	if err != nil {
 		return err
 	}
@@ -453,12 +453,12 @@ func (p *Plugin) deletePostByID(w http.ResponseWriter, r *http.Request) error {
 		return p.Mux.StatusError(http.StatusInternalServerError, fmt.Errorf("post should exist"))
 	}
 
-	err = p.Site.DeletePostByID("abc")
+	err = p.Site.DeletePostByID(r.Context(), "abc")
 	if err != nil {
 		return p.Mux.StatusError(http.StatusNotFound, err)
 	}
 
-	returnedPost, err = p.Site.PostByID("abc")
+	returnedPost, err = p.Site.PostByID(r.Context(), "abc")
 	if err != nil {
 		fmt.Fprint(w, "Works.")
 		return nil
@@ -468,7 +468,7 @@ func (p *Plugin) deletePostByID(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (p *Plugin) pluginNeighborRoutesList(w http.ResponseWriter, r *http.Request) error {
-	routes, err := p.Site.PluginNeighborRoutesList("neighbor")
+	routes, err := p.Site.PluginNeighborRoutesList(r.Context(), "neighbor")
 	if err != nil {
 		return p.Mux.StatusError(http.StatusNotFound, err)
 	}
@@ -479,7 +479,7 @@ func (p *Plugin) pluginNeighborRoutesList(w http.ResponseWriter, r *http.Request
 }
 
 func (p *Plugin) pluginNeighborRoutesListBad(w http.ResponseWriter, r *http.Request) error {
-	routes, err := p.Site.PluginNeighborRoutesList("neighborBad")
+	routes, err := p.Site.PluginNeighborRoutesList(r.Context(), "neighborBad")
 	if err != nil {
 		return p.Mux.StatusError(http.StatusNotFound, err)
 	}
@@ -609,7 +609,7 @@ func (p *Plugin) pluginNeighborSettingsList(w http.ResponseWriter, r *http.Reque
 
 func (p *Plugin) setPluginSetting(w http.ResponseWriter, r *http.Request) error {
 	// Set setting value.
-	err := p.Site.SetPluginSetting(Username, "foo")
+	err := p.Site.SetPluginSetting(r.Context(), Username, "foo")
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
@@ -633,7 +633,7 @@ func (p *Plugin) setPluginSetting(w http.ResponseWriter, r *http.Request) error 
 	}
 
 	// Set setting value.
-	err = p.Site.SetPluginSetting(SafeMode, "false")
+	err = p.Site.SetPluginSetting(r.Context(), SafeMode, "false")
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
@@ -696,12 +696,12 @@ func (p *Plugin) setNeighborPluginSetting(w http.ResponseWriter, r *http.Request
 }
 
 func (p *Plugin) pluginTrusted(w http.ResponseWriter, r *http.Request) error {
-	trusted, err := p.Site.PluginTrusted("neighbor")
+	trusted, err := p.Site.PluginTrusted(r.Context(), "neighbor")
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
 
-	trusted2, err := p.Site.PluginTrusted("trust")
+	trusted2, err := p.Site.PluginTrusted(r.Context(), "trust")
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
@@ -712,12 +712,12 @@ func (p *Plugin) pluginTrusted(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (p *Plugin) title(w http.ResponseWriter, r *http.Request) error {
-	err := p.Site.SetTitle("foo")
+	err := p.Site.SetTitle(r.Context(), "foo")
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
 
-	title, err := p.Site.Title()
+	title, err := p.Site.Title(r.Context())
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
@@ -728,12 +728,12 @@ func (p *Plugin) title(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (p *Plugin) scheme(w http.ResponseWriter, r *http.Request) error {
-	err := p.Site.SetScheme("https")
+	err := p.Site.SetScheme(r.Context(), "https")
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
 
-	scheme, err := p.Site.Scheme()
+	scheme, err := p.Site.Scheme(r.Context())
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
@@ -744,17 +744,17 @@ func (p *Plugin) scheme(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (p *Plugin) uRL(w http.ResponseWriter, r *http.Request) error {
-	err := p.Site.SetURL("bar")
+	err := p.Site.SetURL(r.Context(), "bar")
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
 
-	URL, err := p.Site.URL()
+	URL, err := p.Site.URL(r.Context())
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
 
-	FullURL, err := p.Site.FullURL()
+	FullURL, err := p.Site.FullURL(r.Context())
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
@@ -765,7 +765,7 @@ func (p *Plugin) uRL(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (p *Plugin) updated(w http.ResponseWriter, r *http.Request) error {
-	timestamp, err := p.Site.Updated()
+	timestamp, err := p.Site.Updated(r.Context())
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
@@ -776,12 +776,12 @@ func (p *Plugin) updated(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (p *Plugin) content(w http.ResponseWriter, r *http.Request) error {
-	err := p.Site.SetContent("foo bar")
+	err := p.Site.SetContent(r.Context(), "foo bar")
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
 
-	content, err := p.Site.Content()
+	content, err := p.Site.Content(r.Context())
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
@@ -792,12 +792,12 @@ func (p *Plugin) content(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (p *Plugin) tags(w http.ResponseWriter, r *http.Request) error {
-	err := p.Site.SetContent("foo bar")
+	err := p.Site.SetContent(r.Context(), "foo bar")
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
 
-	tags, err := p.Site.Tags(false)
+	tags, err := p.Site.Tags(r.Context(), false)
 	if err != nil {
 		return p.Mux.StatusError(http.StatusBadRequest, err)
 	}
@@ -816,7 +816,7 @@ func (p *Plugin) assets(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (p *Plugin) assetsHello(w http.ResponseWriter, r *http.Request) error {
-	content, err := p.Site.Content()
+	content, err := p.Site.Content(r.Context())
 	if err != nil {
 		return p.Site.Error(err)
 	}

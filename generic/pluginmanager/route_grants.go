@@ -31,7 +31,7 @@ func (p *Plugin) grantsEdit(w http.ResponseWriter, r *http.Request) (err error) 
 		return p.Site.Error(err)
 	}
 
-	trusted, err := p.Site.PluginTrusted(pluginName)
+	trusted, err := p.Site.PluginTrusted(r.Context(), pluginName)
 	if err != nil {
 		return p.Site.Error(err)
 	}

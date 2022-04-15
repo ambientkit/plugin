@@ -145,7 +145,7 @@ func (p *Plugin) Routes(context.Context) {
 func (p *Plugin) Assets(ctx context.Context) ([]ambient.Asset, ambient.FileSystemReader) {
 	arr := make([]ambient.Asset, 0)
 
-	siteTitle, err := p.Site.Title()
+	siteTitle, err := p.Site.Title(ctx)
 	if err == nil && len(siteTitle) > 0 {
 		arr = append(arr, ambient.Asset{
 			Filetype: ambient.AssetGeneric,

@@ -70,7 +70,7 @@ func (p *Plugin) Assets(ctx context.Context) ([]ambient.Asset, ambient.FileSyste
 		return nil, nil
 	}
 
-	siteURL, err := p.Site.FullURL()
+	siteURL, err := p.Site.FullURL(ctx)
 	if err != nil || len(siteURL) == 0 {
 		// Otherwise don't set the assets.
 		return nil, nil

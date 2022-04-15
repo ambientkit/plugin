@@ -21,7 +21,7 @@ func (p *Plugin) FuncMap(context.Context) func(r *http.Request) template.FuncMap
 			return t.Format("02 Jan, 2006")
 		}
 		fm["simplelogin_PublishedPages"] = func() []ambient.Post {
-			arr, err := p.Site.PublishedPages()
+			arr, err := p.Site.PublishedPages(r.Context())
 			if err != nil {
 				p.Log.Warn("simplelogin: error getting published pages: %v", err.Error())
 			}
@@ -47,7 +47,7 @@ func (p *Plugin) FuncMap(context.Context) func(r *http.Request) template.FuncMap
 			return f
 		}
 		fm["simplelogin_PageURL"] = func() string {
-			siteURL, err := p.Site.FullURL()
+			siteURL, err := p.Site.FullURL(r.Context())
 			if err != nil {
 				p.Log.Warn("simplelogin: error getting site URL: %v", err.Error())
 			}

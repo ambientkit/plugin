@@ -73,7 +73,7 @@ func (p *Plugin) Middleware(context.Context) []func(next http.Handler) http.Hand
 }
 
 // SessionManager returns the session manager.
-func (p *Plugin) SessionManager(logger ambient.Logger, ss ambient.SessionStorer) (ambient.AppSession, error) {
+func (p *Plugin) SessionManager(_ context.Context, logger ambient.Logger, ss ambient.SessionStorer) (ambient.AppSession, error) {
 	// Set up the session storage provider.
 	en := aesdata.NewEncryptedStorage(p.sessionKey)
 	store, err := jsonstore.NewJSONSession(ss, en)

@@ -29,7 +29,7 @@ func (p *Plugin) PluginVersion(context.Context) string {
 }
 
 // Logger returns a logger.
-func (p *Plugin) Logger(appName string, appVersion string, optionalWriter io.Writer) (ambient.AppLogger, error) {
+func (p *Plugin) Logger(_ context.Context, appName string, appVersion string, optionalWriter io.Writer) (ambient.AppLogger, error) {
 	// Create the logger.
 	p.log = NewLogger(appName, appVersion, optionalWriter)
 

@@ -12,7 +12,7 @@ func (p *Plugin) postAdminIndex(w http.ResponseWriter, r *http.Request) (err err
 	vars := make(map[string]interface{})
 	vars["title"] = "Posts"
 
-	postsAndPages, err := p.Site.PostsAndPages(false)
+	postsAndPages, err := p.Site.PostsAndPages(r.Context(), false)
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -67,7 +67,7 @@ func (p *Plugin) postAdminStore(w http.ResponseWriter, r *http.Request) (err err
 	post.Published = r.FormValue("publish") == "on"
 
 	// Save to storage.
-	err = p.Site.SavePost(ID, post)
+	err = p.Site.SavePost(r.Context(), ID, post)
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -84,7 +84,7 @@ func (p *Plugin) postAdminEdit(w http.ResponseWriter, r *http.Request) (err erro
 
 	ID := p.Mux.Param(r, "id")
 
-	post, err := p.Site.PostByID(ID)
+	post, err := p.Site.PostByID(r.Context(), ID)
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -105,7 +105,7 @@ func (p *Plugin) postAdminEdit(w http.ResponseWriter, r *http.Request) (err erro
 func (p *Plugin) postAdminUpdate(w http.ResponseWriter, r *http.Request) (err error) {
 	ID := p.Mux.Param(r, "id")
 
-	post, err := p.Site.PostByID(ID)
+	post, err := p.Site.PostByID(r.Context(), ID)
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -137,7 +137,7 @@ func (p *Plugin) postAdminUpdate(w http.ResponseWriter, r *http.Request) (err er
 	post.Published = r.FormValue("publish") == "on"
 
 	// Save to storage.
-	err = p.Site.SavePost(ID, post)
+	err = p.Site.SavePost(r.Context(), ID, post)
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -149,12 +149,12 @@ func (p *Plugin) postAdminUpdate(w http.ResponseWriter, r *http.Request) (err er
 func (p *Plugin) postAdminDestroy(w http.ResponseWriter, r *http.Request) (err error) {
 	ID := p.Mux.Param(r, "id")
 
-	_, err = p.Site.PostByID(ID)
+	_, err = p.Site.PostByID(r.Context(), ID)
 	if err != nil {
 		return p.Site.Error(err)
 	}
 
-	err = p.Site.DeletePostByID(ID)
+	err = p.Site.DeletePostByID(r.Context(), ID)
 	if err != nil {
 		return p.Site.Error(err)
 	}

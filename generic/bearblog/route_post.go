@@ -17,7 +17,7 @@ func (p *Plugin) postIndex(w http.ResponseWriter, r *http.Request) (err error) {
 	vars["canonical"] = ""
 	vars["query"] = ""
 
-	tags, err := p.Site.Tags(true)
+	tags, err := p.Site.Tags(r.Context(), true)
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -29,7 +29,7 @@ func (p *Plugin) postIndex(w http.ResponseWriter, r *http.Request) (err error) {
 		// Don't show tags when there is a filter.
 		delete(vars, "tags")
 
-		postsAndPages, err := p.Site.PostsAndPages(true)
+		postsAndPages, err := p.Site.PostsAndPages(r.Context(), true)
 		if err != nil {
 			return p.Site.Error(err)
 		}
@@ -51,7 +51,7 @@ func (p *Plugin) postIndex(w http.ResponseWriter, r *http.Request) (err error) {
 
 		vars["posts"] = posts
 	} else {
-		pubPosts, err := p.Site.PublishedPosts()
+		pubPosts, err := p.Site.PublishedPosts(r.Context())
 		if err != nil {
 			return p.Site.Error(err)
 		}
@@ -65,7 +65,7 @@ func (p *Plugin) postIndex(w http.ResponseWriter, r *http.Request) (err error) {
 func (p *Plugin) postShow(w http.ResponseWriter, r *http.Request) (err error) {
 	slug := p.Mux.Param(r, "slug")
 
-	post, err := p.Site.PostBySlug(slug)
+	post, err := p.Site.PostBySlug(r.Context(), slug)
 	if err != nil {
 		return p.Mux.StatusError(http.StatusNotFound, nil)
 	}

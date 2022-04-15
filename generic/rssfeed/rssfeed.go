@@ -67,7 +67,7 @@ func (p *Plugin) Settings(context.Context) []ambient.Setting {
 
 // Assets returns a list of assets and an embedded filesystem.
 func (p *Plugin) Assets(ctx context.Context) ([]ambient.Asset, ambient.FileSystemReader) {
-	siteTitle, err := p.Site.Title()
+	siteTitle, err := p.Site.Title(ctx)
 	if err != nil {
 		return nil, nil
 	}

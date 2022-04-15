@@ -28,12 +28,12 @@ func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (err error) {
 		XHTML: "http://www.w3.org/1999/xhtml",
 	}
 
-	siteURL, err := p.Site.FullURL()
+	siteURL, err := p.Site.FullURL(r.Context())
 	if err != nil {
 		return p.Site.Error(err)
 	}
 
-	siteUpdated, err := p.Site.Updated()
+	siteUpdated, err := p.Site.Updated(r.Context())
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -45,7 +45,7 @@ func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (err error) {
 	})
 
 	// Posts and pages
-	postsAndPages, err := p.Site.PostsAndPages(true)
+	postsAndPages, err := p.Site.PostsAndPages(r.Context(), true)
 	if err != nil {
 		return p.Site.Error(err)
 	}
@@ -57,7 +57,7 @@ func (p *Plugin) index(w http.ResponseWriter, r *http.Request) (err error) {
 	}
 
 	// Tags
-	tags, err := p.Site.Tags(true)
+	tags, err := p.Site.Tags(r.Context(), true)
 	if err != nil {
 		return p.Site.Error(err)
 	}

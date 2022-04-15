@@ -165,10 +165,10 @@ func (p *Plugin) Settings(context.Context) []ambient.Setting {
 }
 
 // Assets returns a list of assets and an embedded filesystem.
-func (p *Plugin) Assets(context.Context) ([]ambient.Asset, ambient.FileSystemReader) {
+func (p *Plugin) Assets(ctx context.Context) ([]ambient.Asset, ambient.FileSystemReader) {
 	arr := make([]ambient.Asset, 0)
 
-	siteTitle, err := p.Site.Title()
+	siteTitle, err := p.Site.Title(ctx)
 	if err == nil && len(siteTitle) > 0 {
 		arr = append(arr, ambient.Asset{
 			Filetype: ambient.AssetGeneric,

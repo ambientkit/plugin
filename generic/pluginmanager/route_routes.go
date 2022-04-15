@@ -11,7 +11,7 @@ func (p *Plugin) routesView(w http.ResponseWriter, r *http.Request) (err error) 
 	vars["title"] = "View routes for: " + pluginName
 	vars["token"] = p.Site.SetCSRF(r)
 
-	routes, err := p.Site.PluginNeighborRoutesList(pluginName)
+	routes, err := p.Site.PluginNeighborRoutesList(r.Context(), pluginName)
 	if err != nil {
 		return p.Site.Error(err)
 	}

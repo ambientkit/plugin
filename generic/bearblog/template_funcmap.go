@@ -29,7 +29,7 @@ func (p *Plugin) FuncMap(context.Context) func(r *http.Request) template.FuncMap
 			return tt.Format("02 Jan, 2006")
 		}
 		fm["bearblog_PublishedPages"] = func() []ambient.Post {
-			arr, err := p.Site.PublishedPages()
+			arr, err := p.Site.PublishedPages(r.Context())
 			if err != nil {
 				p.Log.Warn("bearblog: error getting published pages: %v", err.Error())
 			}
@@ -55,7 +55,7 @@ func (p *Plugin) FuncMap(context.Context) func(r *http.Request) template.FuncMap
 			return f
 		}
 		fm["bearblog_PageURL"] = func() string {
-			siteURL, err := p.Site.FullURL()
+			siteURL, err := p.Site.FullURL(r.Context())
 			if err != nil {
 				p.Log.Warn("bearblog: error getting site URL: %v", err.Error())
 			}

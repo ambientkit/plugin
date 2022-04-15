@@ -28,8 +28,10 @@ func NewAWSStorage(bucket string, object string) *AWSStorage {
 // Load downloads an object from a bucket and returns an error if it cannot
 // be read.
 func (s *AWSStorage) Load() ([]byte, error) {
+	ctx := context.Background()
+
 	// Load config.
-	cfg, err := config.LoadDefaultConfig(context.TODO())
+	cfg, err := config.LoadDefaultConfig(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -41,7 +43,7 @@ func (s *AWSStorage) Load() ([]byte, error) {
 	// Create an uploader with the session and default options.
 	client := s3.NewFromConfig(cfg)
 	downloader := manager.NewDownloader(client)
-	_, err = downloader.Download(context.TODO(), f, &s3.GetObjectInput{
+	_, err = downloader.Download(ctx, f, &s3.GetObjectInput{
 		Bucket: aws.String(s.bucket),
 		Key:    aws.String(s.object),
 	})
@@ -55,8 +57,10 @@ func (s *AWSStorage) Load() ([]byte, error) {
 // Save uploads an object to a bucket and returns an error if it cannot be
 // written.
 func (s *AWSStorage) Save(b []byte) error {
+	ctx := context.Background()
+
 	// Load config.
-	cfg, err := config.LoadDefaultConfig(context.TODO())
+	cfg, err := config.LoadDefaultConfig(ctx)
 	if err != nil {
 		return err
 	}
@@ -64,7 +68,7 @@ func (s *AWSStorage) Save(b []byte) error {
 	// Create an uploader with the session and default options.
 	client := s3.NewFromConfig(cfg)
 	uploader := manager.NewUploader(client)
-	_, err = uploader.Upload(context.TODO(), &s3.PutObjectInput{
+	_, err = uploader.Upload(ctx, &s3.PutObjectInput{
 		Bucket: aws.String(s.bucket),
 		Key:    aws.String(s.object),
 		Body:   bytes.NewBuffer(b),
