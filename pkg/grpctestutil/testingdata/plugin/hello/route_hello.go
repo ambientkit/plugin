@@ -212,13 +212,13 @@ func (p *Plugin) pluginNames(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (p *Plugin) deletePlugin(w http.ResponseWriter, r *http.Request) error {
-	err := p.Site.DeletePlugin("neighbor")
+	err := p.Site.DeletePlugin(r.Context(), "neighbor")
 	fmt.Fprintf(w, "Delete plugin: %v", err)
 	return nil
 }
 
 func (p *Plugin) deletePluginBad(w http.ResponseWriter, r *http.Request) error {
-	err := p.Site.DeletePlugin("neighborBad")
+	err := p.Site.DeletePlugin(r.Context(), "neighborBad")
 	fmt.Fprintf(w, "Delete plugin: %v", err)
 	return nil
 }

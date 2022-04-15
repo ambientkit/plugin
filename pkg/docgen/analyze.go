@@ -78,7 +78,7 @@ func Generate(t *testing.T, p interface{}, outputFile string) {
 	// Determine if the plugin satisfies the core plugin interface.
 	pluginCore, isPluginCore := p.(ambient.PluginCore)
 	if isPluginCore {
-		docInfo.PackageVersion = pluginCore.PluginVersion()
+		docInfo.PackageVersion = pluginCore.PluginVersion(ctx)
 		docInfo.PackageName = pluginCore.PluginName(ctx)
 
 		if docInfo.PackageName != p2.Name {

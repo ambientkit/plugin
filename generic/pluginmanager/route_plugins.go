@@ -154,7 +154,7 @@ func (p *Plugin) destroy(w http.ResponseWriter, r *http.Request) (err error) {
 		return p.Mux.StatusError(http.StatusNotFound, nil)
 	}
 
-	err = p.Site.DeletePlugin(ID)
+	err = p.Site.DeletePlugin(r.Context(), ID)
 	if err != nil {
 		return p.Site.Error(err)
 	}
